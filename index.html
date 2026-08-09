@@ -455,6 +455,10 @@ input[type=date]{-webkit-appearance:none;appearance:none}
         <button onClick="{{ signIn }}" style="width:100%;margin-top:8px;padding:16px;border-radius:14px;border:none;background:#35543F;color:#F6F1E4;font-size:16px;font-weight:700;cursor:pointer">{{ authCta }}</button>
         <button onClick="{{ goPublic }}" style="width:100%;margin-top:8px;padding:14px;border-radius:14px;border:none;background:none;color:#8FA98A;font-size:14px;cursor:pointer">Back to the public view</button>
       </div>
+      <div style="display:flex;align-items:flex-start;gap:8px;background:#F1F5F6;border:1px solid #DDE8EA;border-radius:14px;padding:12px 14px;margin-top:12px">
+        <span style="flex:0 0 auto;font-size:15px">🔒</span>
+        <div style="font-size:12px;color:#4E7A84;line-height:1.5">Sign in is just for the gardener, Kristin. Everyone else — welcome! Head back to the public view to look around; no account needed.</div>
+      </div>
     </div>
   </div>
 </sc-if>
@@ -699,7 +703,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
           </div>
 
           <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
-            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Water</div>
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Tower water</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
               <div style="background:#F3F6F2;border-radius:16px;padding:12px">
                 <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">pH</div>
@@ -781,6 +785,33 @@ input[type=date]{-webkit-appearance:none;appearance:none}
         </div>
         </sc-if>
 
+        <sc-if value="{{ selOff }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <sc-if value="{{ canSow }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ startSelect }}" style="flex:1 1 0;padding:11px 8px;border-radius:12px;border:1.5px solid #E5DECD;background:#FFFDF7;color:#35543F;font-size:13px;font-weight:700;cursor:pointer">▦ Plant multiple pods</button>
+          </sc-if>
+          <sc-if value="{{ canTransplantHere }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ openTransplant }}" style="flex:1 1 0;padding:11px 8px;border-radius:12px;border:1.5px solid #DDE8EA;background:#F1F5F6;color:#4E7A84;font-size:13px;font-weight:700;cursor:pointer">↑ Transplant a seedling</button>
+          </sc-if>
+        </div>
+        </sc-if>
+        <sc-if value="{{ selMode }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:10px">
+          <div style="display:flex;align-items:center;gap:8px;background:#35543F;border-radius:14px;padding:9px 10px 9px 14px;color:#F6F1E4">
+            <span style="flex:1 1 auto;min-width:0;font-size:13px;font-weight:700">{{ selCountLabel }}</span>
+            <button onClick="{{ selectAllOpen }}" style="flex:0 0 auto;padding:7px 10px;border-radius:10px;border:1px solid rgba(246,241,228,0.4);background:transparent;color:#F6F1E4;font-size:12px;cursor:pointer">Select open</button>
+            <button onClick="{{ clearSelect }}" style="flex:0 0 auto;padding:7px 10px;border-radius:10px;border:1px solid rgba(246,241,228,0.4);background:transparent;color:#F6F1E4;font-size:12px;cursor:pointer">Clear</button>
+            <button onClick="{{ cancelSelect }}" style="flex:0 0 auto;padding:7px 10px;border-radius:10px;border:none;background:#F6F1E4;color:#35543F;font-size:12px;font-weight:700;cursor:pointer">Done</button>
+          </div>
+          <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ openBatchPick }}" style="width:100%;margin-top:8px;padding:14px;border-radius:14px;border:none;background:#4E7A55;color:#FFFDF7;font-size:15px;font-weight:700;cursor:pointer">Choose seed for {{ selCount }} pods</button>
+          </sc-if>
+          <sc-if value="{{ noSel }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:8px;font-size:13px;color:#8FA98A;text-align:center">Tap the pods you want, then choose a seed to sow into all of them.</div>
+          </sc-if>
+        </div>
+        </sc-if>
+
         <sc-if value="{{ isElevation }}" hint-placeholder-val="{{ true }}">
           <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px 14px;margin-top:14px">
             <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;margin-bottom:2px">{{ sysTitle }}</div>
@@ -795,7 +826,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
                 </div>
                 <div style="flex:1 1 auto;display:flex;gap:6px;justify-content:flex-start">
                   <sc-for list="{{ r.pods }}" as="p" hint-placeholder-count="8">
-                    <button onClick="{{ p.open }}" style="flex:1 1 0;aspect-ratio:1/1;min-width:44px;max-width:74px;border-radius:50%;border:2px solid {{ p.ring }};background:{{ p.color }};color:{{ p.fg }};font-size:9px;font-weight:700;letter-spacing:0.02em;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center"><span style="width:78%;height:78%;background-image:url({{ p.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ p.iconOp }}"></span></button>
+                    <button onClick="{{ p.open }}" style="position:relative;flex:1 1 0;aspect-ratio:1/1;min-width:44px;max-width:74px;border-radius:50%;border:2px solid {{ p.ring }};background:{{ p.color }};color:{{ p.fg }};font-size:9px;font-weight:700;letter-spacing:0.02em;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:{{ p.selShadow }}"><span style="width:78%;height:78%;background-image:url({{ p.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ p.iconOp }}"></span><sc-if value="{{ p.sel }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#35543F;color:#FFFDF7;font-size:11px;display:flex;align-items:center;justify-content:center;border:2px solid #FBF6EC">✓</span></sc-if></button>
                   </sc-for>
                 </div>
               </div>
@@ -876,6 +907,69 @@ input[type=date]{-webkit-appearance:none;appearance:none}
               <input type="file" accept="image/*" onChange="{{ addTowerPhoto }}" style="display:none">
             </label>
           </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isBoard }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:riseIn .3s ease both">
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px;margin:2px 0 2px">Seed → Seedling → Pod</div>
+        <div style="font-size:13px;color:#7A5C46;margin-bottom:12px">Drag a card into the next column. When you drop it, you'll pick the exact spot in three taps.</div>
+        <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start">
+
+          <div data-kanban-col="seeds" style="flex:0 0 82%;max-width:340px;min-width:240px;background:#FFFDF7;border:1px solid #E5DECD;border-radius:20px;padding:12px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:18px">Seeds</div>
+              <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8FA98A">{{ boardSeedCount }} packets</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;max-height:58vh;overflow-y:auto">
+              <sc-for list="{{ boardSeeds }}" as="c" hint-placeholder-count="6">
+                <div data-kanban-card="1" data-card-type="{{ c.type }}" data-card-id="{{ c.id }}" data-card-col="seeds" style="touch-action:none;cursor:grab;display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;border:1.5px solid #EFE9DA;background:#FCFAF3">
+                  <span style="flex:0 0 auto;width:26px;height:26px;background-image:url({{ c.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="flex:1 1 auto;min-width:0;font-size:13px;color:#2E4034;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.name }}</span>
+                  <span style="flex:0 0 auto;color:#C9C0AE;font-size:15px">⠿</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div data-kanban-col="seedlings" style="flex:0 0 82%;max-width:340px;min-width:240px;background:#F1F5F6;border:1px solid #DDE8EA;border-radius:20px;padding:12px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:18px">Seedlings</div>
+              <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8FA98A">{{ boardSeedlingCount }} in nursery</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;max-height:58vh;overflow-y:auto">
+              <sc-for list="{{ boardSeedlings }}" as="c" hint-placeholder-count="4">
+                <div data-kanban-card="1" data-card-type="{{ c.type }}" data-card-id="{{ c.id }}" data-card-col="seedlings" style="touch-action:none;cursor:grab;display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;border:1.5px solid #DDE8EA;background:#FFFDF7">
+                  <span style="flex:0 0 auto;width:26px;height:26px;background-image:url({{ c.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="flex:1 1 auto;min-width:0"><span style="display:block;font-size:13px;font-weight:700;color:#2E4034;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.name }}</span><span style="display:block;font-size:11px;color:#6E9BA5">{{ c.sub }}</span></span>
+                  <span style="flex:0 0 auto;color:#C9C0AE;font-size:15px">⠿</span>
+                </div>
+              </sc-for>
+              <sc-if value="{{ noBoardSeedlings }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:12px;color:#8FA98A;padding:8px 2px">Nothing started yet. Drag a seed here to sow it in the tray.</div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div data-kanban-col="pods" style="flex:0 0 82%;max-width:340px;min-width:240px;background:#F1F5EF;border:1px solid #DCE6D8;border-radius:20px;padding:12px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:18px">In pods</div>
+              <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8FA98A">{{ boardPodCount }} growing</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;max-height:58vh;overflow-y:auto">
+              <sc-for list="{{ boardPods }}" as="c" hint-placeholder-count="4">
+                <div onClick="{{ c.open }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;border:1.5px solid #DCE6D8;background:#FFFDF7">
+                  <span style="flex:0 0 auto;width:26px;height:26px;background-image:url({{ c.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="flex:1 1 auto;min-width:0"><span style="display:block;font-size:13px;font-weight:700;color:#2E4034;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.name }}</span><span style="display:block;font-size:11px;color:#8FA98A">{{ c.sub }}</span></span>
+                </div>
+              </sc-for>
+              <sc-if value="{{ noBoardPods }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:12px;color:#8FA98A;padding:8px 2px">No pods planted yet. Drag a seedling here to transplant it.</div>
+              </sc-if>
+            </div>
+          </div>
+
         </div>
       </div>
     </sc-if>
@@ -1091,6 +1185,8 @@ input[type=date]{-webkit-appearance:none;appearance:none}
 
     <sc-if value="{{ isWater }}" hint-placeholder-val="{{ false }}">
       <div style="animation:riseIn .3s ease both">
+        <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6E9BA5;margin:2px 0 4px">Tower water · reservoir</div>
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;color:#35543F;margin-bottom:12px">Tower water</div>
         <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
           <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Quick log</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px">
@@ -1373,6 +1469,31 @@ input[type=date]{-webkit-appearance:none;appearance:none}
           <div style="font-size:13px;color:#FFE3D8;margin-top:4px">{{ harvestTotalLabel }}</div>
         </div>
 
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px 14px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;margin-bottom:2px">Harvest map</div>
+          <div style="font-size:12px;color:#8FA98A;margin-bottom:6px">Pods ringed in orange are ready. Tap the exact pod to harvest it — so nothing gets picked by mistake.</div>
+          <sc-for list="{{ harvestSystems }}" as="sys" hint-placeholder-count="3">
+            <div style="margin-top:12px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
+                <div style="font-size:13px;font-weight:700;color:#35543F">{{ sys.name }}</div>
+                <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#C4633F">{{ sys.readyLabel }}</div>
+              </div>
+              <div style="overflow-x:auto;padding-bottom:4px"><div style="min-width:max-content">
+                <sc-for list="{{ sys.rows }}" as="r" hint-placeholder-count="10">
+                  <div style="display:flex;align-items:center;gap:6px;padding:3px 0">
+                    <div style="flex:0 0 32px;font-size:10px;color:#8FA98A">R{{ r.row }}</div>
+                    <div style="flex:1 1 auto;display:flex;gap:6px">
+                      <sc-for list="{{ r.pods }}" as="p" hint-placeholder-count="8">
+                        <button onClick="{{ p.open }}" style="flex:1 1 0;aspect-ratio:1/1;min-width:34px;max-width:60px;border-radius:50%;border:2px solid {{ p.ring }};background:{{ p.color }};opacity:{{ p.harvestDim }};box-shadow:{{ p.readyShadow }};cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center"><span style="width:74%;height:74%;background-image:url({{ p.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ p.iconOp }}"></span></button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div></div>
+            </div>
+          </sc-for>
+        </div>
+
         <div style="display:flex;gap:8px;background:#F1ECDF;border-radius:16px;padding:5px;margin-top:14px">
           <button onClick="{{ setHarvestAll }}" style="flex:1 1 0;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:{{ hAll.bg }};color:{{ hAll.fg }}">All plantings</button>
           <button onClick="{{ setHarvestReady }}" style="flex:1 1 0;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:{{ hReady.bg }};color:{{ hReady.fg }}">Ready only</button>
@@ -1410,8 +1531,9 @@ input[type=date]{-webkit-appearance:none;appearance:none}
 
   <sc-if value="{{ sheet.open }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ closeSheet }}" style="position:fixed;inset:0;background:rgba(46,64,52,0.42);z-index:60;display:flex;align-items:flex-end;justify-content:center">
-      <div onClick="{{ stop }}" style="width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:#FBF6EC;border-radius:26px 26px 0 0;padding:18px 18px 28px;animation:riseIn .25s ease both">
-        <div style="width:44px;height:5px;border-radius:5px;background:#DED7C8;margin:0 auto 14px"></div>
+      <div onClick="{{ stop }}" style="width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:#FBF6EC;border-radius:26px 26px 0 0;padding:0 18px 28px;animation:riseIn .25s ease both">
+        <div style="position:sticky;top:0;z-index:6;background:#FBF6EC;margin:0 -18px 0;padding:14px 18px 12px;border-bottom:1px solid #EFE9DA">
+        <div style="width:44px;height:5px;border-radius:5px;background:#DED7C8;margin:0 auto 12px"></div>
         <div style="display:flex;align-items:center;gap:12px">
           <span style="flex:0 0 auto;width:50px;height:50px;border-radius:50%;background:{{ sheet.color }};border:2px solid {{ sheet.ring }};display:flex;align-items:center;justify-content:center"><span style="width:78%;height:78%;background-image:url({{ sheet.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ sheet.iconOp }}"></span></span>
           <div style="flex:1 1 auto;min-width:0">
@@ -1419,6 +1541,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
             <div style="font-size:12px;color:#8FA98A">{{ sheet.location }}</div>
           </div>
           <button onClick="{{ closeSheet }}" style="flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid #E5DECD;background:#FFFDF7;color:#7A5C46;font-size:16px;cursor:pointer">✕</button>
+        </div>
         </div>
 
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px">
@@ -1487,6 +1610,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
                 </button>
               </sc-for>
             </div>
+            <button onClick="{{ sheet.transplantThis }}" style="width:100%;margin-top:10px;padding:12px;border-radius:13px;border:1.5px solid #6E9BA5;background:#FFFDF7;color:#4E7A84;font-size:14px;font-weight:700;cursor:pointer">Choose a pod — wave plan or manual…</button>
           </div>
         </sc-if>
 
@@ -1511,7 +1635,24 @@ input[type=date]{-webkit-appearance:none;appearance:none}
             <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">{{ sheet.pickerLabel }}</div>
             <button onClick="{{ sheet.togglePicker }}" style="background:none;border:none;color:#6E9BA5;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Seed library</button>
           </div>
+          <sc-if value="{{ sheet.hasRule }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;color:#8FA98A;margin-top:4px">{{ sheet.ruleNote }}</div>
+          </sc-if>
+          <sc-if value="{{ sheet.canTransplantHere }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ sheet.transplantHere }}" style="width:100%;margin-top:10px;padding:13px;border-radius:13px;border:1.5px solid #6E9BA5;background:#F1F5F6;color:#4E7A84;font-size:14px;font-weight:700;cursor:pointer">↑ Transplant a seedling into this pod</button>
+          </sc-if>
           <sc-if value="{{ sheet.pickerOpen }}" hint-placeholder-val="{{ false }}">
+            <input value="{{ sheet.pickerQ }}" onChange="{{ sheet.onPickerQ }}" placeholder="Type to find a seed…" style="width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:15px;max-width:100%;box-sizing:border-box">
+            <sc-if value="{{ sheet.hasRecent }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:10px">
+                <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:6px">Recently used</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <sc-for list="{{ sheet.recentItems }}" as="i" hint-placeholder-count="0">
+                    <button onClick="{{ i.pick }}" style="display:flex;align-items:center;gap:6px;padding:8px 11px;border-radius:999px;border:1.5px solid #DDE8EA;background:#F1F5F6;cursor:pointer;font-size:12px;color:#2E4034"><span style="width:18px;height:18px;background-image:url({{ i.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>{{ i.name }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px;max-height:260px;overflow-y:auto">
               <sc-for list="{{ sheet.pickerItems }}" as="i" hint-placeholder-count="0">
                 <button onClick="{{ i.pick }}" style="display:flex;align-items:center;gap:8px;text-align:left;padding:9px;border-radius:13px;border:1.5px solid {{ i.border }};background:{{ i.bg }};cursor:pointer;min-width:0">
@@ -1520,6 +1661,9 @@ input[type=date]{-webkit-appearance:none;appearance:none}
                 </button>
               </sc-for>
             </div>
+            <sc-if value="{{ sheet.noPickerItems }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:8px;font-size:13px;color:#8FA98A;text-align:center">No seeds match that search.</div>
+            </sc-if>
             <button onClick="{{ sheet.clear }}" style="width:100%;margin-top:10px;padding:12px;border-radius:13px;border:1.5px dashed #DED7C8;background:none;color:#8FA98A;font-size:14px;cursor:pointer">Empty this pod</button>
           </sc-if>
         </div>
@@ -1599,6 +1743,220 @@ input[type=date]{-webkit-appearance:none;appearance:none}
             </sc-for>
           </div>
         </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ tp.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ tp.close }}" style="position:fixed;inset:0;background:rgba(46,64,52,0.42);z-index:65;display:flex;align-items:center;justify-content:center;padding:16px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:#FBF6EC;border-radius:22px;padding:0 18px 24px;animation:riseIn .25s ease both">
+        <div style="position:sticky;top:0;z-index:6;background:#FBF6EC;margin:0 -18px 0;padding:14px 18px 12px;border-bottom:1px solid #EFE9DA">
+          <div style="width:44px;height:5px;border-radius:5px;background:#DED7C8;margin:0 auto 12px"></div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="flex:1 1 auto;min-width:0">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.1">Transplant a seedling</div>
+              <div style="font-size:12px;color:#8FA98A">{{ tp.stepLabel }}</div>
+            </div>
+            <button onClick="{{ tp.close }}" style="flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid #E5DECD;background:#FFFDF7;color:#7A5C46;font-size:16px;cursor:pointer">✕</button>
+          </div>
+        </div>
+
+        <sc-if value="{{ tp.pickSrc }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:14px">
+            <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">Which seedling or starter?</div>
+            <sc-if value="{{ tp.noSources }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:16px;padding:16px;margin-top:8px;font-size:14px;color:#7A5C46">No seedlings in the nursery yet. Sow seeds in the Seed Starter Tray, or add a nursery tray, then come back to transplant.</div>
+            </sc-if>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <sc-for list="{{ tp.sources }}" as="s" hint-placeholder-count="0">
+                <button onClick="{{ s.pick }}" style="display:flex;align-items:center;gap:10px;text-align:left;padding:12px;border-radius:14px;border:1.5px solid #DDE8EA;background:#FFFDF7;cursor:pointer">
+                  <span style="flex:0 0 auto;width:30px;height:30px;background-image:url({{ s.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="flex:1 1 auto;min-width:0">
+                    <span style="display:block;font-size:15px;font-weight:700;color:#2E4034">{{ s.name }}</span>
+                    <span style="display:block;font-size:12px;color:#6E9BA5">{{ s.detail }}</span>
+                  </span>
+                  <span style="flex:0 0 auto;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#4E7A84">{{ s.when }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tp.pickDest }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:14px">
+            <div style="display:flex;align-items:center;gap:10px;background:#F1F5F6;border:1px solid #DDE8EA;border-radius:14px;padding:10px 12px">
+              <span style="flex:0 0 auto;width:26px;height:26px;background-image:url({{ tp.src.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+              <span style="flex:1 1 auto;min-width:0;font-size:14px;font-weight:700;color:#2E4034">{{ tp.src.name }} <span style="font-weight:400;color:#6E9BA5">· {{ tp.src.label }}</span></span>
+              <button onClick="{{ tp.back }}" style="flex:0 0 auto;background:none;border:none;color:#6E9BA5;font-size:12px;cursor:pointer">Change</button>
+            </div>
+
+            <sc-if value="{{ tp.presetDest }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ tp.confirmPreset }}" style="width:100%;margin-top:12px;padding:16px;border-radius:14px;border:none;background:#4E7A55;color:#FFFDF7;font-size:15px;font-weight:700;cursor:pointer">Move it into {{ tp.destLabel }}</button>
+            </sc-if>
+
+            <sc-if value="{{ tp.chooseDest }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:8px;background:#F1ECDF;border-radius:14px;padding:5px;margin-top:12px">
+                <button onClick="{{ tp.modeWave }}" style="flex:1 1 0;padding:10px;border-radius:11px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:{{ tp.waveBg }};color:{{ tp.waveFg }}">By wave plan</button>
+                <button onClick="{{ tp.modeManual }}" style="flex:1 1 0;padding:10px;border-radius:11px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:{{ tp.manualBg }};color:{{ tp.manualFg }}">Pick manually</button>
+              </div>
+
+              <sc-if value="{{ tp.isWave }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:10px">
+                  <sc-if value="{{ tp.noWave }}" hint-placeholder-val="{{ false }}">
+                    <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:16px;padding:16px;font-size:14px;color:#7A5C46">No open pods are planned for this crop right now. Switch to “Pick manually” to choose any open pod.</div>
+                  </sc-if>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px">
+                    <sc-for list="{{ tp.waveTargets }}" as="m" hint-placeholder-count="0">
+                      <button onClick="{{ m.go }}" style="text-align:left;padding:11px;border-radius:13px;border:1.5px solid {{ m.border }};background:{{ m.bg }};cursor:pointer;min-width:0">
+                        <span style="display:block;font-size:14px;font-weight:700;color:#35543F">{{ m.label }}</span>
+                        <span style="display:block;font-size:11px;color:#6E9BA5">{{ m.why }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ tp.isManual }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:10px">
+                  <sc-if value="{{ tp.mHasBack }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ tp.mBack }}" style="background:none;border:none;color:#6E9BA5;font-size:13px;cursor:pointer;padding:2px 0;font-weight:700">‹ {{ tp.mCrumb }}</button>
+                  </sc-if>
+                  <sc-if value="{{ tp.mIsSys }}" hint-placeholder-val="{{ true }}">
+                    <div style="font-size:12px;color:#8FA98A;margin:4px 0 6px">1 · Choose the system</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+                      <sc-for list="{{ tp.cascade.systems }}" as="s" hint-placeholder-count="3">
+                        <button onClick="{{ s.pick }}" style="padding:16px 8px;border-radius:14px;border:1.5px solid #DDE8EA;background:#FFFDF7;cursor:pointer;text-align:center">
+                          <span style="display:block;font-size:15px;font-weight:700;color:#35543F">{{ s.label }}</span>
+                          <span style="display:block;font-size:11px;color:#6E9BA5;margin-top:2px">{{ s.open }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ tp.mIsRow }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:12px;color:#8FA98A;margin:4px 0 6px">2 · Choose the row</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px">
+                      <sc-for list="{{ tp.cascade.rows }}" as="r" hint-placeholder-count="10">
+                        <button onClick="{{ r.pick }}" style="padding:12px 6px;border-radius:12px;border:1.5px solid #E5DECD;background:{{ r.bg }};color:{{ r.fg }};cursor:pointer;text-align:center">
+                          <span style="display:block;font-size:14px;font-weight:700">{{ r.label }}</span>
+                          <span style="display:block;font-size:10px;margin-top:2px">{{ r.open }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ tp.mIsSpace }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:12px;color:#8FA98A;margin:4px 0 6px">3 · Choose the space</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px">
+                      <sc-for list="{{ tp.cascade.spaces }}" as="p" hint-placeholder-count="8">
+                        <button onClick="{{ p.go }}" style="padding:12px 4px;border-radius:12px;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};cursor:pointer;text-align:center;min-width:0">
+                          <span style="display:block;font-size:15px;font-weight:700">{{ p.label }}</span>
+                          <span style="display:block;font-size:10px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.occupied }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ batchPickOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeBatch }}" style="position:fixed;inset:0;background:rgba(46,64,52,0.42);z-index:66;display:flex;align-items:center;justify-content:center;padding:16px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:#FBF6EC;border-radius:22px;padding:0 18px 24px;animation:riseIn .25s ease both">
+        <div style="position:sticky;top:0;z-index:6;background:#FBF6EC;margin:0 -18px 0;padding:14px 18px 12px;border-bottom:1px solid #EFE9DA">
+          <div style="width:44px;height:5px;border-radius:5px;background:#DED7C8;margin:0 auto 12px"></div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="flex:1 1 auto;min-width:0">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px;line-height:1.1">Sow into {{ selCount }} pods</div>
+              <div style="font-size:12px;color:#8FA98A">Pick one seed — it goes into every selected pod.</div>
+            </div>
+            <button onClick="{{ closeBatch }}" style="flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid #E5DECD;background:#FFFDF7;color:#7A5C46;font-size:16px;cursor:pointer">✕</button>
+          </div>
+          <input value="{{ batchQ }}" onChange="{{ onBatchQ }}" placeholder="Type to find a seed…" style="width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:15px;max-width:100%;box-sizing:border-box">
+        </div>
+        <sc-if value="{{ hasRecent }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:12px">
+            <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:6px">Recently used</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ batchRecent }}" as="i" hint-placeholder-count="0">
+                <button onClick="{{ i.pick }}" style="display:flex;align-items:center;gap:6px;padding:8px 11px;border-radius:999px;border:1.5px solid #DDE8EA;background:#F1F5F6;cursor:pointer;font-size:12px;color:#2E4034"><span style="width:18px;height:18px;background-image:url({{ i.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>{{ i.name }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:12px">
+          <sc-for list="{{ batchItems }}" as="i" hint-placeholder-count="0">
+            <button onClick="{{ i.pick }}" style="display:flex;align-items:center;gap:8px;text-align:left;padding:10px;border-radius:13px;border:1.5px solid #EFE9DA;background:#FCFAF3;cursor:pointer;min-width:0">
+              <span style="flex:0 0 auto;width:26px;height:26px;background-image:url({{ i.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+              <span style="flex:1 1 auto;min-width:0;font-size:12px;color:#2E4034;overflow:hidden;text-overflow:ellipsis">{{ i.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ noBatchItems }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;font-size:13px;color:#8FA98A;text-align:center">No seeds match that search.</div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sow.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ sow.close }}" style="position:fixed;inset:0;background:rgba(46,64,52,0.42);z-index:67;display:flex;align-items:center;justify-content:center;padding:16px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:#FBF6EC;border-radius:22px;padding:0 18px 24px;animation:riseIn .25s ease both">
+        <div style="position:sticky;top:0;z-index:6;background:#FBF6EC;margin:0 -18px 0;padding:14px 18px 12px;border-bottom:1px solid #EFE9DA">
+          <div style="width:44px;height:5px;border-radius:5px;background:#DED7C8;margin:0 auto 12px"></div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="flex:0 0 auto;width:34px;height:34px;background-image:url({{ sow.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+            <div style="flex:1 1 auto;min-width:0">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:21px;line-height:1.1">Sow {{ sow.name }}</div>
+              <div style="font-size:12px;color:#8FA98A">Pick a spot in {{ sow.where }}</div>
+            </div>
+            <button onClick="{{ sow.close }}" style="flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid #E5DECD;background:#FFFDF7;color:#7A5C46;font-size:16px;cursor:pointer">✕</button>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <sc-if value="{{ sow.sHasBack }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ sow.sBack }}" style="background:none;border:none;color:#6E9BA5;font-size:13px;cursor:pointer;padding:2px 0;font-weight:700">‹ {{ sow.sCrumb }}</button>
+          </sc-if>
+          <sc-if value="{{ sow.sIsSys }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;color:#8FA98A;margin:4px 0 6px">1 · Choose the location</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <sc-for list="{{ sow.cascade.systems }}" as="s" hint-placeholder-count="2">
+                <button onClick="{{ s.pick }}" style="padding:16px 8px;border-radius:14px;border:1.5px solid #DDE8EA;background:#FFFDF7;cursor:pointer;text-align:center">
+                  <span style="display:block;font-size:15px;font-weight:700;color:#35543F">{{ s.label }}</span>
+                  <span style="display:block;font-size:11px;color:#6E9BA5;margin-top:2px">{{ s.open }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sow.sIsRow }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;color:#8FA98A;margin:4px 0 6px">Choose the row</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px">
+              <sc-for list="{{ sow.cascade.rows }}" as="r" hint-placeholder-count="5">
+                <button onClick="{{ r.pick }}" style="padding:12px 6px;border-radius:12px;border:1.5px solid #E5DECD;background:{{ r.bg }};color:{{ r.fg }};cursor:pointer;text-align:center">
+                  <span style="display:block;font-size:14px;font-weight:700">{{ r.label }}</span>
+                  <span style="display:block;font-size:10px;margin-top:2px">{{ r.open }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sow.sIsSpace }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;color:#8FA98A;margin:4px 0 6px">Tap every spot you want to sow</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px">
+              <sc-for list="{{ sow.cascade.spaces }}" as="p" hint-placeholder-count="12">
+                <button onClick="{{ p.go }}" style="padding:12px 4px;border-radius:12px;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};cursor:pointer;text-align:center;min-width:0">
+                  <span style="display:block;font-size:15px;font-weight:700">{{ p.label }}</span>
+                  <span style="display:block;font-size:10px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.occupied }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sow.hasSel }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ sow.confirm }}" style="position:sticky;bottom:0;width:100%;margin-top:14px;padding:15px;border-radius:14px;border:none;background:#4E7A55;color:#FFFDF7;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 -8px 14px -8px rgba(46,64,52,0.3)">{{ sow.confirmLabel }}</button>
+          </sc-if>
+        </div>
       </div>
     </div>
   </sc-if>
@@ -1821,6 +2179,7 @@ function firstOfBase(list, base){ const m = list.filter(i=>i.base===base); retur
 
 class Component extends DCLogic {
   state = {tab:'start', view:'elevation', sys:'tower', picker:false, podId:null, harvestFilter:'all', data:null,
+    selMode:false, sel:{}, batchPick:false, batchQ:'', pickerQ:'', tp:{open:false}, sow:{open:false},
     form:{ph:'',ec:'',temp:'',level:'Full',gal:''}, calc:{gal:'20',stage:'veg',ec:'',ph:''}};
 
   componentDidMount(){
@@ -1837,6 +2196,7 @@ class Component extends DCLogic {
       } });
     if(added) this.persist(d);
     this.setState({data:d, mode:'public'});
+    try{ window.KRISP_APP = this; }catch(e){}
     this.initCloud(d);
     this.loadGuestNotes();
   }
@@ -1994,6 +2354,7 @@ class Component extends DCLogic {
       .sort((a,b)=> a.sys===b.sys ? (b.row-a.row || a.pos-b.pos) : (a.sys==='tower'?-1:(b.sys==='tower'?1:(a.sys<b.sys?-1:1)))); }
 
   setPodPlant(id, libId){ this.update(d=>{ const pod=d.pods[id]; const it=d.library.filter(i=>i.id===libId)[0]; if(!it) return;
+    this.recordRecent(d, it.id);
     const cur = pod.plantings[pod.plantings.length-1];
     if(cur && !cur.removedOn){ cur.crop = it.id; cur.variety = it.variety; }
     else pod.plantings.push({crop:it.id, variety:it.variety, plantedOn:today(), wave:null, harvests:[], status: pod.sys==='tower' ? 'Planted' : 'Seed Starting', removedOn:null, events:[{date:today(), label: pod.sys==='tower' ? 'Planted in this pod' : 'Sown straight into this pod'}]});
@@ -2003,6 +2364,7 @@ class Component extends DCLogic {
     if(cur && !cur.removedOn){ if(cur.harvests.length) cur.removedOn = today(); else pod.plantings.pop(); } }); this.setState({picker:false}); }
   moveSeedling(slotId, podId){ this.update(d=>{ const slot=d.pods[slotId]; const sp=slot.plantings[slot.plantings.length-1];
     if(!sp || sp.removedOn) return;
+    this.recordRecent(d, sp.crop);
     const pod=d.pods[podId]; const cur=pod.plantings[pod.plantings.length-1];
     if(cur && !cur.removedOn) cur.removedOn = today();
     sp.removedOn = today(); sp.status = 'Harvested';
@@ -2024,6 +2386,7 @@ class Component extends DCLogic {
   removeTray(id){ this.update(d=>{ d.trays = (d.trays||[]).filter(x=>x.id!==id); }); }
   plantFromTray(podId, trayId){ this.update(d=>{ const t=(d.trays||[]).filter(x=>x.id===trayId)[0]; if(!t) return;
     const it = d.library.filter(i=>i.id===t.crop)[0]; if(!it) return;
+    this.recordRecent(d, it.id);
     const pod = d.pods[podId]; const cur = pod.plantings[pod.plantings.length-1];
     if(cur && !cur.removedOn) cur.removedOn = today();
     pod.plantings.push({crop:it.id, variety:it.variety, plantedOn:today(), wave:null, harvests:[], status:'Planted', removedOn:null, sownOn:t.sownOn,
@@ -2107,6 +2470,79 @@ class Component extends DCLogic {
   harvestSome(id){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1]; if(p&&!p.removedOn){ p.harvests.push({date:today(),type:'some'}); p.status='Growing'; this.logEvent(p,'Harvested some — plant kept growing'); } }); }
   harvestRemove(id){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1]; if(p&&!p.removedOn){ p.harvests.push({date:today(),type:'full'}); p.removedOn=today(); p.status='Harvested'; this.logEvent(p,'Final harvest — plant removed'); } }); this.setState({podId:id}); }
   plantCrop(id, crop){ this.update(d=>{ const c=C(crop); d.pods[id].plantings.push({crop, variety: c.varieties?c.varieties[0]:'', plantedOn:today(), wave:null, harvests:[], status:'Seed Starting', removedOn:null}); }); }
+
+  // ---- Usability: recents, multi-select sowing, transplant flow ----
+  recordRecent(d, libId){ if(!libId) return; d.recentSeeds = [libId].concat((d.recentSeeds||[]).filter(x=>x!==libId)).slice(0,10); }
+  // system planting rules: seeds -> tray, starters -> tower, both -> tabletops
+  sysAllows(sys){ return sys==='S' ? {seed:true, starter:false} : (sys==='tower' ? {seed:false, starter:true} : {seed:true, starter:true}); }
+  toggleSel(id){ this.setState(s=>{ const sel=Object.assign({}, s.sel||{}); if(sel[id]) delete sel[id]; else sel[id]=true; return {sel}; }); }
+  startSelect(){ this.setState({selMode:true, sel:{}, view:'elevation'}); }
+  cancelSelect(){ this.setState({selMode:false, sel:{}, batchPick:false, batchQ:''}); }
+  clearSelect(){ this.setState({sel:{}}); }
+  selectAllOpen(){ const sys=this.state.sys||'tower'; const ids={}; this.podList(sys).forEach(p=>{ if(!this.current(p)) ids[p.id]=true; }); this.setState({sel:ids}); }
+  openBatchPick(){ if(Object.keys(this.state.sel||{}).length) this.setState({batchPick:true, batchQ:''}); }
+  closeBatch(){ this.setState({batchPick:false}); }
+  plantMany(ids, libId){ this.update(d=>{ const it=d.library.filter(i=>i.id===libId)[0]; if(!it) return;
+    ids.forEach(id=>{ const pod=d.pods[id]; if(!pod) return; const cur=pod.plantings[pod.plantings.length-1];
+      if(cur && !cur.removedOn){ cur.crop=it.id; cur.variety=it.variety; }
+      else pod.plantings.push({crop:it.id, variety:it.variety, plantedOn:today(), wave:(d.plan[id]||{}).wave||null, harvests:[], status: pod.sys==='tower'?'Planted':'Seed Starting', removedOn:null,
+        events:[{date:today(), label: pod.sys==='tower'?'Planted in this pod':'Sown into this pod'}]});
+      if(d.plan[id]) d.plan[id].crop = it.id;
+    });
+    this.recordRecent(d, libId);
+  }); this.setState({selMode:false, sel:{}, batchPick:false, batchQ:''}); }
+  setPickerQ(v){ this.setState({pickerQ:v}); }
+  setBatchQ(v){ this.setState({batchQ:v}); }
+  openTransplant(src, dest){ this.setState({tp:{open:true, src:src||null, dest:dest||null, mode:'wave', jump:''}, podId:null}); }
+  closeTransplant(){ this.setState({tp:{open:false}}); }
+  tpSetSrc(src){ this.setState(s=>({tp:Object.assign({}, s.tp||{}, {src})})); }
+  tpMode(m){ this.setState(s=>({tp:Object.assign({}, s.tp||{}, {mode:m})})); }
+  tpJump(v){ this.setState(s=>({tp:Object.assign({}, s.tp||{}, {jump:v})})); }
+  tpConfirm(podId){ const tp=this.state.tp||{}; const src=tp.src; if(!src||!podId) return;
+    if(src.type==='slot') this.moveSeedling(src.id, podId); else this.plantFromTray(podId, src.id);
+    this.setState({tp:{open:false}}); }
+  // shared 3-tap cascade: system -> row -> space
+  cascadeData(sysKeys, msys, mrow, setSys, setRow, back, onPick){
+    const label = k => k==='tower'?'Tower':(k==='S'?'Seed Tray':('Table '+k));
+    const openCount = k => this.podList(k).filter(p=>!this.current(p)).length;
+    if(!msys) return {step:'sys', crumb:'Where does it go?',
+      systems: sysKeys.map(k=>({key:k, label:label(k), open:openCount(k)+' open', pick:()=>setSys(k)})), back:null};
+    const sdef = SYSTEMS.filter(s=>s.key===msys)[0];
+    if(mrow==null){
+      const rows=[]; for(let r=sdef.rows;r>=1;r--){ const openN=this.podList(msys).filter(p=>p.row===r && !this.current(p)).length;
+        rows.push({row:r, label:'Row '+r, open:openN+' open', disabled:openN===0, bg: openN===0?'#F3EFE6':'#FFFDF7', fg: openN===0?'#B7AE9C':'#35543F', pick: openN===0?(()=>{}):(()=>setRow(r))}); }
+      return {step:'row', crumb: label(msys), rows, back:()=>back()};
+    }
+    const spaces=[]; for(let pos=1;pos<=sdef.cols;pos++){ const id=(msys==='tower'?'':msys+'-')+'R'+mrow+'-P'+pos; const pod=this.state.data.pods[id]; const cur=pod?this.current(pod):null;
+      spaces.push({pos, id, label:'#'+pos, open:!cur, occupied: cur?C(cur.crop).name:'open',
+        border: cur?'#EFE9DA':'#6E9BA5', bg: cur?'#F3EFE6':'#F1F5F6', fg: cur?'#B7AE9C':'#35543F',
+        go: cur?(()=>{}):(()=>onPick(id))}); }
+    return {step:'space', crumb: label(msys)+' · Row '+mrow, spaces, back:()=>back()};
+  }
+  tpManualSys(k){ this.setState(s=>({tp:Object.assign({},s.tp||{},{msys:k, mrow:null})})); }
+  tpManualRow(r){ this.setState(s=>({tp:Object.assign({},s.tp||{},{mrow:r})})); }
+  tpManualBack(){ this.setState(s=>{ const tp=Object.assign({},s.tp||{}); if(tp.mrow!=null) tp.mrow=null; else tp.msys=null; return {tp}; }); }
+  // sow-a-seed dialog (used by the board drops)
+  openSow(libId){ this.setState({sow:{open:true, libId, msys:null, mrow:null, sel:{}}}); }
+  closeSow(){ this.setState({sow:{open:false}}); }
+  sowSys(k){ this.setState(s=>({sow:Object.assign({},s.sow||{},{msys:k, mrow:null})})); }
+  sowRow(r){ this.setState(s=>({sow:Object.assign({},s.sow||{},{mrow:r})})); }
+  sowBack(){ this.setState(s=>{ const sw=Object.assign({},s.sow||{}); if(sw.mrow!=null) sw.mrow=null; else sw.msys=null; return {sow:sw}; }); }
+  sowToggle(id){ this.setState(s=>{ const sw=Object.assign({},s.sow||{}); const sel=Object.assign({},sw.sel||{}); if(sel[id]) delete sel[id]; else sel[id]=true; sw.sel=sel; return {sow:sw}; }); }
+  sowConfirmMany(){ const sw=this.state.sow||{}; const ids=Object.keys(sw.sel||{}); if(ids.length && sw.libId) this.plantMany(ids, sw.libId); this.setState({sow:{open:false}}); }
+  // Kanban board drop: seed->tray/tabletop (sow), seedling->pod (transplant)
+  boardDrop(type, id, toCol){
+    const d=this.state.data;
+    if(type==='seed'){ this.openSow(id); return; }
+    if((type==='slot'||type==='tray') && toCol==='pods'){
+      let src=null;
+      if(type==='slot'){ const pod=d.pods[id]; const cur=this.current(pod); if(!cur) return; const cc=C(cur.crop);
+        src={type:'slot', id, crop:cur.crop, name:cc.name, icon:cc.icon, label:id}; }
+      else { const t=(d.trays||[]).filter(x=>x.id===id)[0]; if(!t) return; const cc=C(t.crop);
+        src={type:'tray', id, crop:t.crop, name:cc.name, icon:cc.icon, label:'nursery tray'}; }
+      this.openTransplant(src, null); this.tpMode('manual');
+    }
+  }
   reservePod(id){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1]; if(p && !p.removedOn){ p.removedOn=today(); } pod.reserved=true; }); }
   setPodStatus(id, st){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1];
     if(st==='Reserved / Open'){ if(p && !p.removedOn) p.removedOn = today(); return; }
@@ -2154,11 +2590,15 @@ class Component extends DCLogic {
       todayLabel: new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}),
       isToday:this.state.tab==='today', isTower:this.state.tab==='tower', isPlants:this.state.tab==='plants',
       isWater:this.state.tab==='water', isTasks:this.state.tab==='tasks', isHarvest:this.state.tab==='harvest',
-      isStart:this.state.tab==='start',
-      navItems: [['start','Start'],['today','Today'],['tower','Tower'],['plants','Plants'],['water','Water'],['tasks','Tasks'],['harvest','Harvest']].map(([k,label])=>({
+      isStart:this.state.tab==='start', isBoard:this.state.tab==='board',
+      navItems: [['start','Start'],['today','Today'],['tower','Tower'],['board','Board'],['plants','Plants'],['water','Water'],['tasks','Tasks'],['harvest','Harvest']].map(([k,label])=>({
         label, go:()=>this.setState({tab:k}), bg: this.state.tab===k?'#35543F':'transparent',
         fg: this.state.tab===k?'#F6F1E4':'#7A5C46', dot: this.state.tab===k?'#D9A441':'#DED7C8'})),
       sheet:{open:false}, isElevation:this.state.view==='elevation', isTopDown:this.state.view==='top', isRows:this.state.view==='rows',
+      tp:{open:false}, batchPickOpen:false, batchItems:[], batchRecent:[], hasRecent:false, noBatchItems:false, batchQ:'', onBatchQ:()=>{},
+      sow:{open:false}, isBoard:false, boardSeeds:[], boardSeedlings:[], boardPods:[], boardSeedCount:0, boardSeedlingCount:0, boardPodCount:0, noBoardSeedlings:true, noBoardPods:true, closeSow:()=>{}, harvestSystems:[],
+      selMode:false, selOff:true, selCount:0, hasSel:false, noSel:true, selCountLabel:'', canSow:false, canTransplantHere:false,
+      startSelect:()=>{}, cancelSelect:()=>{}, clearSelect:()=>{}, selectAllOpen:()=>{}, openBatchPick:()=>{}, closeBatch:()=>{}, openTransplant:()=>{},
       imgHide: e=>{ try{ e.target.style.display='none'; }catch(_){} },
       imgHideCard: e=>{ let n=e.target; while(n){ if(n.getAttribute && n.getAttribute('data-imgcard')){ n.style.display='none'; return; } n=n.parentElement; } try{ e.target.style.display='none'; }catch(_){} }};
     if(!d) return Object.assign(base,{stats:{},water:{},todayTasks:[],comingUp:[],miniRows:[],towerRows:[],topDownPods:[],legend:[],
@@ -2261,13 +2701,19 @@ class Component extends DCLogic {
         some: ()=>this.harvestSome(x.pod.id), remove: ()=>this.harvestRemove(x.pod.id)}; });
 
     // tower views
+    const selMode = !!this.state.selMode; const sel = this.state.sel || {};
     const mk = p => { const v = this.visual(p); const cur = this.current(p); const pl = d.plan[p.id];
       const name = cur ? C(cur.crop).name
         : (v.planned ? (pl.sownOn ? C(pl.crop).name + ' · in nursery' : C(pl.crop).name + ' · wave ' + pl.wave) : 'Reserved / Airflow');
-      return {id:p.id, pos:p.pos, color:v.color, ring:v.ring, fg:v.fg, abbr:v.abbr,
+      const isSel = !!sel[p.id];
+      const hst = cur ? this.statusOf(p) : '';
+      const isReady = hst==='Ready to Harvest';
+      return {id:p.id, pos:p.pos, color:v.color, ring: selMode && isSel ? '#35543F' : v.ring, fg:v.fg, abbr:v.abbr,
         icon: cur ? C(cur.crop).icon : (v.planned ? C(pl.crop).icon : BLANK),
         iconOp: cur ? '1' : (v.planned ? (pl.sownOn ? '0.8' : '0.4') : '0'),
-        plantName: name, open: ()=>this.openPod(p.id), openPublic: ()=>this.setState({pubPod:p.id})}; };
+        sel: isSel, selShadow: selMode && isSel ? '0 0 0 3px #35543F' : 'none',
+        ready: isReady, readyShadow: isReady ? '0 0 0 3px #E8836B' : 'none', harvestDim: isReady ? '1' : (cur ? '0.5' : '0.24'),
+        plantName: name, open: selMode ? (()=>this.toggleSel(p.id)) : (()=>this.openPod(p.id)), openPublic: ()=>this.setState({pubPod:p.id})}; };
     const towerRows = [];
     for(let row=10; row>=1; row--){ const rp=[]; for(let pos=1;pos<=8;pos++) rp.push(mk(d.pods['R'+row+'-P'+pos]));
       towerRows.push({row, pods:rp, zone:ZONES[row][0], zoneShort:ZONES[row][1], zoneColor:ZONES[row][2]}); }
@@ -2426,7 +2872,8 @@ class Component extends DCLogic {
         sheet.moveTargets = empties.sort((a,b)=>(planMatch(b)?1:0)-(planMatch(a)?1:0)).slice(0,8).map(p=>({
           label: podLabel(p), why: planMatch(p) ? 'planned for this crop' : (p.sys==='tower' ? ZONES[p.row][1] : 'open slot'),
           move: ()=>this.moveSeedling(pod.id, p.id)}));
-      } else { sheet.seedling = {show:false}; sheet.moveTargets = []; }
+        sheet.transplantThis = ()=>this.openTransplant({type:'slot', id:pod.id, crop:cur.crop, label:podLabel(pod), name:C(cur.crop).name, icon:C(cur.crop).icon}, null);
+      } else { sheet.seedling = {show:false}; sheet.moveTargets = []; sheet.transplantThis = ()=>{}; }
       sheet.trayItems = (d.trays||[]).map(t=>{ const c=C(t.crop); const starter = t.kind==='starter';
         const ready = addDays(t.sownOn, starter ? 0 : (c.lead||0)); const left = -daysSince(ready);
         return {name: c.name + (starter ? ' · starter' : ''), icon:c.icon, count:t.count+' available',
@@ -2443,12 +2890,27 @@ class Component extends DCLogic {
       sheet.events = cur ? (cur.events||[]).slice().reverse().map(ev=>({date: fmt(ev.date), label: ev.label})) : [];
       sheet.hasEvents = !!(cur && (cur.events||[]).length);
       sheet.pickerOpen = !!this.state.picker;
-      sheet.togglePicker = ()=>this.setState(s=>({picker:!s.picker}));
+      sheet.togglePicker = ()=>this.setState(s=>({picker:!s.picker, pickerQ:''}));
       sheet.pickerLabel = cur ? 'Change what is in this pod' : 'Choose from my seed library';
       sheet.clear = ()=>this.clearPod(pod.id);
-      sheet.pickerItems = d.library.map(i=>({id:i.id, name:i.name, group:i.group, icon:i.icon, color:i.color,
+      // planting rules note + transplant shortcut
+      sheet.hasRule = true;
+      sheet.ruleNote = pod.sys==='S' ? 'The seed tray is for starting seeds — move seedlings up once they’re ready.'
+        : (pod.sys==='tower' ? 'The tower takes transplanted starters. Sow seeds in the tray or a tabletop, then transplant them up here.'
+          : 'Tabletops take either — sow a seed straight in, or transplant a starter.');
+      sheet.canTransplantHere = pod.sys!=='S';
+      sheet.transplantHere = ()=>this.openTransplant(null, pod.id);
+      const pq = (this.state.pickerQ||'').trim().toLowerCase();
+      sheet.pickerQ = this.state.pickerQ||'';
+      sheet.onPickerQ = e=>{ const v=e.target.value; this.setState({pickerQ:v}); };
+      const libAll = d.library.map(i=>({id:i.id, name:i.name, group:i.group, icon: i.icon || C(i.id).icon, color:i.color,
         border: cur && cur.crop===i.id ? '#35543F' : '#EFE9DA', bg: cur && cur.crop===i.id ? '#F1F5EF' : '#FCFAF3',
         pick: ()=>this.setPodPlant(pod.id, i.id)}));
+      const recentIds = (d.recentSeeds||[]).slice(0,6);
+      sheet.recentItems = recentIds.map(id=>libAll.filter(x=>x.id===id)[0]).filter(Boolean);
+      sheet.hasRecent = !pq && sheet.recentItems.length>0;
+      sheet.pickerItems = pq ? libAll.filter(i=>i.name.toLowerCase().indexOf(pq)>=0) : libAll;
+      sheet.noPickerItems = sheet.pickerItems.length===0;
     }
 
     const tabStyle = on => on ? {bg:'#FFFDF7', fg:'#35543F'} : {bg:'transparent', fg:'#7A5C46'};
@@ -2510,7 +2972,108 @@ class Component extends DCLogic {
         open: ()=>this.setState({guestOpen:{name:nm, body:n.body, icon:n.icon||BLANK, when:w}}) }; });
     const guestOpen = this.state.guestOpen || null;
 
+    // --- usability: multi-select toolbar, batch seed picker, transplant flow ---
+    const selCount = Object.keys(sel).length;
+    const sysAllow = this.sysAllows(sysKey);
+    const bq = (this.state.batchQ||'').trim().toLowerCase();
+    const libBatch = d.library.map(i=>({id:i.id, name:i.name, icon: i.icon || C(i.id).icon,
+      pick: ()=>this.plantMany(Object.keys(this.state.sel||{}), i.id)}));
+    const batchRecent = (d.recentSeeds||[]).slice(0,6).map(id=>libBatch.filter(x=>x.id===id)[0]).filter(Boolean);
+    const batchItems = bq ? libBatch.filter(i=>i.name.toLowerCase().indexOf(bq)>=0) : libBatch;
+
+    const tpState = this.state.tp || {open:false};
+    let tp = {open:false};
+    if(tpState.open){
+      const slotSrc = this.podList('S').map(p=>({p, cur:this.current(p)})).filter(x=>x.cur).map(x=>{
+        const cc=C(x.cur.crop); const lead=cc.lead||14; const age=daysSince(x.cur.plantedOn); const left=lead-age;
+        return {type:'slot', id:x.p.id, crop:x.cur.crop, name:cc.name, icon:cc.icon, label:podLabel(x.p),
+          detail:podLabel(x.p)+' · '+age+'d old', when: left>0?('ready in '+left+'d'):'ready now',
+          pick: ()=>this.tpSetSrc({type:'slot', id:x.p.id, crop:x.cur.crop, name:cc.name, icon:cc.icon, label:podLabel(x.p)})}; });
+      const traySrc = (d.trays||[]).map(t=>{ const cc=C(t.crop); const starter=t.kind==='starter';
+        const ready=addDays(t.sownOn, starter?0:(cc.lead||0)); const left=-daysSince(ready);
+        return {type:'tray', id:t.id, crop:t.crop, name:cc.name+(starter?' · starter':''), icon:cc.icon, label:'nursery tray',
+          detail:t.count+' available', when: (starter||left<=0)?'ready now':('ready in '+left+'d'),
+          pick: ()=>this.tpSetSrc({type:'tray', id:t.id, crop:t.crop, name:cc.name, icon:cc.icon, label:'nursery tray'})}; });
+      const sources = slotSrc.concat(traySrc);
+      const src = tpState.src || null;
+      const destId = tpState.dest || null;
+      const destPod = destId ? d.pods[destId] : null;
+      let waveTargets=[]; let cascade=null;
+      if(src && !destId){
+        const empties = this.podList().filter(p=>!this.current(p));
+        const srcBase = C(src.crop).base;
+        const match = p => { const pl=d.plan[p.id]; return pl && (pl.crop===src.crop || C(pl.crop).base===srcBase); };
+        waveTargets = empties.filter(match).sort((a,b)=>((d.plan[a.id].wave||9)-(d.plan[b.id].wave||9)) || (b.row-a.row) || (a.pos-b.pos)).map(p=>{
+          const pl=d.plan[p.id]; const exact=pl.crop===src.crop; const zone = p.sys==='tower'?ZONES[p.row][1]:('Tabletop '+p.sys);
+          return {label: podLabel(p), why:'Wave '+(pl.wave||'—')+' · '+zone, border: exact?'#4E7A55':'#DDE8EA', bg: exact?'#F1F5EF':'#FFFDF7', go:()=>this.tpConfirm(p.id)}; });
+        cascade = this.cascadeData(['tower','A','B'], tpState.msys, tpState.mrow, k=>this.tpManualSys(k), r=>this.tpManualRow(r), ()=>this.tpManualBack(), pid=>this.tpConfirm(pid));
+      }
+      const mode = tpState.mode||'wave';
+      tp = {open:true,
+        stepLabel: !src ? 'Step 1 · pick a seedling' : (destId ? ('Into '+podLabel(destPod)) : 'Step 2 · pick a pod'),
+        pickSrc: !src, sources, noSources: sources.length===0,
+        pickDest: !!src, src: src||{},
+        back: ()=>this.tpSetSrc(null), close: ()=>this.closeTransplant(),
+        presetDest: !!destId, chooseDest: !destId, destLabel: destPod?podLabel(destPod):'',
+        confirmPreset: ()=>{ if(destId) this.tpConfirm(destId); },
+        isWave: mode!=='manual', isManual: mode==='manual',
+        modeWave: ()=>this.tpMode('wave'), modeManual: ()=>this.tpMode('manual'),
+        waveBg: mode!=='manual'?'#FFFDF7':'transparent', waveFg: mode!=='manual'?'#35543F':'#7A5C46',
+        manualBg: mode==='manual'?'#FFFDF7':'transparent', manualFg: mode==='manual'?'#35543F':'#7A5C46',
+        waveTargets, noWave: waveTargets.length===0,
+        cascade: cascade||{step:'sys',systems:[],rows:[],spaces:[]},
+        mIsSys: !!cascade && cascade.step==='sys', mIsRow: !!cascade && cascade.step==='row', mIsSpace: !!cascade && cascade.step==='space',
+        mCrumb: cascade?cascade.crumb:'', mBack: (cascade&&cascade.back)?cascade.back:(()=>{}), mHasBack: !!(cascade&&cascade.back)};
+    }
+
+    // sow-a-seed dialog (board drops) + Kanban board data
+    const sowState = this.state.sow || {open:false};
+    let sow = {open:false};
+    if(sowState.open){
+      const it = d.library.filter(i=>i.id===sowState.libId)[0] || {name:'seed'};
+      const sysKeys = ['S','A','B'];
+      const sel = sowState.sel || {};
+      const casc = this.cascadeData(sysKeys, sowState.msys, sowState.mrow, k=>this.sowSys(k), r=>this.sowRow(r), ()=>this.sowBack(), pid=>this.sowToggle(pid));
+      if(casc.step==='space'){ casc.spaces = casc.spaces.map(sp=> (sp.open && sel[sp.id]) ? Object.assign({}, sp, {border:'#4E7A55', bg:'#E7F0E6', fg:'#2E4034', occupied:'✓ picked'}) : sp); }
+      const selCount = Object.keys(sel).length;
+      sow = {open:true, name: it.name, icon: it.icon || (it.id?C(it.id).icon:BLANK),
+        where: 'the tray or a tabletop',
+        cascade: casc, sIsSys: casc.step==='sys', sIsRow: casc.step==='row', sIsSpace: casc.step==='space',
+        sCrumb: casc.crumb, sBack: casc.back?casc.back:(()=>{}), sHasBack: !!casc.back,
+        selCount, hasSel: selCount>0, confirmLabel: 'Sow '+it.name+' into '+selCount+' spot'+(selCount===1?'':'s'),
+        confirm: ()=>this.sowConfirmMany(), close: ()=>this.closeSow()};
+    }
+
+    const boardSeeds = d.library.map(i=>({type:'seed', id:i.id, name:i.name, icon: i.icon || C(i.id).icon}));
+    const boardSeedlings = this.podList('S').map(p=>({p, cur:this.current(p)})).filter(x=>x.cur).map(x=>{
+        const cc=C(x.cur.crop); const lead=cc.lead||14; const age=daysSince(x.cur.plantedOn); const left=lead-age;
+        return {type:'slot', id:x.p.id, name:cc.name, icon:cc.icon, sub: podLabel(x.p)+' · '+(left>0?('ready in '+left+'d'):'ready now')}; })
+      .concat((d.trays||[]).map(t=>{ const cc=C(t.crop); const starter=t.kind==='starter'; const ready=addDays(t.sownOn, starter?0:(cc.lead||0)); const left=-daysSince(ready);
+        return {type:'tray', id:t.id, name:cc.name+(starter?' · starter':''), icon:cc.icon, sub: t.count+' available · '+((starter||left<=0)?'ready now':('ready in '+left+'d'))}; }));
+    const boardPods = this.podList().map(p=>({p, cur:this.current(p)})).filter(x=>x.cur).map(x=>{
+        const cc=C(x.cur.crop); return {type:'pod', id:x.p.id, name:cc.name, icon:cc.icon, sub: podLabel(x.p)+' · '+this.statusOf(x.p), open:()=>this.openPod(x.p.id)}; });
+
+    // Harvest pod map — physical layout so you tap the exact pod
+    const harvestSystems = ['tower','A','B'].map(key=>{ const sdef=SYSTEMS.filter(s=>s.key===key)[0];
+      const rows=[]; for(let r=sdef.rows; r>=1; r--){ const rp=[]; for(let pos=1; pos<=sdef.cols; pos++){ const id=(key==='tower'?'':key+'-')+'R'+r+'-P'+pos; if(d.pods[id]) rp.push(mk(d.pods[id])); } rows.push({row:r, pods:rp}); }
+      const readyN = this.podList(key).filter(p=>this.statusOf(p)==='Ready to Harvest').length;
+      return {key, name:sdef.name, readyLabel: readyN+' ready', hasReady: readyN>0, rows}; });
+
     return Object.assign(base, {
+      sow, isBoard: this.state.tab==='board',
+      boardSeeds, boardSeedlings, boardPods, harvestSystems,
+      boardSeedCount: boardSeeds.length, boardSeedlingCount: boardSeedlings.length, boardPodCount: boardPods.length,
+      noBoardSeedlings: boardSeedlings.length===0, noBoardPods: boardPods.length===0,
+      selMode, selOff: !selMode, selCount, hasSel: selCount>0, noSel: selCount===0,
+      selCountLabel: selCount ? (selCount+' pod'+(selCount===1?'':'s')+' selected') : 'Tap pods to select',
+      canSow: sysAllow.seed, canTransplantHere: sysKey!=='S',
+      startSelect: ()=>this.startSelect(), cancelSelect: ()=>this.cancelSelect(),
+      clearSelect: ()=>this.clearSelect(), selectAllOpen: ()=>this.selectAllOpen(),
+      openBatchPick: ()=>this.openBatchPick(), closeBatch: ()=>this.closeBatch(),
+      openTransplant: ()=>this.openTransplant(null, null),
+      batchPickOpen: !!this.state.batchPick, batchItems, batchRecent, hasRecent: !bq && batchRecent.length>0,
+      noBatchItems: batchItems.length===0, batchQ: this.state.batchQ||'', onBatchQ: e=>this.setState({batchQ:e.target.value}),
+      tp,
       publicTables, hasPublicTables: publicTables.some(t=>t.rows.length>0),
       publicSeeds, hasPublicSeeds: publicSeeds.length>0,
       pubTab, isPubGarden: pubTab==='garden', isPubSetup: pubTab==='setup', isPubWaves: pubTab==='waves', isPubSeeds: pubTab==='seeds',
@@ -2555,7 +3118,7 @@ class Component extends DCLogic {
         {when:'Transplant', label:'Move ready seedlings into open pods', detail: counts.reserved+' pods reserved, '+counts.attention+' need replanting'},
         {when:'Upkeep', label: (taskObjs.filter(t=>t.due && t.group!=='daily')[0]||{label:'All caught up'}).label, detail:'Next scheduled maintenance'}
       ],
-      navItems: [['start','Start'],['today','Today'],['tower','Tower'],['plants','Plants'],['water','Water'],['tasks','Tasks'],['harvest','Harvest']]
+      navItems: [['start','Start'],['today','Today'],['tower','Tower'],['board','Board'],['plants','Plants'],['water','Water'],['tasks','Tasks'],['harvest','Harvest']]
         .filter(([k])=> k!=='start' || (d.setup && d.setup.active))
         .map(([k,label])=>({label, go:()=>this.setState({tab:k}), bg: this.state.tab===k?'#35543F':'transparent',
           fg: this.state.tab===k?'#F6F1E4':'#7A5C46', dot: this.state.tab===k?'#D9A441':'#DED7C8'})),
@@ -2785,6 +3348,54 @@ class Component extends DCLogic {
   }
 }
 
+</script>
+<script>
+/* Kanban drag/drop layer — delegated on document so it survives DC re-renders. Pointer-based for iPad. */
+(function(){
+  var drag=null;
+  function colUnder(x,y){ var el=document.elementFromPoint(x,y); while(el){ if(el.getAttribute && el.getAttribute('data-kanban-col')) return el; el=el.parentElement; } return null; }
+  function clearHi(){ var cols=document.querySelectorAll('[data-kanban-col]'); for(var i=0;i<cols.length;i++) cols[i].style.boxShadow=''; }
+  document.addEventListener('pointerdown', function(e){
+    var card = e.target && e.target.closest ? e.target.closest('[data-kanban-card]') : null;
+    if(!card) return;
+    var type=card.getAttribute('data-card-type');
+    if(type==='pod') return; // terminal column: tap to open, not draggable
+    var rect=card.getBoundingClientRect();
+    var ghost=card.cloneNode(true);
+    ghost.style.position='fixed'; ghost.style.left=rect.left+'px'; ghost.style.top=rect.top+'px';
+    ghost.style.width=rect.width+'px'; ghost.style.margin='0'; ghost.style.pointerEvents='none';
+    ghost.style.zIndex='9999'; ghost.style.opacity='0.95'; ghost.style.transform='scale(1.03)';
+    ghost.style.boxShadow='0 12px 30px rgba(46,64,52,0.28)';
+    document.body.appendChild(ghost);
+    card.style.opacity='0.35';
+    drag={type:type, id:card.getAttribute('data-card-id'), from:card.getAttribute('data-card-col'),
+      ghost:ghost, card:card, dx:e.clientX-rect.left, dy:e.clientY-rect.top, moved:false};
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', function(e){
+    if(!drag) return;
+    drag.moved=true;
+    drag.ghost.style.left=(e.clientX-drag.dx)+'px';
+    drag.ghost.style.top=(e.clientY-drag.dy)+'px';
+    clearHi();
+    var col=colUnder(e.clientX, e.clientY);
+    if(col && col.getAttribute('data-kanban-col')!==drag.from) col.style.boxShadow='inset 0 0 0 2px #4E7A55';
+  });
+  function end(e){
+    if(!drag) return;
+    var d=drag; drag=null;
+    if(d.ghost && d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
+    if(d.card) d.card.style.opacity='';
+    clearHi();
+    var colEl=colUnder(e.clientX, e.clientY);
+    var to=colEl?colEl.getAttribute('data-kanban-col'):null;
+    if(d.moved && to && to!==d.from && window.KRISP_APP && window.KRISP_APP.boardDrop){
+      window.KRISP_APP.boardDrop(d.type, d.id, to);
+    }
+  }
+  document.addEventListener('pointerup', end);
+  document.addEventListener('pointercancel', end);
+})();
 </script>
 </body>
 </html>
