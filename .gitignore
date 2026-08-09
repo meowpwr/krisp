@@ -1,2 +1,7 @@
 .claude/settings.local.json
 .DS_Store
+
+# Supabase CLI local state (never commit these)
+supabase/.branches
+supabase/.temp
+.env
