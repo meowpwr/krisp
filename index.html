@@ -1024,7 +1024,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
                     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;padding:8px 0 12px">
                       <sc-for list="{{ it.iconChoices }}" as="ic" hint-placeholder-count="0">
                         <button onClick="{{ ic.pick }}" style="aspect-ratio:1/1;padding:4px;border-radius:12px;border:1px solid #EFE9DA;background:#FFFDF7;cursor:pointer">
-                          <span style="display:block;width:100%;height:100%;background-image:url({{ ic.src }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                          <span style="display:block;width:100%;height:100%;background-image:url({{ ic.src }});background-size:{{ ic.fit }};background-position:center;background-repeat:no-repeat"></span>
                         </button>
                       </sc-for>
                     </div>
@@ -1074,7 +1074,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
               <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;margin-top:10px">
                 <sc-for list="{{ newIconChoices }}" as="ic" hint-placeholder-count="0">
                   <button onClick="{{ ic.pick }}" style="aspect-ratio:1/1;padding:4px;border-radius:12px;border:1px solid #DCE6D8;background:#FFFDF7;cursor:pointer">
-                    <span style="display:block;width:100%;height:100%;background-image:url({{ ic.src }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                    <span style="display:block;width:100%;height:100%;background-image:url({{ ic.src }});background-size:{{ ic.fit }};background-position:center;background-repeat:no-repeat"></span>
                   </button>
                 </sc-for>
               </div>
@@ -1094,7 +1094,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;margin-top:12px">
               <sc-for list="{{ iconManager }}" as="ic" hint-placeholder-count="0">
                 <div style="background:#FFFDF7;border:1px solid #EFE9DA;border-radius:14px;padding:8px;text-align:center">
-                  <span style="display:block;width:100%;aspect-ratio:1/1;background-image:url({{ ic.src }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="display:block;width:100%;aspect-ratio:1/1;background-image:url({{ ic.src }});background-size:{{ ic.fit }};background-position:center;background-repeat:no-repeat"></span>
                   <div style="font-size:10px;color:#7A5C46;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ic.name }}</div>
                   <div style="font-size:9px;color:#8FA98A;letter-spacing:0.08em;text-transform:uppercase">{{ ic.tag }} {{ ic.used }}</div>
                   <div style="display:flex;gap:4px;margin-top:6px">
@@ -1444,18 +1444,28 @@ input[type=date]{-webkit-appearance:none;appearance:none}
           </div>
         </sc-if>
         <sc-for list="{{ taskGroups }}" as="g" hint-placeholder-count="5">
-          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-bottom:14px">
-            <div style="display:flex;align-items:baseline;justify-content:space-between">
-              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">{{ g.title }}</div>
-              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:{{ g.accent }}">{{ g.status }}</div>
-            </div>
-            <sc-for list="{{ g.tasks }}" as="t" hint-placeholder-count="6">
-              <button onClick="{{ t.toggle }}" style="width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:12px 4px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
-                <span style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ t.border }};background:{{ t.fill }};color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">{{ t.mark }}</span>
-                <span style="flex:1 1 auto;font-size:15px;color:{{ t.textColor }}">{{ t.label }}</span>
-                <span style="flex:0 0 auto;font-size:11px;color:#8FA98A">{{ t.when }}</span>
-              </button>
-            </sc-for>
+          <div style="background:{{ g.cardBg }};border:1px solid {{ g.cardBorder }};border-radius:22px;padding:16px;margin-bottom:14px">
+            <button onClick="{{ g.toggle }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:none;border:none;padding:0;text-align:left;cursor:{{ g.cursor }}">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                <sc-if value="{{ g.allDone }}" hint-placeholder-val="{{ false }}"><span style="flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:#8FA98A;color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">✓</span></sc-if>
+                <span style="font-family:'DM Serif Display',Georgia,serif;font-size:22px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ g.title }}</span>
+              </div>
+              <span style="flex:0 0 auto;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:{{ g.accent }}">{{ g.status }}</span>
+            </button>
+            <sc-if value="{{ g.collapsed }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12px;color:#8FA98A;margin-top:6px">{{ g.nextLabel }} · tap to review</div>
+            </sc-if>
+            <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:4px">
+                <sc-for list="{{ g.tasks }}" as="t" hint-placeholder-count="6">
+                  <button onClick="{{ t.toggle }}" style="width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:12px 4px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
+                    <span style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ t.border }};background:{{ t.fill }};color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">{{ t.mark }}</span>
+                    <span style="flex:1 1 auto;font-size:15px;color:{{ t.textColor }}">{{ t.label }}</span>
+                    <span style="flex:0 0 auto;font-size:11px;color:#8FA98A">{{ t.when }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
           </div>
         </sc-for>
       </div>
@@ -2147,6 +2157,12 @@ const ICON_WORDS = [['chili','chili_pepper'],['jalape','jalapeno'],['roma','toma
 const ICON_FILES = ['basil','cherry_tomatoes','tomato','chili_pepper','jalapeno','red_bell_pepper','orange_bell_pepper','yellow_bell_pepper','cucumber','peas','snap_peas','strawberries','green_lettuce','leaf_lettuce','red_leaf_lettuce','bok_choy','baby_bok_choy','scallions','bunching_onions','chives','cilantro','parsley','dill','oregano','thyme','mint','generic'];
 const ICON_FILES_FP = ["fp/arugula","fp/banana_pepper","fp/bell_pepper","fp/bok_choy","fp/butter_lettuce","fp/celery","fp/cherry_tomato","fp/chili_pepper","fp/cucumber","fp/dead_failed","fp/disease_issue","fp/eggplant","fp/empty_pod","fp/endive","fp/flower","fp/fruiting","fp/habanero","fp/harvested","fp/jalapeno","fp/kale","fp/lavender","fp/lemon_balm","fp/marjoram","fp/mini_cucumber","fp/mini_sweet_pepper","fp/mizuna","fp/mustard_greens","fp/other_plant","fp/peppermint","fp/pest_bug","fp/poblano","fp/prune","fp/radicchio","fp/romaine","fp/roots","fp/rosemary","fp/sage","fp/scallion","fp/seed","fp/seedling","fp/serrano","fp/shishito","fp/snap_pea","fp/snow_pea","fp/spearmint","fp/spinach","fp/strawberry","fp/swiss_chard","fp/tarragon","fp/tatsoi","fp/tomato","fp/watercress","fp/yellow_squash","fp/zucchini"];
 const BLANK = 'icons/blank.png';
+// Measured opaque-artwork fill ratio per icon (how much of the 512px canvas the art covers).
+// The main set fills ~0.82; the fp/ set is padded (~0.2-0.34), so it renders small.
+// iconFit() zooms each icon so its artwork fills the tile consistently (~0.82) like the big ones.
+const ICON_FILL = {"basil":0.818,"cherry_tomatoes":0.814,"tomato":0.818,"chili_pepper":0.814,"jalapeno":0.814,"red_bell_pepper":0.818,"orange_bell_pepper":0.818,"yellow_bell_pepper":0.814,"cucumber":0.811,"peas":0.814,"snap_peas":0.818,"strawberries":0.818,"green_lettuce":0.818,"leaf_lettuce":0.818,"red_leaf_lettuce":0.818,"bok_choy":0.814,"baby_bok_choy":0.814,"scallions":0.818,"bunching_onions":0.814,"chives":0.818,"cilantro":0.814,"parsley":0.818,"dill":0.814,"oregano":0.818,"thyme":0.818,"mint":0.818,"generic":0.807,"fp/arugula":0.311,"fp/banana_pepper":0.275,"fp/bell_pepper":0.24,"fp/bok_choy":0.318,"fp/butter_lettuce":0.318,"fp/celery":0.303,"fp/cherry_tomato":0.201,"fp/chili_pepper":0.818,"fp/cucumber":0.342,"fp/dead_failed":0.193,"fp/disease_issue":0.232,"fp/eggplant":0.264,"fp/empty_pod":0.193,"fp/endive":0.303,"fp/flower":0.201,"fp/fruiting":0.201,"fp/habanero":0.24,"fp/harvested":0.248,"fp/jalapeno":0.814,"fp/kale":0.311,"fp/lavender":0.295,"fp/lemon_balm":0.295,"fp/marjoram":0.326,"fp/mini_cucumber":0.264,"fp/mini_sweet_pepper":0.256,"fp/mizuna":0.311,"fp/mustard_greens":0.322,"fp/other_plant":0.209,"fp/peppermint":0.334,"fp/pest_bug":0.217,"fp/poblano":0.279,"fp/prune":0.209,"fp/radicchio":0.283,"fp/romaine":0.311,"fp/roots":0.209,"fp/rosemary":0.303,"fp/sage":0.311,"fp/scallion":0.279,"fp/seed":0.189,"fp/seedling":0.197,"fp/serrano":0.264,"fp/shishito":0.279,"fp/snap_pea":0.244,"fp/snow_pea":0.24,"fp/spearmint":0.303,"fp/spinach":0.314,"fp/strawberry":0.244,"fp/swiss_chard":0.318,"fp/tarragon":0.311,"fp/tatsoi":0.318,"fp/tomato":0.6,"fp/watercress":0.295,"fp/yellow_squash":0.26,"fp/zucchini":0.268};
+const ICON_FIT_TARGET = 0.82;
+function iconFit(file){ const f = ICON_FILL[file]; if(!f) return 'contain'; const z = Math.max(1, Math.min(4.3, ICON_FIT_TARGET / f)); return Math.round(z*100)+'%'; }
 let ICONX = {src:{}, hidden:{}, custom:[]};
 function syncIcons(d){ const st = (d && d.iconLib) || {};
   ICONX = {src: Object.assign({}, st.overrides || {}), hidden: st.hidden || {}, custom: st.custom || []};
@@ -3151,7 +3167,7 @@ class Component extends DCLogic {
           onNotes: e=>this.setSeedField(i.id, 'packetNotes', e.target.value),
           picking: this.state.iconFor === i.id,
           openIcons: ()=>this.setState(s=>({iconFor: s.iconFor===i.id ? null : i.id})),
-          iconChoices: iconKeys().map(f=>({src: iconSrc(f), pick: ()=>this.setSeedIcon(i.id, f)})),
+          iconChoices: iconKeys().map(f=>({src: iconSrc(f), fit: iconFit(f), pick: ()=>this.setSeedIcon(i.id, f)})),
           used: (function(){ const n = pods.filter(p=>{ const c=this.current(p); return c && c.crop===i.id; }).length; return n ? ' · '+n+' in use' : ''; }).call(this),
           remove: ()=>this.removeSeed(i.id)})) })); }).call(this),
       trayItems: (d.trays||[]).map(t=>{ const c = C(t.crop); const starter = t.kind==='starter';
@@ -3178,11 +3194,11 @@ class Component extends DCLogic {
       newSeedIcon: (this.state.newSeed && this.state.newSeed.iconFile) ? iconSrc(this.state.newSeed.iconFile) : 'icons/generic.png',
       newIconPicking: this.state.iconFor === 'new',
       openNewIcons: ()=>this.setState(s=>({iconFor: s.iconFor==='new' ? null : 'new'})),
-      newIconChoices: iconKeys().map(f=>({src: iconSrc(f),
+      newIconChoices: iconKeys().map(f=>({src: iconSrc(f), fit: iconFit(f),
         pick: ()=>this.setState(s=>({newSeed:Object.assign({name:'',base:'lettuce'}, s.newSeed, {iconFile:f}), iconFor:null}))})),
       iconManager: iconKeys().map(f=>{ const custom = (ICONX.custom||[]).filter(c=>c.key===f)[0];
         const used = d.library.filter(i=>i.iconFile===f).length;
-        return {key:f, src: iconSrc(f), name: custom ? custom.name : f.replace(/^fp\//,'').replace(/_/g,' '),
+        return {key:f, src: iconSrc(f), fit: iconFit(f), name: custom ? custom.name : f.replace(/^fp\//,'').replace(/_/g,' '),
           tag: custom ? 'mine' : (((d.iconLib||{}).overrides||{})[f] ? 'replaced' : ''),
           used: used ? used+' in use' : '',
           replace: e => this.iconUpload(e, src => this.replaceIcon(f, src)),
@@ -3335,8 +3351,16 @@ class Component extends DCLogic {
       onTripEnd: e=>this.setTrip('end', e.target.value),
       clearTrip: ()=>this.clearTrip(),
       goTasks: ()=>this.setState({tab:'tasks'}),
-      taskGroups: Object.keys(GROUP_META).map(g=>{ const ts = taskObjs.filter(t=>t.group===g);
-        return {title:GROUP_META[g][0], accent:GROUP_META[g][2], status: ts.filter(t=>t.due).length ? ts.filter(t=>t.due).length+' due' : 'all done', tasks:ts}; }),
+      taskGroups: (()=>{ const gs = Object.keys(GROUP_META).map(g=>{ const ts = taskObjs.filter(t=>t.group===g);
+          const dueN = ts.filter(t=>t.due).length; const allDone = dueN===0; const due = GROUP_META[g][1];
+          const open = !allDone || !!(this.state.taskOpen && this.state.taskOpen[g]);
+          return {key:g, title:GROUP_META[g][0], accent: allDone ? '#8FA98A' : GROUP_META[g][2],
+            status: dueN ? (dueN+' due') : 'All done', allDone, open, collapsed: allDone && !open,
+            cardBg: allDone ? '#F3F6F2' : '#FFFDF7', cardBorder: allDone ? '#DCE6D8' : '#E5DECD', cursor: allDone ? 'pointer' : 'default',
+            nextLabel: 'Comes back '+(due===1?'tomorrow':('in about '+due+' days')),
+            toggle: ()=>{ if(allDone) this.setState(s=>{ const to=Object.assign({}, s.taskOpen||{}); to[g]=!to[g]; return {taskOpen:to}; }); },
+            tasks: ts}; });
+        return gs.filter(x=>!x.allDone).concat(gs.filter(x=>x.allDone)); })(),
       harvestList, harvestTotalLabel: hl.length+(hl.length===1 ? ' active planting' : ' active plantings')+' across your garden',
       hAll: tabStyle(this.state.harvestFilter==='all'), hReady: tabStyle(this.state.harvestFilter==='ready'),
       setHarvestAll: ()=>this.setState({harvestFilter:'all'}), setHarvestReady: ()=>this.setState({harvestFilter:'ready'}),
