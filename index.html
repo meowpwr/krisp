@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./config.js"></script>
+<script src="./krisp-sync.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -158,7 +161,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
       <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:20px;margin-top:20px">
         <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px">{{ authTitle }}</div>
         <div style="font-size:13px;color:#7A5C46;margin-top:4px;line-height:1.55">{{ authSub }}</div>
-        <input type="password" value="{{ pin }}" onChange="{{ onPin }}" placeholder="Your code" style="width:100%;margin-top:14px;padding:16px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:17px;letter-spacing:0.1em">
+        <input type="email" value="{{ pin }}" onChange="{{ onPin }}" placeholder="you@email.com" autoComplete="email" inputMode="email" style="width:100%;margin-top:14px;padding:16px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:17px">
         <div style="font-size:12px;color:#C4633F;margin-top:8px">{{ authError }}</div>
         <button onClick="{{ signIn }}" style="width:100%;margin-top:8px;padding:16px;border-radius:14px;border:none;background:#35543F;color:#F6F1E4;font-size:16px;font-weight:700;cursor:pointer">{{ authCta }}</button>
         <button onClick="{{ goPublic }}" style="width:100%;margin-top:8px;padding:14px;border-radius:14px;border:none;background:none;color:#8FA98A;font-size:14px;cursor:pointer">Back to the public view</button>
@@ -1550,8 +1553,45 @@ class Component extends DCLogic {
         if(!d.pods[id]){ d.pods[id] = {id, sys:s.key, row, pos, plantings:[], note:'', photos:[]}; added = true; }
       } });
     if(added) this.persist(d);
-    let signed = false; try{ signed = localStorage.getItem('krisp-session')==='1'; }catch(e){}
-    this.setState({data:d, mode: signed ? 'app' : 'public'});
+    this.setState({data:d, mode:'public'});
+    this.initCloud(d);
+  }
+
+  initCloud(localDoc){
+    if(!(window.KrispSync && KrispSync.enabled)){
+      // No backend configured — fall back to the legacy local PIN gate.
+      let signed=false; try{ signed = localStorage.getItem('krisp-session')==='1'; }catch(e){}
+      if(signed) this.setState({mode:'app'});
+      return;
+    }
+    KrispSync.onAuth(sess=>this.onCloudAuth(sess));
+    KrispSync.init().then(sess=>KrispSync.loadDoc().then(remote=>{
+      if(remote && remote.doc && remote.doc.pods){ this.adoptDoc(remote.doc); }
+      else if(sess){ KrispSync.saveDoc(localDoc); } // first sign-in: migrate local garden up
+      this.setState({mode: sess ? 'app' : 'public'});
+    })).catch(e=>{ console.warn('[krisp] cloud init failed:', e); });
+  }
+
+  adoptDoc(doc){
+    if(!doc || !doc.pods) return;
+    try{ syncIcons(doc); syncLib(doc.library); }catch(e){}
+    SYSTEMS.forEach(s=>{ if(s.key==='tower') return;
+      for(let row=s.rows; row>=1; row--) for(let pos=1; pos<=s.cols; pos++){
+        const id = s.key+'-R'+row+'-P'+pos;
+        if(!doc.pods[id]){ doc.pods[id] = {id, sys:s.key, row, pos, plantings:[], note:'', photos:[]}; }
+      } });
+    try{ localStorage.setItem(KEY, JSON.stringify(doc)); }catch(e){}
+    this.setState({data:doc});
+  }
+
+  onCloudAuth(sess){
+    if(sess){
+      KrispSync.loadDoc().then(remote=>{
+        if(remote && remote.doc && remote.doc.pods) this.adoptDoc(remote.doc);
+        else KrispSync.saveDoc(this.state.data); // no cloud doc yet — push what we have
+        this.setState({mode:'app', pin:'', authError:''});
+      });
+    } else { this.setState({mode:'public', tab:'today'}); }
   }
 
   seed(){
@@ -1603,7 +1643,10 @@ class Component extends DCLogic {
     else { const pod=d.pods[id]; if(pod.plantings.length===1) pod.plantings = []; }
   }); }); }
 
-  persist(d){ try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch(e){} }
+  persist(d){ try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch(e){}
+    if(window.KrispSync && KrispSync.enabled && KrispSync.session){
+      clearTimeout(this._cloudT); this._cloudT = setTimeout(()=>{ KrispSync.saveDoc(d); }, 900);
+    } }
   update(fn){ this.setState(s=>{ const d = JSON.parse(JSON.stringify(s.data)); fn(d); this.persist(d); return {data:d}; }); }
 
   current(pod){ if(!pod) return null; const p = pod.plantings[pod.plantings.length-1]; return (p && !p.removedOn) ? p : null; }
@@ -1726,6 +1769,14 @@ class Component extends DCLogic {
       this.setState({mode:'app', pin:'', authError:''}); }
     else this.setState({authError:'That code does not match. Try again.'}); }
   signOut(){ try{ localStorage.removeItem('krisp-session'); }catch(e){} this.setState({mode:'public', pin:'', tab:'today'}); }
+  cloudSignIn(){ const email=(this.state.pin||'').trim();
+    if(!email || email.indexOf('@')<1) return this.setState({authError:'Enter the email you want your sign-in link sent to.'});
+    this.setState({authError:'Sending your link…'});
+    KrispSync.signIn(email).then(res=>{
+      if(res && res.error) this.setState({authError:(res.error.message||'Could not send the link.')});
+      else this.setState({authError:'Check your email for a sign-in link, then come back here.'});
+    }).catch(e=>this.setState({authError:(e&&e.message)||'Could not send the link.'})); }
+  cloudSignOut(){ KrispSync.signOut().then(()=>this.setState({mode:'public', pin:'', tab:'today'})); }
   setTrip(key, val){ this.update(d=>{ d.trip = d.trip || {prep:{}, back:{}}; d.trip[key] = val; }); }
   clearTrip(){ this.update(d=>{ d.trip = null; }); }
   toggleTrip(list, i){ this.update(d=>{ d.trip = d.trip || {prep:{}, back:{}}; d.trip[list] = d.trip[list] || {};
@@ -1776,18 +1827,21 @@ class Component extends DCLogic {
   renderVals(){
     const d = this.state.data;
     const mode = this.state.mode || 'public';
+    const cloudOn = !!(window.KrispSync && window.KrispSync.enabled);
+    const cloudIn = !!(cloudOn && window.KrispSync.session);
+    const legacySigned = ()=>{ try{ return localStorage.getItem('krisp-session')==='1'; }catch(e){ return false; } };
     const base = {isPublic: mode==='public', isLogin: mode==='login', isApp: mode==='app',
       pin: this.state.pin||'', authError: this.state.authError||'',
       hasPin: !!(d && d.auth && d.auth.pin),
-      authTitle: (d && d.auth && d.auth.pin) ? 'Welcome back' : 'Set your code',
-      authSub: (d && d.auth && d.auth.pin) ? 'Enter your code to manage the garden.' : 'Pick a code you will remember. It keeps the editing side to you — the public view stays open to everyone.',
-      authCta: (d && d.auth && d.auth.pin) ? 'Sign in' : 'Set code and continue',
+      authTitle: cloudOn ? 'Sign in to your garden' : ((d && d.auth && d.auth.pin) ? 'Welcome back' : 'Set your code'),
+      authSub: cloudOn ? 'Enter your email and we\'ll send you a one-time sign-in link. The public view stays open to everyone.' : ((d && d.auth && d.auth.pin) ? 'Enter your code to manage the garden.' : 'Pick a code you will remember. It keeps the editing side to you — the public view stays open to everyone.'),
+      authCta: cloudOn ? 'Email me a sign-in link' : ((d && d.auth && d.auth.pin) ? 'Sign in' : 'Set code and continue'),
       onPin: e=>{ const v=e.target.value; this.setState({pin:v, authError:''}); },
-      signIn: ()=>this.signIn(), signOut: ()=>this.signOut(),
-      goLogin: ()=>{ let signed=false; try{ signed = localStorage.getItem('krisp-session')==='1'; }catch(e){}
+      signIn: ()=> cloudOn ? this.cloudSignIn() : this.signIn(), signOut: ()=> cloudOn ? this.cloudSignOut() : this.signOut(),
+      goLogin: ()=>{ const signed = cloudOn ? cloudIn : legacySigned();
         this.setState(signed ? {mode:'app'} : {mode:'login', pin:'', authError:''}); },
-      signedIn: (function(){ try{ return localStorage.getItem('krisp-session')==='1'; }catch(e){ return false; } })(),
-      signInLabel: (function(){ try{ return localStorage.getItem('krisp-session')==='1' ? 'Back to my garden' : 'Sign in'; }catch(e){ return 'Sign in'; } })(),
+      signedIn: cloudOn ? cloudIn : legacySigned(),
+      signInLabel: (cloudOn ? cloudIn : legacySigned()) ? 'Back to my garden' : 'Sign in',
       goPublic: ()=>this.setState({mode:'public'}),
       todayLabel: new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}),
       isToday:this.state.tab==='today', isTower:this.state.tab==='tower', isPlants:this.state.tab==='plants',
