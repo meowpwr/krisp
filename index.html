@@ -3,7 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>KRISP — grow. track. harvest.</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<!-- Vendored locally so the app never depends on a CDN being reachable.
+     React/ReactDOM load before support.js, which then skips its unpkg fetch. -->
+<script src="./vendor/react.production.min.js"></script>
+<script src="./vendor/react-dom.production.min.js"></script>
+<script src="./vendor/supabase.js"></script>
 <script src="./config.js"></script>
 <script src="./krisp-sync.js"></script>
 <script src="./support.js"></script>
