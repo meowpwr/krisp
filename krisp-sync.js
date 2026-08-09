@@ -77,5 +77,36 @@
     });
   };
 
+  // ---- Guest wall notes ----
+  // Reads/writes a separate `notes` table so visitors (anon) can leave messages.
+  // Requires a `notes` table with public SELECT + INSERT policies; if it does not
+  // exist yet these calls fail quietly and the app falls back to local storage.
+  //   create table notes (
+  //     id uuid primary key default gen_random_uuid(),
+  //     garden_id text not null default 'me',
+  //     name text, body text not null, icon text,
+  //     created_at timestamptz not null default now()
+  //   );
+  //   alter table notes enable row level security;
+  //   create policy notes_read  on notes for select using (true);
+  //   create policy notes_write on notes for insert with check (char_length(body) between 1 and 500);
+  Sync.loadNotes = function () {
+    if (!Sync.enabled) return Promise.resolve([]);
+    return Sync.client.from('notes').select('name,body,icon,created_at')
+      .eq('garden_id', ROW_ID).order('created_at', { ascending: false }).limit(100)
+      .then(function (res) {
+        if (res.error) return [];
+        return (res.data || []).map(function (r) {
+          return { name: r.name, body: r.body, icon: r.icon || '', ts: r.created_at ? Date.parse(r.created_at) : 0 };
+        });
+      });
+  };
+  Sync.addNote = function (note) {
+    if (!Sync.enabled) return Promise.reject(new Error('offline'));
+    return Sync.client.from('notes').insert({
+      garden_id: ROW_ID, name: (note.name || '').slice(0, 60), body: (note.body || '').slice(0, 500), icon: (note.icon || '').slice(0, 120)
+    }).then(function (res) { if (res.error) throw res.error; return res; });
+  };
+
   window.KrispSync = Sync;
 })();
