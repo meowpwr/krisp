@@ -912,12 +912,12 @@ input[type=date]{-webkit-appearance:none;appearance:none}
     </sc-if>
 
     <sc-if value="{{ isBoard }}" hint-placeholder-val="{{ false }}">
-      <div style="animation:riseIn .3s ease both">
+      <div style="animation:riseIn .3s ease both;margin-left:calc(-50vw + 50%);margin-right:calc(-50vw + 50%);padding:0 16px;box-sizing:border-box">
         <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px;margin:2px 0 2px">Seed → Seedling → Pod</div>
         <div style="font-size:13px;color:#7A5C46;margin-bottom:12px">Drag a card into the next column. When you drop it, you'll pick the exact spot in three taps.</div>
-        <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start">
+        <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:stretch">
 
-          <div data-kanban-col="seeds" style="flex:0 0 82%;max-width:340px;min-width:240px;background:#FFFDF7;border:1px solid #E5DECD;border-radius:20px;padding:12px">
+          <div data-kanban-col="seeds" style="flex:1 1 0;min-width:240px;background:#FFFDF7;border:1px solid #E5DECD;border-radius:20px;padding:12px">
             <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px">
               <div style="font-family:'DM Serif Display',Georgia,serif;font-size:18px">Seeds</div>
               <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8FA98A">{{ boardSeedCount }} packets</div>
@@ -933,7 +933,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
             </div>
           </div>
 
-          <div data-kanban-col="seedlings" style="flex:0 0 82%;max-width:340px;min-width:240px;background:#F1F5F6;border:1px solid #DDE8EA;border-radius:20px;padding:12px">
+          <div data-kanban-col="seedlings" style="flex:1 1 0;min-width:240px;background:#F1F5F6;border:1px solid #DDE8EA;border-radius:20px;padding:12px">
             <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px">
               <div style="font-family:'DM Serif Display',Georgia,serif;font-size:18px">Seedlings</div>
               <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8FA98A">{{ boardSeedlingCount }} in nursery</div>
@@ -952,7 +952,7 @@ input[type=date]{-webkit-appearance:none;appearance:none}
             </div>
           </div>
 
-          <div data-kanban-col="pods" style="flex:0 0 82%;max-width:340px;min-width:240px;background:#F1F5EF;border:1px solid #DCE6D8;border-radius:20px;padding:12px">
+          <div data-kanban-col="pods" style="flex:1 1 0;min-width:240px;background:#F1F5EF;border:1px solid #DCE6D8;border-radius:20px;padding:12px">
             <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px">
               <div style="font-family:'DM Serif Display',Georgia,serif;font-size:18px">In pods</div>
               <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8FA98A">{{ boardPodCount }} growing</div>
