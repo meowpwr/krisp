@@ -1,0 +1,8 @@
+# Supabase CLI project config.
+# `project_id` is just a local label; the actual target is chosen at push time
+# with `supabase link --project-ref <ref>`. This repo pushes to two projects:
+#   dev  = tqobbcbmqtvwwmxiilbi   (localhost)
+#   prod = kfrnhqbluvbjzvqhtrnb   (deployed site)
+# If the CLI ever complains this file is incomplete, run `supabase init` in place
+# to regenerate the full default sections — it will keep the migrations folder.
+project_id = "krisp"
