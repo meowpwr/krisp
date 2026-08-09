@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#FBF6EC;color:#2E4034;font-family:Karla,'Helvetica Neue',Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#6E9BA5;text-decoration:none}
+a:hover{color:#C4633F}
+input,select,button,textarea{font-family:inherit;font-size:inherit}
+input,select,textarea{max-width:100%;min-width:0;box-sizing:border-box}
+input[type=date]{-webkit-appearance:none;appearance:none}
+::-webkit-scrollbar{height:6px;width:6px}
+::-webkit-scrollbar-thumb{background:#DED7C8;border-radius:6px}
+@keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#FBF6EC">
+
+<sc-if value="{{ isPublic }}" hint-placeholder-val="{{ true }}">
+  <div style="animation:riseIn .3s ease both">
+    <div style="background:#35543F;color:#F6F1E4;padding:26px 18px 30px">
+      <div style="max-width:760px;margin:0 auto">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <span style="font-size:22px">🌱</span>
+              <span style="font-family:'DM Serif Display',Georgia,serif;font-size:30px;letter-spacing:0.02em">KRISP</span>
+            </div>
+            <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#B8CBB0;margin-top:2px">Grow. Track. Harvest.</div>
+          </div>
+          <button onClick="{{ goLogin }}" style="flex:0 0 auto;padding:12px 16px;border-radius:13px;border:1px solid rgba(246,241,228,0.35);background:transparent;color:#F6F1E4;font-size:14px;font-weight:700;cursor:pointer">{{ signInLabel }}</button>
+        </div>
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:38px;line-height:1.1;margin-top:22px">A garden growing<br>in the living room</div>
+        <div style="font-size:15px;color:#C9DAC1;margin-top:8px;line-height:1.6;max-width:44ch">An eight-foot hydroponic tower, two tabletop gardens and a starter tray — 104 pods of lettuce, herbs, peppers, tomatoes and berries, planted in a slow spiral so something is always ready.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:20px">
+          <sc-for list="{{ publicStat }}" as="s" hint-placeholder-count="4">
+            <div style="background:rgba(255,253,247,0.12);border-radius:16px;padding:12px 14px">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:28px;line-height:1">{{ s.n }}</div>
+              <div style="font-size:11px;color:#C9DAC1;letter-spacing:0.06em">{{ s.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width:760px;margin:0 auto;padding:16px 16px 40px">
+      <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Live from the tower</div>
+          <span style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#C4633F">on air</span>
+        </div>
+        <sc-if value="{{ hasCam }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:12px;border-radius:18px;overflow:hidden;border:1px solid #E5DECD;background:#2E4034">
+            <iframe src="{{ camUrl }}" title="Tower camera" allow="autoplay; fullscreen" style="display:block;width:100%;aspect-ratio:4/3;border:0"></iframe>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noCam }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:12px;border-radius:18px;border:1.5px dashed #DED7C8;background:repeating-linear-gradient(135deg,#FAF6EC,#FAF6EC 10px,#F4EFE2 10px,#F4EFE2 20px);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px">
+            <span style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#8FA98A;line-height:1.7">tower webcam<br>add the stream link from the Tower tab</span>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">The tower right now</div>
+        <div style="font-size:12px;color:#8FA98A;margin-top:2px">Ten levels, eight pods around each. Row 10 is the top; pale pods are left open on purpose for airflow.</div>
+        <div style="overflow-x:auto;padding:12px 0 4px">
+          <div style="min-width:max-content">
+            <sc-for list="{{ publicRows }}" as="r" hint-placeholder-count="10">
+              <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+                <div style="flex:0 0 54px">
+                  <div style="font-size:12px;font-weight:700;color:#35543F">Row {{ r.row }}</div>
+                  <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:{{ r.zoneColor }}">{{ r.zoneShort }}</div>
+                </div>
+                <div style="flex:1 1 auto;display:flex;gap:6px">
+                  <sc-for list="{{ r.pods }}" as="p" hint-placeholder-count="8">
+                    <span title="{{ p.plantName }}" style="flex:0 0 44px;width:44px;height:44px;border-radius:50%;border:2px solid {{ p.ring }};background:{{ p.color }};display:flex;align-items:center;justify-content:center">
+                      <span style="width:78%;height:78%;background-image:url({{ p.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ p.iconOp }}"></span>
+                    </span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">What is growing</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px">
+          <sc-for list="{{ publicGrowing }}" as="g" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:10px;background:#FAF6EC;border:1px solid #EFE9DA;border-radius:16px;padding:10px 12px">
+              <span style="flex:0 0 auto;width:34px;height:34px;background-image:url({{ g.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+              <div style="flex:1 1 auto;min-width:0">
+                <div style="font-size:14px;color:#2E4034">{{ g.name }}</div>
+                <div style="font-size:11px;color:#8FA98A">{{ g.count }} · {{ g.when }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ firstHarvest.show }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#E8836B;border-radius:22px;padding:18px;margin-top:14px;color:#FFF6F1">
+          <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FFE3D8">Next harvest</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:8px">
+            <span style="flex:0 0 auto;width:56px;height:56px;background-image:url({{ firstHarvest.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+            <div style="flex:1 1 auto;min-width:0">
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <span style="font-family:'DM Serif Display',Georgia,serif;font-size:42px;line-height:1">{{ firstHarvest.big }}</span>
+                <span style="font-size:14px;color:#FFE3D8">{{ firstHarvest.unit }}</span>
+              </div>
+              <div style="font-size:13px;color:#FFE3D8;margin-top:2px">{{ firstHarvest.detail }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hasTowerPhotos }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Filling in over time</div>
+          <div style="display:flex;gap:10px;overflow-x:auto;padding:12px 0 4px">
+            <sc-for list="{{ towerPhotos }}" as="ph" hint-placeholder-count="0">
+              <div style="flex:0 0 auto;width:132px">
+                <span style="display:block;width:132px;height:172px;border-radius:14px;border:1px solid #E5DECD;background-image:url({{ ph.src }});background-size:cover;background-position:center"></span>
+                <div style="font-size:11px;color:#8FA98A;margin-top:4px">{{ ph.date }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="text-align:center;padding:26px 0 0">
+        <button onClick="{{ goLogin }}" style="padding:14px 20px;border-radius:14px;border:1px solid #E5DECD;background:#FFFDF7;color:#35543F;font-size:14px;font-weight:700;cursor:pointer">{{ signInLabel }}</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;animation:riseIn .3s ease both">
+    <div style="width:100%;max-width:380px">
+      <div style="text-align:center">
+        <div style="font-size:30px">🌱</div>
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:32px;color:#35543F;margin-top:4px">KRISP</div>
+        <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#8FA98A">Grow. Track. Harvest.</div>
+      </div>
+      <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:20px;margin-top:20px">
+        <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px">{{ authTitle }}</div>
+        <div style="font-size:13px;color:#7A5C46;margin-top:4px;line-height:1.55">{{ authSub }}</div>
+        <input type="password" value="{{ pin }}" onChange="{{ onPin }}" placeholder="Your code" style="width:100%;margin-top:14px;padding:16px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:17px;letter-spacing:0.1em">
+        <div style="font-size:12px;color:#C4633F;margin-top:8px">{{ authError }}</div>
+        <button onClick="{{ signIn }}" style="width:100%;margin-top:8px;padding:16px;border-radius:14px;border:none;background:#35543F;color:#F6F1E4;font-size:16px;font-weight:700;cursor:pointer">{{ authCta }}</button>
+        <button onClick="{{ goPublic }}" style="width:100%;margin-top:8px;padding:14px;border-radius:14px;border:none;background:none;color:#8FA98A;font-size:14px;cursor:pointer">Back to the public view</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+<div style="padding-bottom:104px">
+  <div style="position:sticky;top:0;z-index:40;background:rgba(251,246,236,0.94);backdrop-filter:blur(8px);border-bottom:1px solid #E5DECD">
+    <div style="max-width:760px;margin:0 auto;padding:14px 18px 12px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+      <div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <span style="font-size:20px">🌱</span>
+          <span style="font-family:'DM Serif Display',Georgia,serif;font-size:26px;letter-spacing:0.02em;color:#35543F">KRISP</span>
+        </div>
+        <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#8FA98A;margin-top:2px">Grow. Track. Harvest.</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:12px;color:#7A5C46">{{ todayLabel }}</div>
+        <div style="font-size:12px;color:#8FA98A">Tower · 2 tabletops · starter tray</div>
+        <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px">
+          <button onClick="{{ goPublic }}" style="padding:8px 12px;border-radius:11px;border:1px solid #E5DECD;background:#FFFDF7;color:#35543F;font-size:12px;font-weight:700;cursor:pointer">Public view</button>
+          <button onClick="{{ signOut }}" style="padding:8px 12px;border-radius:11px;border:1px solid #E5DECD;background:#FFFDF7;color:#B08A7A;font-size:12px;font-weight:700;cursor:pointer">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:760px;margin:0 auto;padding:16px 16px 0">
+
+    <sc-if value="{{ isStart }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:riseIn .3s ease both">
+        <div style="background:#35543F;border-radius:22px;padding:18px;color:#F6F1E4">
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#B8CBB0">Setting up</div>
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:30px;line-height:1.15;margin-top:4px">Let's fill the tower, one sow day at a time</div>
+          <div style="font-size:14px;color:#C9DAC1;margin-top:6px">Seeds go into plugs first. KRISP tells you the exact count and the exact pods, then reminds you when each tray is ready to move up.</div>
+          <div style="height:8px;border-radius:8px;background:rgba(255,253,247,0.2);margin-top:14px;overflow:hidden">
+            <div style="height:100%;border-radius:8px;background:#D9A441;width:{{ setupPct }}"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#C9DAC1;margin-top:6px">
+            <span>{{ setupPlanted }} of {{ setupTotal }} pods planted</span>
+            <span>{{ setupSown }} seedlings started</span>
+          </div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">First sow day</div>
+          <div style="font-size:13px;color:#7A5C46;margin-top:2px">Everything below is scheduled from this date. Waves 2 and 3 follow two and four weeks later.</div>
+          <input type="date" value="{{ setupStart }}" onChange="{{ onStartDate }}" style="width:100%;margin-top:10px;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:17px">
+        </div>
+
+        <div style="background:#FBF3E6;border:1px solid #EFE2CB;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#B0801F">Next up · {{ next.when }}</div>
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:26px;line-height:1.15;margin-top:3px">{{ next.title }}</div>
+          <div style="font-size:13px;color:#7A5C46;margin-top:2px">{{ next.longDate }} · {{ next.subtitle }}</div>
+        </div>
+
+        <sc-if value="{{ firstHarvest.show }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+            <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C4633F">Predicted first harvest</div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:8px">
+              <span style="flex:0 0 auto;width:56px;height:56px;background-image:url({{ firstHarvest.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+              <div style="flex:1 1 auto;min-width:0">
+                <div style="display:flex;align-items:baseline;gap:8px">
+                  <span style="font-family:'DM Serif Display',Georgia,serif;font-size:44px;line-height:1;color:#35543F">{{ firstHarvest.big }}</span>
+                  <span style="font-size:14px;color:#7A5C46">{{ firstHarvest.unit }}</span>
+                </div>
+                <div style="font-size:13px;color:#7A5C46;margin-top:4px">{{ firstHarvest.date }}</div>
+                <div style="font-size:12px;color:#8FA98A">{{ firstHarvest.detail }}</div>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <sc-for list="{{ firstHarvest.soon }}" as="s" hint-placeholder-count="0">
+                <div style="display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #F0EADB">
+                  <span style="flex:0 0 auto;width:28px;height:28px;background-image:url({{ s.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <div style="flex:1 1 auto;min-width:0">
+                    <div style="font-size:14px">{{ s.name }}</div>
+                    <div style="font-size:11px;color:#8FA98A">{{ s.where }}</div>
+                  </div>
+                  <div style="flex:0 0 auto;font-size:12px;color:#C4633F">{{ s.when }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:12px;color:#8FA98A;margin-top:10px;line-height:1.5">{{ firstHarvest.note }}</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasNursery }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">In the nursery</div>
+            <div style="font-size:13px;color:#7A5C46;margin-top:2px">Seedlings growing in plugs, waiting for a pod.</div>
+            <sc-for list="{{ nursery }}" as="n" hint-placeholder-count="0">
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #F0EADB">
+                <span style="flex:0 0 auto;width:30px;height:30px;background-image:url({{ n.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                <div style="flex:1 1 auto;min-width:0">
+                  <div style="font-size:15px;font-weight:600">{{ n.name }}</div>
+                  <div style="font-size:12px;color:#8FA98A">{{ n.sown }} · {{ n.ready }}</div>
+                  <div style="font-size:11px;color:#A79E8B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ n.pods }}</div>
+                </div>
+                <button onClick="{{ n.plant }}" style="flex:0 0 auto;padding:11px 13px;border-radius:12px;border:none;background:{{ n.btnBg }};color:{{ n.btnFg }};font-size:13px;font-weight:700;cursor:pointer">Move up</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="margin-top:14px">
+          <sc-for list="{{ timeline }}" as="e" hint-placeholder-count="6">
+            <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-bottom:12px">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+                <div style="min-width:0">
+                  <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:{{ e.accent }}">{{ e.longDate }} · {{ e.when }}</div>
+                  <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px;line-height:1.2;margin-top:2px">{{ e.title }}</div>
+                  <div style="font-size:12px;color:#8FA98A">{{ e.subtitle }}</div>
+                </div>
+                <span style="flex:0 0 auto;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 10px;border-radius:999px;background:{{ e.badgeBg }};color:{{ e.badgeFg }}">{{ e.badge }}</span>
+              </div>
+              <sc-for list="{{ e.groups }}" as="g" hint-placeholder-count="0">
+                <button onClick="{{ g.toggle }}" style="width:100%;display:flex;align-items:flex-start;gap:11px;text-align:left;padding:12px 2px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
+                  <span style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ g.border }};background:{{ g.fill }};color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">{{ g.mark }}</span>
+                  <span style="flex:0 0 auto;width:26px;height:26px;background-image:url({{ g.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="flex:1 1 auto;min-width:0">
+                    <span style="display:block;font-size:15px;font-weight:600;color:{{ g.textColor }}">{{ g.label }}</span>
+                    <span style="display:block;font-size:11px;color:#8FA98A;line-height:1.5">{{ g.sub }}</span>
+                  </span>
+                </button>
+              </sc-for>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px">
+                <span style="font-size:12px;color:#8FA98A">{{ e.progress }}</span>
+                <button onClick="{{ e.markAll }}" style="padding:12px 16px;border-radius:13px;border:none;background:#35543F;color:#F6F1E4;font-size:14px;font-weight:700;cursor:pointer">Mark this day done</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:2px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Starting a seedling</div>
+          <div style="font-size:13px;color:#7A5C46;margin-top:2px">Never done this before? This is the whole routine.</div>
+          <sc-for list="{{ seedSteps }}" as="s" hint-placeholder-count="6">
+            <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #F0EADB">
+              <span style="flex:0 0 8px;height:8px;border-radius:50%;background:#8FA98A;margin-top:7px"></span>
+              <div style="flex:1 1 auto">
+                <div style="font-size:15px;font-weight:600">{{ s.t }}</div>
+                <div style="font-size:13px;color:#7A5C46;line-height:1.5">{{ s.b }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="background:#F3F6F2;border:1px solid #DCE6D8;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-size:14px;color:#35543F;line-height:1.55">15 pods stay empty on purpose — airflow, light and room for the big plants. They are the pale ones on the tower map, and they become your succession slots later.</div>
+          <button onClick="{{ finishSetup }}" style="margin-top:12px;padding:13px 16px;border-radius:13px;border:1.5px solid #DCE6D8;background:#FFFDF7;color:#4E7A55;font-size:14px;font-weight:700;cursor:pointer">Setup finished — hide this tab</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+      <div style="animation:riseIn .3s ease both">
+        <sc-if value="{{ setupActive }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ goStart }}" style="width:100%;text-align:left;background:#FBF3E6;border:1px solid #EFE2CB;border-radius:22px;padding:16px;margin-bottom:14px;cursor:pointer;display:block">
+            <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#B0801F">Setting up · {{ next.when }}</div>
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.15;margin-top:3px;color:#2E4034">{{ next.title }}</div>
+            <div style="font-size:13px;color:#7A5C46;margin-top:2px">{{ next.longDate }} · {{ next.subtitle }}</div>
+            <div style="font-size:12px;color:#B0801F;letter-spacing:0.1em;text-transform:uppercase;margin-top:8px">Open the plan →</div>
+          </button>
+        </sc-if>
+        <sc-if value="{{ trip.set }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ goTasks }}" style="width:100%;text-align:left;display:block;background:{{ trip.bg }};border:1px solid {{ trip.border }};border-radius:22px;padding:16px;margin-bottom:14px;cursor:pointer">
+            <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ trip.accent }}">Away from the garden</div>
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.15;margin-top:2px;color:#2E4034">{{ trip.headline }}</div>
+            <div style="font-size:13px;color:#7A5C46;margin-top:2px">{{ trip.sub }}</div>
+            <div style="font-size:12px;color:{{ trip.accent }};letter-spacing:0.1em;text-transform:uppercase;margin-top:8px">Open the plan →</div>
+          </button>
+        </sc-if>
+        <div style="background:#35543F;border-radius:22px;padding:18px 18px 16px;color:#F6F1E4">
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#B8CBB0">My garden</div>
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:34px;line-height:1.1;margin-top:4px">{{ totalPods }} pods</div>
+          <div style="font-size:12px;color:#C9DAC1;margin-top:2px">Tower 80 · Tabletop A 12 · Tabletop B 12</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-top:14px">
+            <div style="background:rgba(255,253,247,0.12);border-radius:14px;padding:10px 12px">
+              <div style="font-size:22px;font-family:'DM Serif Display',Georgia,serif">{{ stats.growing }}</div>
+              <div style="font-size:11px;color:#C9DAC1">Growing</div>
+            </div>
+            <div style="background:rgba(255,253,247,0.12);border-radius:14px;padding:10px 12px">
+              <div style="font-size:22px;font-family:'DM Serif Display',Georgia,serif">{{ stats.seeding }}</div>
+              <div style="font-size:11px;color:#C9DAC1">Seed starting</div>
+            </div>
+            <div style="background:rgba(255,253,247,0.12);border-radius:14px;padding:10px 12px">
+              <div style="font-size:22px;font-family:'DM Serif Display',Georgia,serif">{{ stats.nursery }}</div>
+              <div style="font-size:11px;color:#C9DAC1">In nursery</div>
+            </div>
+            <div style="background:rgba(255,253,247,0.12);border-radius:14px;padding:10px 12px">
+              <div style="font-size:22px;font-family:'DM Serif Display',Georgia,serif">{{ stats.toPlant }}</div>
+              <div style="font-size:11px;color:#C9DAC1">Still to plant</div>
+            </div>
+            <div style="background:rgba(232,131,107,0.9);border-radius:14px;padding:10px 12px">
+              <div style="font-size:22px;font-family:'DM Serif Display',Georgia,serif">{{ stats.ready }}</div>
+              <div style="font-size:11px;color:#FFF0E9">Ready to harvest</div>
+            </div>
+            <div style="background:rgba(255,253,247,0.12);border-radius:14px;padding:10px 12px">
+              <div style="font-size:22px;font-family:'DM Serif Display',Georgia,serif">{{ stats.reserved }}</div>
+              <div style="font-size:11px;color:#C9DAC1">Reserved / open</div>
+            </div>
+            <div style="background:rgba(255,253,247,0.12);border-radius:14px;padding:10px 12px">
+              <div style="font-size:22px;font-family:'DM Serif Display',Georgia,serif">{{ stats.attention }}</div>
+              <div style="font-size:11px;color:#C9DAC1">Need attention</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px">
+          <sc-for list="{{ systemCards }}" as="s" hint-placeholder-count="3">
+            <button onClick="{{ s.go }}" style="text-align:left;background:#FFFDF7;border:1px solid #E5DECD;border-radius:20px;padding:14px;cursor:pointer;display:block;width:100%">
+              <div style="font-size:16px;font-weight:700;color:#35543F">{{ s.name }}</div>
+              <div style="font-size:12px;color:#8FA98A">{{ s.sub }}</div>
+              <div style="height:6px;border-radius:6px;background:#F0EADB;margin-top:10px;overflow:hidden">
+                <div style="height:100%;border-radius:6px;background:{{ s.accent }};width:{{ s.pct }}"></div>
+              </div>
+              <div style="font-size:12px;color:#7A5C46;margin-top:6px">{{ s.planted }}</div>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px">
+
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px 16px 8px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Today</div>
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#C4633F">{{ dueCount }} due</div>
+            </div>
+            <sc-if value="{{ awayNow }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#F1F5F6;border:1px solid #DCE6E8;border-radius:16px;padding:12px 14px;margin-top:10px;font-size:13px;color:#35543F;line-height:1.55">You are away. Routine checks are paused until you are back — the garden is set up to coast. Anything urgent still shows on the Tasks tab.</div>
+            </sc-if>
+            <sc-for list="{{ todayTasks }}" as="t" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #F0EADB">
+                <button onClick="{{ t.toggle }}" style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ t.border }};background:{{ t.fill }};color:#FFFDF7;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center">{{ t.mark }}</button>
+                <div style="flex:1 1 auto;min-width:0">
+                  <div style="font-size:15px;color:{{ t.textColor }}">{{ t.label }}</div>
+                  <div style="font-size:11px;color:#8FA98A;letter-spacing:0.08em;text-transform:uppercase">{{ t.groupLabel }}</div>
+                </div>
+                <button onClick="{{ t.snooze }}" style="flex:0 0 auto;background:none;border:none;color:#8FA98A;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Snooze</button>
+              </div>
+            </sc-for>
+            <div style="padding:10px 0 8px;font-size:12px;color:#8FA98A">Snoozing pushes a task one day.</div>
+          </div>
+
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Water</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+              <div style="background:#F3F6F2;border-radius:16px;padding:12px">
+                <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">pH</div>
+                <div style="font-family:'DM Serif Display',Georgia,serif;font-size:30px;color:{{ water.phColor }}">{{ water.ph }}</div>
+                <div style="font-size:11px;color:#7A5C46">Target 5.8–6.2</div>
+              </div>
+              <div style="background:#F1F5F6;border-radius:16px;padding:12px">
+                <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">EC</div>
+                <div style="font-family:'DM Serif Display',Georgia,serif;font-size:30px;color:{{ water.ecColor }}">{{ water.ec }}</div>
+                <div style="font-size:11px;color:#7A5C46">Target {{ water.ecTarget }}</div>
+              </div>
+              <div style="background:#F7F3EA;border-radius:16px;padding:12px">
+                <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">Water level</div>
+                <div style="font-family:'DM Serif Display',Georgia,serif;font-size:30px">{{ water.level }}</div>
+                <div style="font-size:11px;color:#7A5C46">Last top-off {{ water.lastTopoff }}</div>
+              </div>
+              <div style="background:#F7F3EA;border-radius:16px;padding:12px">
+                <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">Water temp</div>
+                <div style="font-family:'DM Serif Display',Georgia,serif;font-size:30px">{{ water.temp }}</div>
+                <div style="font-size:11px;color:#7A5C46">Last reading {{ water.lastReading }}</div>
+              </div>
+            </div>
+            <button onClick="{{ goWater }}" style="width:100%;margin-top:12px;padding:14px;border-radius:14px;border:none;background:#6E9BA5;color:#FFFDF7;font-size:15px;font-weight:600;cursor:pointer">Log a reading</button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Coming up</div>
+            <sc-for list="{{ comingUp }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid #F0EADB">
+                <div style="flex:0 0 62px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#C4633F">{{ c.when }}</div>
+                <div style="flex:1 1 auto">
+                  <div style="font-size:15px">{{ c.label }}</div>
+                  <div style="font-size:12px;color:#8FA98A">{{ c.detail }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Tower map</div>
+              <button onClick="{{ goTower }}" style="background:none;border:none;color:#6E9BA5;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Open</button>
+            </div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px">
+              <sc-for list="{{ miniRows }}" as="r" hint-placeholder-count="10">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div style="flex:0 0 26px;font-size:10px;color:#8FA98A">R{{ r.row }}</div>
+                  <div style="flex:1 1 auto;display:flex;gap:5px">
+                    <sc-for list="{{ r.pods }}" as="p" hint-placeholder-count="8">
+                      <div onClick="{{ p.open }}" style="flex:1 1 0;height:14px;border-radius:5px;cursor:pointer;background:{{ p.color }};border:1px solid {{ p.ring }}"></div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:#8FA98A">Row 10 top → Row 1 bottom. Pale pods are reserved for airflow.</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTower }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:riseIn .3s ease both">
+        <div style="display:flex;gap:8px;background:#F1ECDF;border-radius:16px;padding:5px;margin-bottom:10px">
+          <sc-for list="{{ systemTabs }}" as="s" hint-placeholder-count="3">
+            <button onClick="{{ s.go }}" style="flex:1 1 0;min-width:0;padding:10px 6px;border-radius:12px;border:none;cursor:pointer;background:{{ s.bg }};color:{{ s.fg }}">
+              <span style="display:block;font-size:13px;font-weight:700">{{ s.label }}</span>
+              <span style="display:block;font-size:11px;color:#8FA98A">{{ s.count }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ isTowerSys }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:8px;background:#F1ECDF;border-radius:16px;padding:5px">
+          <button onClick="{{ setViewElevation }}" style="flex:1 1 0;padding:11px 6px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:{{ tabEl.bg }};color:{{ tabEl.fg }}">Front view</button>
+          <button onClick="{{ setViewTop }}" style="flex:1 1 0;padding:11px 6px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:{{ tabTop.bg }};color:{{ tabTop.fg }}">Top-down</button>
+          <button onClick="{{ setViewRows }}" style="flex:1 1 0;padding:11px 6px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:{{ tabRows.bg }};color:{{ tabRows.fg }}">Row list</button>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isElevation }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px 14px;margin-top:14px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;margin-bottom:2px">{{ sysTitle }}</div>
+            <div style="font-size:12px;color:#8FA98A;margin-bottom:14px">{{ sysSub }}</div>
+            <div style="overflow-x:auto;padding-bottom:4px">
+            <div style="min-width:max-content">
+            <sc-for list="{{ gridRows }}" as="r" hint-placeholder-count="10">
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed #F0EADB">
+                <div style="flex:0 0 54px">
+                  <div style="font-size:13px;font-weight:700;color:#35543F">Row {{ r.row }}</div>
+                  <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:{{ r.zoneColor }}">{{ r.zoneShort }}</div>
+                </div>
+                <div style="flex:1 1 auto;display:flex;gap:6px;justify-content:flex-start">
+                  <sc-for list="{{ r.pods }}" as="p" hint-placeholder-count="8">
+                    <button onClick="{{ p.open }}" style="flex:1 1 0;aspect-ratio:1/1;min-width:44px;max-width:74px;border-radius:50%;border:2px solid {{ p.ring }};background:{{ p.color }};color:{{ p.fg }};font-size:9px;font-weight:700;letter-spacing:0.02em;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center"><span style="width:78%;height:78%;background-image:url({{ p.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ p.iconOp }}"></span></button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;padding-top:8px">
+              <span>P1</span><span>Around the tower</span><span>P8</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isTopDown }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px 14px;margin-top:14px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Top-down map</div>
+            <div style="font-size:12px;color:#8FA98A;margin-bottom:8px">Outer ring is Row 10 (top). Inner ring is Row 1 (bottom).</div>
+            <div style="position:relative;width:320px;height:320px;margin:6px auto 0">
+              <div style="position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:1px dashed #DED7C8"></div>
+              <sc-for list="{{ topDownPods }}" as="p" hint-placeholder-count="80">
+                <button onClick="{{ p.open }}" style="position:absolute;left:50%;top:50%;width:24px;height:24px;padding:0;border-radius:50%;cursor:pointer;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid {{ p.ring }};background:{{ p.color }};color:{{ p.fg }};transform:{{ p.tf }}"><span style="width:80%;height:80%;background-image:url({{ p.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ p.iconOp }}"></span></button>
+              </sc-for>
+            </div>
+            <div style="text-align:center;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#8FA98A;margin-top:8px">Front / door at bottom · P1 starts at top</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isRows }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
+            <sc-for list="{{ gridRows }}" as="r" hint-placeholder-count="10">
+              <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:20px;padding:14px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Row {{ r.row }}</div>
+                  <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:{{ r.zoneColor }}">{{ r.zone }}</div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:10px">
+                  <sc-for list="{{ r.pods }}" as="p" hint-placeholder-count="8">
+                    <button onClick="{{ p.open }}" style="display:flex;align-items:center;gap:8px;text-align:left;padding:8px 9px;border-radius:13px;border:1px solid #EFE9DA;background:#FCFAF3;cursor:pointer;min-width:0">
+                      <span style="flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:{{ p.color }};border:1.5px solid {{ p.ring }};display:flex;align-items:center;justify-content:center"><span style="width:80%;height:80%;background-image:url({{ p.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ p.iconOp }}"></span></span>
+                      <span style="flex:1 1 auto;min-width:0">
+                        <span style="display:block;font-size:12px;font-weight:700;color:#35543F">{{ p.id }}</span>
+                        <span style="display:block;font-size:11px;color:#7A5C46;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.plantName }}</span>
+                      </span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Legend</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+            <sc-for list="{{ legend }}" as="l" hint-placeholder-count="0">
+              <div style="display:flex;align-items:center;gap:7px;background:#FAF6EC;border:1px solid #EFE9DA;border-radius:999px;padding:5px 11px 5px 5px">
+                <span style="width:24px;height:24px;border-radius:50%;background:{{ l.color }};border:1.5px solid {{ l.ring }};display:flex;align-items:center;justify-content:center"><span style="width:80%;height:80%;background-image:url({{ l.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span></span>
+                <span style="font-size:12px">{{ l.name }}</span>
+                <span style="font-size:11px;color:#8FA98A">{{ l.count }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Tower webcam</div>
+          <div style="font-size:12px;color:#8FA98A;margin-top:2px">Paste the embed link from your camera. It appears on the public page for anyone with the link.</div>
+          <input value="{{ camUrl }}" onChange="{{ onCamUrl }}" placeholder="https://…" style="width:100%;margin-top:10px;padding:14px;border-radius:13px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:15px">
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px">Tower photo timeline</div>
+          <div style="font-size:12px;color:#8FA98A;margin-top:2px">Watch the tower fill in over time.</div>
+          <div style="display:flex;gap:10px;overflow-x:auto;padding:12px 0 4px">
+            <sc-if value="{{ hasTowerPhotos }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ towerPhotos }}" as="ph" hint-placeholder-count="0">
+              <div style="flex:0 0 auto;width:132px">
+                <span style="display:block;width:132px;height:172px;border-radius:14px;border:1px solid #E5DECD;background-image:url({{ ph.src }});background-size:cover;background-position:center"></span>
+                <div style="font-size:11px;color:#8FA98A;margin-top:4px">{{ ph.date }}</div>
+              </div>
+            </sc-for>
+            </sc-if>
+            <label style="flex:0 0 auto;width:132px;height:172px;border-radius:14px;border:1.5px dashed #DED7C8;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#8FA98A;cursor:pointer;padding:10px">
+              Add tower photo
+              <input type="file" accept="image/*" onChange="{{ addTowerPhoto }}" style="display:none">
+            </label>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPlants }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:riseIn .3s ease both">
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Planting waves</div>
+          <div style="font-size:13px;color:#7A5C46;margin-top:4px">Three waves, two weeks apart, each spread diagonally around every side and height of the tower — never one row or one side at a time.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px">
+            <sc-for list="{{ waves }}" as="w" hint-placeholder-count="3">
+              <div style="border-radius:18px;padding:14px;background:{{ w.bg }};border:1px solid {{ w.border }}">
+                <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ w.accent }}">Wave {{ w.n }}</div>
+                <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;margin-top:2px">{{ w.date }}</div>
+                <div style="font-size:13px;color:#7A5C46">{{ w.count }} pods planted</div>
+                <div style="font-size:12px;color:#8FA98A;margin-top:6px">{{ w.note }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:12px;background:#F3F6F2;border-radius:16px;padding:12px 14px;font-size:13px;color:#35543F">After Wave 3 the tower moves to continuous succession planting — replant each pod as it is harvested.</div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Succession cadence</div>
+          <sc-for list="{{ cadence }}" as="c" hint-placeholder-count="9">
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #F0EADB">
+              <div style="font-size:15px">{{ c.crop }}</div>
+              <div style="font-size:13px;color:#7A5C46;text-align:right">{{ c.every }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">My seeds &amp; starters</div>
+          <div style="font-size:13px;color:#7A5C46;margin-top:2px">Everything you own. Add a packet, drop one you have used up — any pod in any system can be set to any of these.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px">
+            <sc-for list="{{ libraryGroups }}" as="g" hint-placeholder-count="9">
+              <div style="background:#FAF6EC;border:1px solid #EFE9DA;border-radius:18px;padding:12px 14px">
+                <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#35543F">{{ g.group }}</div>
+                <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="0">
+                  <div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #EFE9DA">
+                    <button onClick="{{ it.openIcons }}" style="flex:0 0 auto;width:40px;height:40px;padding:4px;border-radius:12px;border:1px solid #EFE9DA;background:#FFFDF7;cursor:pointer;display:flex;align-items:center;justify-content:center">
+                      <span style="width:100%;height:100%;background-image:url({{ it.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                    </button>
+                    <button onClick="{{ it.toggle }}" style="flex:1 1 auto;min-width:0;text-align:left;background:none;border:none;padding:0;cursor:pointer">
+                      <span style="display:block;font-size:14px;color:#2E4034">{{ it.name }}</span>
+                      <span style="display:block;font-size:11px;color:#8FA98A">{{ it.sub }}{{ it.used }}</span>
+                    </button>
+                    <button onClick="{{ it.remove }}" style="flex:0 0 auto;width:30px;height:30px;border-radius:9px;border:1px solid #EFE9DA;background:#FFFDF7;color:#B08A7A;font-size:14px;cursor:pointer">✕</button>
+                  </div>
+                  <sc-if value="{{ it.picking }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;padding:8px 0 12px">
+                      <sc-for list="{{ it.iconChoices }}" as="ic" hint-placeholder-count="0">
+                        <button onClick="{{ ic.pick }}" style="aspect-ratio:1/1;padding:4px;border-radius:12px;border:1px solid #EFE9DA;background:#FFFDF7;cursor:pointer">
+                          <span style="display:block;width:100%;height:100%;background-image:url({{ ic.src }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ it.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="background:#FFFDF7;border:1px solid #EFE9DA;border-radius:14px;padding:12px;margin:8px 0 12px">
+                      <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">From the packet</div>
+                      <sc-for list="{{ it.fields }}" as="f" hint-placeholder-count="0">
+                        <label style="display:block;margin-top:8px">
+                          <span style="display:block;font-size:11px;color:#8FA98A;margin-bottom:3px">{{ f.label }}</span>
+                          <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" style="width:100%;min-width:0;max-width:100%;padding:11px;border-radius:11px;border:1px solid #E5DECD;background:#FCFAF3;font-size:14px">
+                        </label>
+                      </sc-for>
+                      <div style="display:flex;gap:8px;margin-top:10px">
+                        <sc-for list="{{ it.numbers }}" as="f" hint-placeholder-count="0">
+                          <label style="flex:1 1 0;min-width:0">
+                            <span style="display:block;font-size:11px;color:#8FA98A;margin-bottom:3px">{{ f.label }}</span>
+                            <input value="{{ f.value }}" onChange="{{ f.onChange }}" inputMode="numeric" style="width:100%;min-width:0;max-width:100%;padding:11px;border-radius:11px;border:1px solid #E5DECD;background:#FCFAF3;font-size:14px;text-align:center">
+                          </label>
+                        </sc-for>
+                      </div>
+                      <label style="display:block;margin-top:10px">
+                        <span style="display:block;font-size:11px;color:#8FA98A;margin-bottom:3px">Notes from the packet</span>
+                        <textarea value="{{ it.packetNotes }}" onChange="{{ it.onNotes }}" rows="2" placeholder="sow depth, spacing, light, anything you want later" style="width:100%;min-width:0;max-width:100%;padding:11px;border-radius:11px;border:1px solid #E5DECD;background:#FCFAF3;font-size:14px;resize:vertical"></textarea>
+                      </label>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#F3F6F2;border:1px solid #DCE6D8;border-radius:18px;padding:12px 14px;margin-top:12px">
+            <div style="font-size:13px;font-weight:700;color:#35543F">Add a seed or starter</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+              <button onClick="{{ openNewIcons }}" style="flex:0 0 auto;width:52px;height:52px;padding:6px;border-radius:13px;border:1.5px solid #E5DECD;background:#FCFAF3;cursor:pointer">
+                <span style="display:block;width:100%;height:100%;background-image:url({{ newSeedIcon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+              </button>
+              <input value="{{ newSeed.name }}" onChange="{{ onSeedName }}" placeholder="e.g. Bok Choy" style="flex:2 1 150px;min-width:0;padding:14px;border-radius:13px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:15px">
+              <select value="{{ newSeed.base }}" onChange="{{ onSeedBase }}" style="flex:1 1 130px;min-width:0;padding:14px 10px;border-radius:13px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:14px">
+                <sc-for list="{{ baseOptions }}" as="o" hint-placeholder-count="5">
+                  <option value="{{ o.value }}">grows like {{ o.label }}</option>
+                </sc-for>
+              </select>
+              <button onClick="{{ addSeed }}" style="flex:1 1 110px;padding:14px;border-radius:13px;border:none;background:#35543F;color:#F6F1E4;font-size:15px;font-weight:700;cursor:pointer">Add</button>
+            </div>
+            <sc-if value="{{ newIconPicking }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;margin-top:10px">
+                <sc-for list="{{ newIconChoices }}" as="ic" hint-placeholder-count="0">
+                  <button onClick="{{ ic.pick }}" style="aspect-ratio:1/1;padding:4px;border-radius:12px;border:1px solid #DCE6D8;background:#FFFDF7;cursor:pointer">
+                    <span style="display:block;width:100%;height:100%;background-image:url({{ ic.src }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <div style="font-size:12px;color:#8FA98A;margin-top:8px">Tap a seed to add brand and packet details. Tap its picture to change the icon.</div>
+          </div>
+
+          <div style="background:#FAF6EC;border:1px solid #EFE9DA;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Icons</div>
+              <label style="flex:0 0 auto;padding:11px 14px;border-radius:13px;background:#35543F;color:#F6F1E4;font-size:14px;font-weight:700;cursor:pointer">
+                Upload
+                <input type="file" accept="image/*" onChange="{{ addIcon }}" style="display:none">
+              </label>
+            </div>
+            <div style="font-size:12px;color:#8FA98A;margin-top:2px">Add your own artwork, swap a picture you do not like, or remove one you never use.</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;margin-top:12px">
+              <sc-for list="{{ iconManager }}" as="ic" hint-placeholder-count="0">
+                <div style="background:#FFFDF7;border:1px solid #EFE9DA;border-radius:14px;padding:8px;text-align:center">
+                  <span style="display:block;width:100%;aspect-ratio:1/1;background-image:url({{ ic.src }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <div style="font-size:10px;color:#7A5C46;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ic.name }}</div>
+                  <div style="font-size:9px;color:#8FA98A;letter-spacing:0.08em;text-transform:uppercase">{{ ic.tag }} {{ ic.used }}</div>
+                  <div style="display:flex;gap:4px;margin-top:6px">
+                    <label style="flex:1 1 0;padding:7px 2px;border-radius:9px;border:1px solid #EFE9DA;background:#FCFAF3;color:#6E9BA5;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">
+                      Swap
+                      <input type="file" accept="image/*" onChange="{{ ic.replace }}" style="display:none">
+                    </label>
+                    <button onClick="{{ ic.remove }}" style="flex:0 0 30px;padding:7px 0;border-radius:9px;border:1px solid #EFE9DA;background:#FCFAF3;color:#B08A7A;font-size:12px;cursor:pointer">✕</button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ hasHiddenIcons }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px">
+                <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">Removed</div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+                  <sc-for list="{{ hiddenIcons }}" as="ic" hint-placeholder-count="0">
+                    <button onClick="{{ ic.restore }}" style="display:flex;align-items:center;gap:7px;padding:6px 11px 6px 6px;border-radius:999px;border:1px solid #EFE9DA;background:#FFFDF7;cursor:pointer">
+                      <span style="width:24px;height:24px;background-image:url({{ ic.src }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:0.45"></span>
+                      <span style="font-size:12px;color:#7A5C46">Restore {{ ic.name }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="margin-top:12px;background:#FBEFE9;border:1px solid #F2DDD2;border-radius:16px;padding:12px 14px;font-size:13px;color:#C4633F">Roma tomatoes stay out of the tower — separate container only.</div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Seedlings &amp; starters</div>
+            <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#6E9BA5">{{ trayTotal }} waiting</div>
+          </div>
+          <div style="font-size:13px;color:#7A5C46;margin-top:2px">Everything waiting for a pod — seedlings you started, plus starter plants you bought ready to go.</div>
+          <sc-if value="{{ hasTrays }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:10px">
+              <sc-for list="{{ trayItems }}" as="t" hint-placeholder-count="0">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F0EADB">
+                  <span style="flex:0 0 auto;width:32px;height:32px;background-image:url({{ t.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <div style="flex:1 1 auto;min-width:0">
+                    <div style="font-size:15px;font-weight:600">{{ t.name }}</div>
+                    <div style="font-size:12px;color:{{ t.readyColor }}">{{ t.sown }} · {{ t.ready }}</div>
+                  </div>
+                  <div style="flex:0 0 auto;display:flex;align-items:center;gap:6px">
+                    <button onClick="{{ t.minus }}" style="width:34px;height:34px;border-radius:11px;border:1px solid #E5DECD;background:#FCFAF3;color:#7A5C46;font-size:16px;cursor:pointer">−</button>
+                    <span style="min-width:26px;text-align:center;font-size:16px;font-weight:700">{{ t.count }}</span>
+                    <button onClick="{{ t.plus }}" style="width:34px;height:34px;border-radius:11px;border:1px solid #E5DECD;background:#FCFAF3;color:#7A5C46;font-size:16px;cursor:pointer">+</button>
+                    <button onClick="{{ t.remove }}" style="width:34px;height:34px;border-radius:11px;border:1px solid #EFE9DA;background:#FFFDF7;color:#B08A7A;font-size:14px;cursor:pointer">✕</button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="background:#F1F5F6;border:1px solid #DDE8EA;border-radius:18px;padding:12px 14px;margin-top:12px">
+            <div style="font-size:13px;font-weight:700;color:#35543F">Add to the queue</div>
+            <div style="display:flex;gap:6px;background:#E8EEF0;border-radius:14px;padding:4px;margin-top:8px">
+              <button onClick="{{ setTraySeed }}" style="flex:1 1 0;padding:11px;border-radius:11px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:{{ traySeedTab.bg }};color:{{ traySeedTab.fg }}">I started these</button>
+              <button onClick="{{ setTrayStarter }}" style="flex:1 1 0;padding:11px;border-radius:11px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:{{ trayStarterTab.bg }};color:{{ trayStarterTab.fg }}">Bought as starters</button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+              <select value="{{ newTray.crop }}" onChange="{{ onTrayCrop }}" style="flex:2 1 170px;min-width:0;padding:14px 10px;border-radius:13px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:14px">
+                <sc-for list="{{ trayOptions }}" as="o" hint-placeholder-count="0">
+                  <option value="{{ o.value }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+              <input value="{{ newTray.count }}" onChange="{{ onTrayCount }}" inputMode="numeric" style="flex:0 1 78px;min-width:0;padding:14px;border-radius:13px;border:1.5px solid #E5DECD;background:#FCFAF3;font-size:15px;text-align:center">
+              <button onClick="{{ addTray }}" style="flex:1 1 110px;padding:14px;border-radius:13px;border:none;background:#6E9BA5;color:#FFFDF7;font-size:15px;font-weight:700;cursor:pointer">Add</button>
+            </div>
+            <div style="font-size:12px;color:#8FA98A;margin-top:8px">Seedlings get a ready date from their crop. Bought starters are ready to plant straight away.</div>
+          </div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Zones by height</div>
+          <sc-for list="{{ zones }}" as="z" hint-placeholder-count="5">
+            <div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #F0EADB">
+              <div style="flex:0 0 78px;font-size:12px;font-weight:700;color:{{ z.color }}">{{ z.rows }}</div>
+              <div style="flex:1 1 auto">
+                <div style="font-size:14px;font-weight:600">{{ z.title }}</div>
+                <div style="font-size:13px;color:#7A5C46">{{ z.crops }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isWater }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:riseIn .3s ease both">
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Quick log</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px">
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">pH</span>
+              <input value="{{ form.ph }}" onChange="{{ onFormPh }}" inputMode="decimal" placeholder="6.0" style="width:100%;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:17px">
+            </label>
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">EC (mS/cm)</span>
+              <input value="{{ form.ec }}" onChange="{{ onFormEc }}" inputMode="decimal" placeholder="1.6" style="width:100%;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:17px">
+            </label>
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Water °F</span>
+              <input value="{{ form.temp }}" onChange="{{ onFormTemp }}" inputMode="decimal" placeholder="70" style="width:100%;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:17px">
+            </label>
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Level</span>
+              <select value="{{ form.level }}" onChange="{{ onFormLevel }}" style="width:100%;padding:15px 12px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:16px">
+                <option value="Full">Full</option>
+                <option value="3/4">3/4</option>
+                <option value="Half">Half</option>
+                <option value="Low">Low</option>
+              </select>
+            </label>
+          </div>
+          <button onClick="{{ saveReading }}" style="width:100%;margin-top:12px;padding:16px;border-radius:16px;border:none;background:#35543F;color:#F6F1E4;font-size:16px;font-weight:700;cursor:pointer">Save reading</button>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <input value="{{ form.gal }}" onChange="{{ onFormGal }}" inputMode="decimal" placeholder="Gallons added" style="flex:1 1 130px;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:16px">
+            <button onClick="{{ logTopoff }}" style="flex:1 1 130px;padding:15px;border-radius:14px;border:none;background:#6E9BA5;color:#FFFDF7;font-size:15px;font-weight:700;cursor:pointer">Log top-off</button>
+          </div>
+          <div style="font-size:12px;color:#8FA98A;margin-top:8px">After topping off, recheck EC and pH. Nutrients are added based on EC — not automatically with every top-off.</div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Trends</div>
+          <sc-for list="{{ charts }}" as="ch" hint-placeholder-count="3">
+            <div style="margin-top:12px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline">
+                <div style="font-size:13px;font-weight:600">{{ ch.title }}</div>
+                <div style="font-size:12px;color:#8FA98A">{{ ch.range }}</div>
+              </div>
+              <svg viewBox="0 0 300 70" preserveAspectRatio="none" style="width:100%;height:70px;margin-top:4px;background:#FAF6EC;border-radius:12px">
+                <polyline points="{{ ch.band }}" fill="rgba(143,169,138,0.22)" stroke="none"></polyline>
+                <polyline points="{{ ch.points }}" fill="none" stroke="{{ ch.color }}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></polyline>
+              </svg>
+            </div>
+          </sc-for>
+          <div style="font-size:12px;color:#8FA98A;margin-top:8px">{{ readingCount }} readings recorded.</div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Nutrient calculator</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px">
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Reservoir gallons</span>
+              <input value="{{ calc.gal }}" onChange="{{ onCalcGal }}" inputMode="decimal" style="width:100%;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:17px">
+            </label>
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Stage</span>
+              <select value="{{ calc.stage }}" onChange="{{ onCalcStage }}" style="width:100%;padding:15px 12px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:15px">
+                <option value="seedling">Seedling / clone, wk 1–2</option>
+                <option value="veg">Vegetative, wk 1–4</option>
+                <option value="flower14">Flowering, wk 1–4</option>
+                <option value="flower58">Flowering, wk 5–8</option>
+              </select>
+            </label>
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Current EC</span>
+              <input value="{{ calc.ec }}" onChange="{{ onCalcEc }}" inputMode="decimal" placeholder="1.4" style="width:100%;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:17px">
+            </label>
+            <label style="display:block;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Current pH</span>
+              <input value="{{ calc.ph }}" onChange="{{ onCalcPh }}" inputMode="decimal" placeholder="6.0" style="width:100%;padding:15px 14px;border-radius:14px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:17px">
+            </label>
+          </div>
+
+          <div style="background:{{ calcAdvice.bg }};border:1px solid {{ calcAdvice.border }};border-radius:16px;padding:12px 14px;margin-top:12px;font-size:13px;color:{{ calcAdvice.fg }}">{{ calcAdvice.text }}</div>
+
+          <div style="margin-top:12px">
+            <sc-for list="{{ calcRows }}" as="n" hint-placeholder-count="8">
+              <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #F0EADB">
+                <div style="flex:1 1 auto;min-width:0">
+                  <div style="font-size:15px;font-weight:600">{{ n.name }}</div>
+                  <div style="font-size:12px;color:#8FA98A">{{ n.sub }}</div>
+                </div>
+                <div style="flex:0 0 auto;text-align:right">
+                  <div style="font-size:17px;font-family:'DM Serif Display',Georgia,serif;color:{{ n.amountColor }}">{{ n.amount }}</div>
+                  <div style="font-size:11px;color:#8FA98A">{{ n.rate }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:12px;background:#FAF6EC;border:1px solid #EFE9DA;border-radius:16px;padding:12px 14px">
+            <div style="font-size:13px;font-weight:700;color:#35543F">Store your label rates</div>
+            <div style="font-size:12px;color:#7A5C46;margin-top:2px">KRISP never invents a dose. Enter the mL per gallon from each bottle's label and it does the math.</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px">
+              <sc-for list="{{ rateInputs }}" as="r" hint-placeholder-count="6">
+                <label style="display:flex;align-items:center;gap:8px;background:#FFFDF7;border:1px solid #EFE9DA;border-radius:12px;padding:8px 10px">
+                  <span style="flex:1 1 auto;font-size:12px">{{ r.label }}</span>
+                  <input value="{{ r.value }}" onChange="{{ r.onChange }}" inputMode="decimal" placeholder="mL/gal" style="flex:0 0 78px;padding:9px;border-radius:9px;border:1px solid #E5DECD;background:#FCFAF3;font-size:14px;text-align:right">
+                </label>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;background:#FBEFE9;border:1px solid #F2DDD2;border-radius:16px;padding:12px 14px;font-size:13px;color:#C4633F">Never combine concentrates. Add each nutrient to the water on its own and mix completely before the next one.</div>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Mixing checklist</div>
+            <button onClick="{{ resetMix }}" style="background:none;border:none;color:#6E9BA5;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Reset</button>
+          </div>
+          <sc-for list="{{ mixSteps }}" as="s" hint-placeholder-count="17">
+            <button onClick="{{ s.toggle }}" style="width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:12px 4px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
+              <span style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ s.border }};background:{{ s.fill }};color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">{{ s.mark }}</span>
+              <span style="flex:0 0 20px;font-size:12px;color:#8FA98A">{{ s.n }}</span>
+              <span style="flex:1 1 auto;font-size:15px;color:{{ s.color }}">{{ s.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Reservoir health</div>
+          <div style="font-size:13px;color:#7A5C46;margin-top:2px">The tower is 8 feet tall — deep cleans happen when the water tells you to, not on a calendar. Tick anything you're seeing.</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+            <sc-for list="{{ healthFlags }}" as="f" hint-placeholder-count="9">
+              <button onClick="{{ f.toggle }}" style="padding:11px 14px;border-radius:999px;border:1.5px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};font-size:13px;cursor:pointer">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <div style="margin-top:12px;background:{{ deep.bg }};border:1px solid {{ deep.border }};border-radius:16px;padding:12px 14px;font-size:13px;color:{{ deep.fg }}">{{ deep.text }}</div>
+          <sc-if value="{{ deep.show }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:10px">
+              <sc-for list="{{ deepSteps }}" as="d" hint-placeholder-count="8">
+                <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #F0EADB;font-size:14px">
+                  <span style="color:#C4633F">·</span><span>{{ d }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-top:14px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">Recent log</div>
+          <sc-for list="{{ recentLog }}" as="l" hint-placeholder-count="6">
+            <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #F0EADB">
+              <div style="font-size:14px">{{ l.text }}</div>
+              <div style="font-size:12px;color:#8FA98A;white-space:nowrap">{{ l.date }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTasks }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:riseIn .3s ease both">
+        <div style="background:{{ trip.bg }};border:1px solid {{ trip.border }};border-radius:22px;padding:16px;margin-bottom:14px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+            <div style="min-width:0">
+              <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ trip.accent }}">Away from the garden</div>
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.15;margin-top:2px">{{ trip.headline }}</div>
+              <div style="font-size:13px;color:#7A5C46;margin-top:2px">{{ trip.sub }}</div>
+            </div>
+            <button onClick="{{ clearTrip }}" style="flex:0 0 auto;background:none;border:none;color:#8FA98A;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Clear</button>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <label style="flex:1 1 140px;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Leaving</span>
+              <input type="date" value="{{ trip.start }}" onChange="{{ onTripStart }}" style="width:100%;min-width:0;max-width:100%;padding:14px;border-radius:13px;border:1.5px solid #E5DECD;background:#FFFDF7;font-size:15px">
+            </label>
+            <label style="flex:1 1 140px;min-width:0">
+              <span style="display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-bottom:4px">Back</span>
+              <input type="date" value="{{ trip.end }}" onChange="{{ onTripEnd }}" style="width:100%;min-width:0;max-width:100%;padding:14px;border-radius:13px;border:1.5px solid #E5DECD;background:#FFFDF7;font-size:15px">
+            </label>
+          </div>
+
+          <sc-if value="{{ trip.set }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px;color:#8FA98A;margin-top:10px">{{ trip.range }} · {{ trip.days }} days unattended</div>
+
+            <sc-if value="{{ trip.hasRisk }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FFFDF7;border:1px solid #F2DDD2;border-radius:16px;padding:12px;margin-top:12px">
+                <div style="font-size:13px;font-weight:700;color:#C4633F">{{ trip.riskLabel }}</div>
+                <sc-for list="{{ trip.atRisk }}" as="r" hint-placeholder-count="0">
+                  <div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #F7F0E6">
+                    <span style="flex:0 0 auto;width:28px;height:28px;background-image:url({{ r.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                    <div style="flex:1 1 auto;min-width:0">
+                      <div style="font-size:14px">{{ r.name }}</div>
+                      <div style="font-size:11px;color:#8FA98A">{{ r.pod }} · {{ r.note }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Before you go</div>
+                <div style="font-size:11px;color:#8FA98A">{{ trip.prepPct }}</div>
+              </div>
+              <sc-for list="{{ trip.prep }}" as="p" hint-placeholder-count="0">
+                <button onClick="{{ p.toggle }}" style="width:100%;display:flex;align-items:flex-start;gap:11px;text-align:left;padding:11px 2px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
+                  <span style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ p.border }};background:{{ p.fill }};color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">{{ p.mark }}</span>
+                  <span style="flex:1 1 auto;min-width:0">
+                    <span style="display:block;font-size:15px;color:{{ p.color }}">{{ p.label }}</span>
+                    <span style="display:block;font-size:12px;color:#8FA98A;line-height:1.5">{{ p.why }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+
+            <div style="background:#F1F5F6;border:1px solid #DCE6E8;border-radius:16px;padding:12px 14px;margin-top:12px;font-size:13px;color:#35543F;line-height:1.55">{{ trip.awayNote }}</div>
+
+            <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">When you get back</div>
+                <div style="font-size:11px;color:#8FA98A">{{ trip.backPct }}</div>
+              </div>
+              <sc-for list="{{ trip.back }}" as="p" hint-placeholder-count="0">
+                <button onClick="{{ p.toggle }}" style="width:100%;display:flex;align-items:flex-start;gap:11px;text-align:left;padding:11px 2px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
+                  <span style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ p.border }};background:{{ p.fill }};color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">{{ p.mark }}</span>
+                  <span style="flex:1 1 auto;min-width:0">
+                    <span style="display:block;font-size:15px;color:{{ p.color }}">{{ p.label }}</span>
+                    <span style="display:block;font-size:12px;color:#8FA98A;line-height:1.5">{{ p.why }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <sc-if value="{{ hasOpenIssues }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FBEFE9;border:1px solid #F2DDD2;border-radius:22px;padding:16px;margin-bottom:14px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px;color:#C4633F">Problems to fix</div>
+            <div style="font-size:13px;color:#B08A7A;margin-top:2px">Reported from a pod. These stay here until you mark them sorted.</div>
+            <sc-for list="{{ openIssues }}" as="is" hint-placeholder-count="0">
+              <div style="background:#FFFDF7;border:1px solid #F2DDD2;border-radius:18px;padding:13px;margin-top:12px">
+                <div style="display:flex;align-items:center;gap:9px">
+                  <span style="flex:0 0 auto;width:10px;height:10px;border-radius:50%;background:{{ is.color }}"></span>
+                  <div style="flex:1 1 auto;min-width:0">
+                    <div style="font-size:15px;font-weight:700">{{ is.type }}</div>
+                    <div style="font-size:12px;color:#8FA98A">{{ is.pod }} · {{ is.since }} · {{ is.progress }}</div>
+                  </div>
+                  <button onClick="{{ is.open }}" style="flex:0 0 auto;background:none;border:none;color:#6E9BA5;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Pod</button>
+                </div>
+                <sc-for list="{{ is.tasks }}" as="t" hint-placeholder-count="0">
+                  <button onClick="{{ t.toggle }}" style="width:100%;display:flex;align-items:center;gap:11px;text-align:left;padding:11px 2px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
+                    <span style="flex:0 0 auto;width:24px;height:24px;border-radius:8px;border:1.5px solid {{ t.border }};background:{{ t.fill }};color:#FFFDF7;font-size:12px;display:flex;align-items:center;justify-content:center">{{ t.mark }}</span>
+                    <span style="flex:1 1 auto;font-size:14px;color:{{ t.color }}">{{ t.label }}</span>
+                  </button>
+                </sc-for>
+                <button onClick="{{ is.resolve }}" style="width:100%;margin-top:10px;padding:12px;border-radius:13px;border:none;background:#4E7A55;color:#FFFDF7;font-size:14px;font-weight:700;cursor:pointer">Mark this sorted</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-for list="{{ taskGroups }}" as="g" hint-placeholder-count="5">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:22px;padding:16px;margin-bottom:14px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:22px">{{ g.title }}</div>
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:{{ g.accent }}">{{ g.status }}</div>
+            </div>
+            <sc-for list="{{ g.tasks }}" as="t" hint-placeholder-count="6">
+              <button onClick="{{ t.toggle }}" style="width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:12px 4px;border:none;border-bottom:1px solid #F0EADB;background:none;cursor:pointer">
+                <span style="flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:1.5px solid {{ t.border }};background:{{ t.fill }};color:#FFFDF7;font-size:13px;display:flex;align-items:center;justify-content:center">{{ t.mark }}</span>
+                <span style="flex:1 1 auto;font-size:15px;color:{{ t.textColor }}">{{ t.label }}</span>
+                <span style="flex:0 0 auto;font-size:11px;color:#8FA98A">{{ t.when }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isHarvest }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:riseIn .3s ease both">
+        <div style="background:#E8836B;border-radius:22px;padding:16px 18px;color:#FFF6F1">
+          <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#FFE3D8">Ready now</div>
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:32px;line-height:1.15;margin-top:2px">{{ stats.ready }} pods ready to harvest</div>
+          <div style="font-size:13px;color:#FFE3D8;margin-top:4px">{{ harvestTotalLabel }}</div>
+        </div>
+
+        <div style="display:flex;gap:8px;background:#F1ECDF;border-radius:16px;padding:5px;margin-top:14px">
+          <button onClick="{{ setHarvestAll }}" style="flex:1 1 0;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:{{ hAll.bg }};color:{{ hAll.fg }}">All plantings</button>
+          <button onClick="{{ setHarvestReady }}" style="flex:1 1 0;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:{{ hReady.bg }};color:{{ hReady.fg }}">Ready only</button>
+        </div>
+
+        <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px">
+          <sc-for list="{{ harvestList }}" as="h" hint-placeholder-count="0">
+            <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:20px;padding:14px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:{{ h.color }};border:2px solid {{ h.ring }};display:flex;align-items:center;justify-content:center"><span style="width:78%;height:78%;background-image:url({{ h.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span></span>
+                <div style="flex:1 1 auto;min-width:0">
+                  <div style="font-size:16px;font-weight:700;color:#35543F">{{ h.name }}</div>
+                  <div style="font-size:12px;color:#8FA98A">{{ h.pod }} · planted {{ h.planted }} · day {{ h.days }}</div>
+                </div>
+                <span style="flex:0 0 auto;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:{{ h.statusBg }};color:{{ h.statusFg }}">{{ h.status }}</span>
+              </div>
+              <div style="height:6px;border-radius:6px;background:#F0EADB;margin-top:12px;overflow:hidden">
+                <div style="height:100%;border-radius:6px;background:{{ h.color }};width:{{ h.pct }}"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:#7A5C46;margin-top:6px">
+                <span>First harvest {{ h.window }}</span>
+                <span>{{ h.totalHarvested }}</span>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button onClick="{{ h.some }}" style="flex:1 1 0;padding:13px;border-radius:13px;border:none;background:#8FA98A;color:#FFFDF7;font-size:14px;font-weight:700;cursor:pointer">Harvest some</button>
+                <button onClick="{{ h.remove }}" style="flex:1 1 0;padding:13px;border-radius:13px;border:1.5px solid #E8836B;background:#FFFDF7;color:#C4633F;font-size:14px;font-weight:700;cursor:pointer">Harvest &amp; remove</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <sc-if value="{{ sheet.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSheet }}" style="position:fixed;inset:0;background:rgba(46,64,52,0.42);z-index:60;display:flex;align-items:flex-end;justify-content:center">
+      <div onClick="{{ stop }}" style="width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:#FBF6EC;border-radius:26px 26px 0 0;padding:18px 18px 28px;animation:riseIn .25s ease both">
+        <div style="width:44px;height:5px;border-radius:5px;background:#DED7C8;margin:0 auto 14px"></div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="flex:0 0 auto;width:50px;height:50px;border-radius:50%;background:{{ sheet.color }};border:2px solid {{ sheet.ring }};display:flex;align-items:center;justify-content:center"><span style="width:78%;height:78%;background-image:url({{ sheet.icon }});background-size:contain;background-position:center;background-repeat:no-repeat;opacity:{{ sheet.iconOp }}"></span></span>
+          <div style="flex:1 1 auto;min-width:0">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:26px;line-height:1.1">{{ sheet.plantName }}</div>
+            <div style="font-size:12px;color:#8FA98A">{{ sheet.location }}</div>
+          </div>
+          <button onClick="{{ closeSheet }}" style="flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid #E5DECD;background:#FFFDF7;color:#7A5C46;font-size:16px;cursor:pointer">✕</button>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px">
+          <sc-for list="{{ sheet.statusOptions }}" as="s" hint-placeholder-count="6">
+            <button onClick="{{ s.pick }}" style="padding:9px 12px;border-radius:999px;border:1.5px solid {{ s.border }};background:{{ s.bg }};color:{{ s.fg }};font-size:12px;cursor:pointer">{{ s.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ sheet.hasPlant }}" hint-placeholder-val="{{ true }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+            <sc-for list="{{ sheet.facts }}" as="f" hint-placeholder-count="8">
+              <div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #F0EADB">
+                <span style="font-size:13px;color:#8FA98A">{{ f.k }}</span>
+                <span style="font-size:14px;text-align:right">{{ f.v }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button onClick="{{ sheet.harvestSome }}" style="flex:1 1 0;padding:14px;border-radius:14px;border:none;background:#8FA98A;color:#FFFDF7;font-size:15px;font-weight:700;cursor:pointer">Harvest some</button>
+              <button onClick="{{ sheet.harvestRemove }}" style="flex:1 1 0;padding:14px;border-radius:14px;border:1.5px solid #E8836B;background:#FFFDF7;color:#C4633F;font-size:15px;font-weight:700;cursor:pointer">Harvest &amp; remove</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheet.planned.show }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">{{ sheet.planned.headline }}</div>
+            <div style="font-size:13px;color:#7A5C46;margin-top:2px">{{ sheet.planned.detail }}</div>
+            <div style="font-size:12px;color:#8FA98A;margin-top:4px">{{ sheet.planned.variety }}</div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button onClick="{{ sheet.planned.sow }}" style="flex:1 1 0;padding:14px;border-radius:14px;border:1.5px solid #6E9BA5;background:#FFFDF7;color:#4E7A84;font-size:14px;font-weight:700;cursor:pointer">{{ sheet.planned.sowLabel }}</button>
+              <button onClick="{{ sheet.planned.plant }}" style="flex:1 1 0;padding:14px;border-radius:14px;border:none;background:#4E7A55;color:#FFFDF7;font-size:14px;font-weight:700;cursor:pointer">{{ sheet.planned.plantLabel }}</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheet.showReplant }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Plant something here</div>
+            <div style="font-size:12px;color:#8FA98A;margin-top:2px">{{ sheet.replantWhy }}</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+              <sc-for list="{{ sheet.suggestions }}" as="s" hint-placeholder-count="0">
+                <button onClick="{{ s.plant }}" style="display:flex;align-items:center;gap:10px;text-align:left;padding:12px;border-radius:14px;border:1.5px solid {{ s.border }};background:{{ s.bg }};cursor:pointer">
+                  <span style="flex:0 0 auto;width:30px;height:30px;background-image:url({{ s.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="flex:1 1 auto">
+                    <span style="display:block;font-size:15px;font-weight:700;color:#35543F">{{ s.name }}</span>
+                    <span style="display:block;font-size:12px;color:#7A5C46">{{ s.reason }}</span>
+                  </span>
+                  <span style="flex:0 0 auto;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#6E9BA5">Plant</span>
+                </button>
+              </sc-for>
+              <button onClick="{{ sheet.reserve }}" style="padding:12px;border-radius:14px;border:1.5px dashed #DED7C8;background:none;color:#8FA98A;font-size:14px;cursor:pointer">Keep reserved for airflow</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheet.seedling.show }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#F1F5F6;border:1px solid #DDE8EA;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Seedling</div>
+            <div style="font-size:13px;color:#4E7A84;margin-top:2px">{{ sheet.seedling.age }} · {{ sheet.seedling.ready }}</div>
+            <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A;margin-top:12px">Move it up to</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:8px">
+              <sc-for list="{{ sheet.moveTargets }}" as="m" hint-placeholder-count="0">
+                <button onClick="{{ m.move }}" style="text-align:left;padding:11px;border-radius:13px;border:1.5px solid #DDE8EA;background:#FFFDF7;cursor:pointer;min-width:0">
+                  <span style="display:block;font-size:14px;font-weight:700;color:#35543F">{{ m.label }}</span>
+                  <span style="display:block;font-size:11px;color:#6E9BA5">{{ m.why }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheet.hasTrays }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#F1F5F6;border:1px solid #DDE8EA;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Plant from my seedlings</div>
+            <sc-for list="{{ sheet.trayItems }}" as="t" hint-placeholder-count="0">
+              <button onClick="{{ t.plant }}" style="width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:11px 2px;border:none;border-bottom:1px solid #DDE8EA;background:none;cursor:pointer">
+                <span style="flex:0 0 auto;width:30px;height:30px;background-image:url({{ t.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                <span style="flex:1 1 auto;min-width:0">
+                  <span style="display:block;font-size:15px;font-weight:600;color:#2E4034">{{ t.name }}</span>
+                  <span style="display:block;font-size:12px;color:#6E9BA5">{{ t.count }} · {{ t.when }}</span>
+                </span>
+                <span style="flex:0 0 auto;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#4E7A84">Use one</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">{{ sheet.pickerLabel }}</div>
+            <button onClick="{{ sheet.togglePicker }}" style="background:none;border:none;color:#6E9BA5;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Seed library</button>
+          </div>
+          <sc-if value="{{ sheet.pickerOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px;max-height:260px;overflow-y:auto">
+              <sc-for list="{{ sheet.pickerItems }}" as="i" hint-placeholder-count="0">
+                <button onClick="{{ i.pick }}" style="display:flex;align-items:center;gap:8px;text-align:left;padding:9px;border-radius:13px;border:1.5px solid {{ i.border }};background:{{ i.bg }};cursor:pointer;min-width:0">
+                  <span style="flex:0 0 auto;width:26px;height:26px;background-image:url({{ i.icon }});background-size:contain;background-position:center;background-repeat:no-repeat"></span>
+                  <span style="flex:1 1 auto;min-width:0;font-size:12px;color:#2E4034;overflow:hidden;text-overflow:ellipsis">{{ i.name }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <button onClick="{{ sheet.clear }}" style="width:100%;margin-top:10px;padding:12px;border-radius:13px;border:1.5px dashed #DED7C8;background:none;color:#8FA98A;font-size:14px;cursor:pointer">Empty this pod</button>
+          </sc-if>
+        </div>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+          <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8FA98A">Notes</div>
+          <textarea value="{{ sheet.note }}" onChange="{{ sheet.onNote }}" rows="2" placeholder="Leaf tips yellowing, moved trellis clip…" style="width:100%;margin-top:8px;padding:12px;border-radius:13px;border:1.5px solid #E5DECD;background:#FCFAF3;min-width:0;max-width:100%;font-size:15px;resize:vertical"></textarea>
+          <div style="display:flex;gap:10px;overflow-x:auto;padding-top:10px">
+            <sc-if value="{{ sheet.hasPhotos }}" hint-placeholder-val="{{ false }}">
+              <sc-for list="{{ sheet.photos }}" as="p" hint-placeholder-count="0">
+                <span style="flex:0 0 auto;width:84px;height:106px;border-radius:12px;border:1px solid #E5DECD;background-image:url({{ p.src }});background-size:cover;background-position:center"></span>
+              </sc-for>
+            </sc-if>
+            <label style="flex:0 0 auto;width:84px;height:106px;border-radius:12px;border:1.5px dashed #DED7C8;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;color:#8FA98A;cursor:pointer;padding:6px">
+              Add photo
+              <input type="file" accept="image/*" onChange="{{ sheet.addPhoto }}" style="display:none">
+            </label>
+          </div>
+        </div>
+
+        <sc-if value="{{ sheet.hasIssues }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FBEFE9;border:1px solid #F2DDD2;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px;color:#C4633F">Fixing this pod</div>
+            <sc-for list="{{ sheet.podIssues }}" as="is" hint-placeholder-count="0">
+              <div style="margin-top:8px">
+                <div style="font-size:14px;font-weight:700">{{ is.type }}</div>
+                <div style="font-size:12px;color:#B08A7A">{{ is.since }}</div>
+                <sc-for list="{{ is.tasks }}" as="t" hint-placeholder-count="0">
+                  <button onClick="{{ t.toggle }}" style="width:100%;display:flex;align-items:center;gap:11px;text-align:left;padding:10px 2px;border:none;border-bottom:1px solid #F2DDD2;background:none;cursor:pointer">
+                    <span style="flex:0 0 auto;width:24px;height:24px;border-radius:8px;border:1.5px solid {{ t.border }};background:{{ t.fill }};color:#FFFDF7;font-size:12px;display:flex;align-items:center;justify-content:center">{{ t.mark }}</span>
+                    <span style="flex:1 1 auto;font-size:14px;color:{{ t.color }}">{{ t.label }}</span>
+                  </button>
+                </sc-for>
+                <button onClick="{{ is.resolve }}" style="width:100%;margin-top:10px;padding:12px;border-radius:13px;border:none;background:#4E7A55;color:#FFFDF7;font-size:14px;font-weight:700;cursor:pointer">Mark this sorted</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Report a problem</div>
+          <div style="font-size:12px;color:#8FA98A;margin-top:2px">The fix steps land in your maintenance plan straight away.</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+            <sc-for list="{{ sheet.issueOptions }}" as="o" hint-placeholder-count="0">
+              <button onClick="{{ o.report }}" style="padding:11px 14px;border-radius:999px;border:1.5px solid #EFE9DA;background:#FCFAF3;color:#7A5C46;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px">
+                <span style="width:9px;height:9px;border-radius:50%;background:{{ o.color }}"></span>{{ o.label }}
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{ sheet.hasEvents }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Activity</div>
+            <div style="font-size:12px;color:#8FA98A;margin-top:2px">Everything that has happened to this planting.</div>
+            <sc-for list="{{ sheet.events }}" as="ev" hint-placeholder-count="0">
+              <div style="display:flex;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid #F0EADB">
+                <span style="flex:0 0 54px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8FA98A">{{ ev.date }}</span>
+                <span style="flex:1 1 auto;font-size:14px">{{ ev.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ sheet.hasHistory }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFDF7;border:1px solid #E5DECD;border-radius:18px;padding:14px;margin-top:12px">
+            <div style="font-family:'DM Serif Display',Georgia,serif;font-size:19px">Pod history</div>
+            <div style="font-size:12px;color:#8FA98A;margin-top:2px">This pod is permanent — every planting stays on the record.</div>
+            <sc-for list="{{ sheet.history }}" as="h" hint-placeholder-count="2">
+              <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #F0EADB">
+                <div style="flex:0 0 auto;font-size:12px;color:#C4633F">#{{ h.n }}</div>
+                <div style="flex:1 1 auto">
+                  <div style="font-size:14px;font-weight:600">{{ h.name }}</div>
+                  <div style="font-size:12px;color:#8FA98A">{{ h.span }} · {{ h.result }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:fixed;left:0;right:0;bottom:0;z-index:50;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(251,246,236,0.98) 65%,rgba(251,246,236,0))">
+    <div style="max-width:560px;margin:0 auto;display:flex;gap:2px;background:#FFFDF7;border:1px solid #E5DECD;border-radius:20px;padding:5px;box-shadow:0 6px 20px rgba(46,64,52,0.08)">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
+        <button onClick="{{ n.go }}" style="flex:1 1 0;min-width:0;padding:10px 1px 8px;border:none;border-radius:14px;cursor:pointer;background:{{ n.bg }};color:{{ n.fg }};display:flex;flex-direction:column;align-items:center;gap:3px">
+          <span style="width:8px;height:8px;border-radius:50%;background:{{ n.dot }}"></span>
+          <span style="font-size:9.5px;font-weight:700;letter-spacing:0.01em">{{ n.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:932}}">
+const CROPS = {
+  cucumber:{name:'Persian Muncher Cucumber',abbr:'CUC',color:'#7FA05E',ring:'#5F7F45',fg:'#FFFDF7',cat:'vine',dtm:[45,60],succ:'Long crop — replace when productivity drops'},
+  snowpea:{name:'Oregon Sugar Pod II Snow Pea',abbr:'SNW',color:'#A9C48C',ring:'#7F9D63',fg:'#2E4034',cat:'vine',dtm:[50,65],succ:'Replace after the crop finishes'},
+  snappea:{name:'Sugar Daddy Snap Pea',abbr:'SNP',color:'#8FBE9B',ring:'#6C9A78',fg:'#2E4034',cat:'vine',dtm:[50,65],succ:'Replace after the crop finishes'},
+  cherrytomato:{name:'Cherry Baby Cherry Tomato',abbr:'CTM',color:'#D45D4B',ring:'#A9412F',fg:'#FFFDF7',cat:'fruit',dtm:[60,75],succ:'Long-term plant'},
+  sweetpepper:{name:'Sweet Pepper',abbr:'PEP',color:'#D9A441',ring:'#B0801F',fg:'#2E4034',cat:'fruit',dtm:[70,90],succ:'Long-term plant',varieties:['Carnival Blend','California Wonder','Orange Sun']},
+  hotpepper:{name:'Hot Pepper',abbr:'JAL',color:'#C4633F',ring:'#96462A',fg:'#FFFDF7',cat:'fruit',dtm:[80,100],succ:'Long-term plant',varieties:['Jalapeño','Early Jalapeño','Chili Pepper']},
+  strawberry:{name:'Strawberry',abbr:'STR',color:'#D06B7A',ring:'#A44857',fg:'#FFFDF7',cat:'berry',dtm:[30,45],succ:'Long-term — replace individual plants as needed'},
+  lettuce:{name:'Lettuce',abbr:'LTC',color:'#8FA98A',ring:'#6C8768',fg:'#2E4034',cat:'leafy',dtm:[30,45],succ:'Every 2–3 weeks',varieties:['Salad Bowl Blend',"Farmer's Market Mesclun",'Brentwood Red Leaf']},
+  scallion:{name:'White Lisbon Scallion',abbr:'SCA',color:'#6E9BA5',ring:'#4E7A84',fg:'#FFFDF7',cat:'leafy',dtm:[30,45],succ:'Every 3–4 weeks'},
+  basil:{name:'Italian Genovese Basil',abbr:'BAS',color:'#4E7A55',ring:'#3A5C40',fg:'#FFFDF7',cat:'herb',dtm:[30,40],succ:'Every 3–4 weeks as needed'},
+  thaibasil:{name:'Thai Basil',abbr:'THB',color:'#6B8A4E',ring:'#4F6A38',fg:'#FFFDF7',cat:'herb',dtm:[30,40],succ:'Every 3–4 weeks as needed'},
+  cilantro:{name:'Slow Bolt Cilantro',abbr:'CIL',color:'#9BB56B',ring:'#78924B',fg:'#2E4034',cat:'herb',dtm:[25,35],succ:'Every 2–3 weeks'},
+  parsley:{name:'Flat Leaf Parsley',abbr:'PAR',color:'#4F7A4A',ring:'#3B5D37',fg:'#FFFDF7',cat:'herb',dtm:[60,75],succ:'Every 4–6 weeks as needed'},
+  thyme:{name:'Thyme',abbr:'THY',color:'#8B9E7A',ring:'#6B7C5C',fg:'#2E4034',cat:'herb',dtm:[60,90],succ:'Long-lived — prune, replace occasionally'},
+  oregano:{name:'Greek Oregano',abbr:'ORG',color:'#A5A05E',ring:'#827E43',fg:'#2E4034',cat:'herb',dtm:[60,90],succ:'Long-lived — prune, replace occasionally'},
+  chives:{name:'Chives',abbr:'CHV',color:'#5E8F8A',ring:'#456C68',fg:'#FFFDF7',cat:'herb',dtm:[60,80],succ:'Long-lived — cut and regrow'},
+  spearmint:{name:'Spearmint',abbr:'SPM',color:'#7EB8A5',ring:'#5C948283',fg:'#2E4034',cat:'herb',dtm:[45,70],succ:'Long-lived — prune hard'}
+};
+const EMPTY = {color:'#EDE6D6',ring:'#DED7C8',fg:'#A79E8B',abbr:'—'};
+
+const ROW_PLAN = {
+  10:['cucumber','cucumber','snowpea','snowpea'],
+  9:['cucumber','cucumber','snappea','snappea'],
+  8:['cherrytomato','cherrytomato','cherrytomato','sweetpepper','sweetpepper','sweetpepper','hotpepper'],
+  7:['cherrytomato','cherrytomato','sweetpepper','sweetpepper','sweetpepper','hotpepper','hotpepper','hotpepper'],
+  6:['strawberry','strawberry','strawberry','strawberry','spearmint'],
+  5:['strawberry','strawberry','strawberry','strawberry','thyme'],
+  4:['basil','basil','cilantro','cilantro','parsley','parsley','chives','oregano'],
+  3:['basil','basil','cilantro','cilantro','parsley','chives','oregano','thyme'],
+  2:['lettuce','lettuce','lettuce','lettuce','lettuce','lettuce','scallion','scallion'],
+  1:['lettuce','lettuce','lettuce','lettuce','lettuce','lettuce','scallion','scallion']
+};
+const ZONES = {10:['Vining · trained to top frame','Vining','#7FA05E'],9:['Vining · trained to top frame','Vining','#7FA05E'],
+  8:['Fruiting · tomatoes & peppers','Fruiting','#D45D4B'],7:['Fruiting · tomatoes & peppers','Fruiting','#D45D4B'],
+  6:['Berries & upper herbs','Berries','#D06B7A'],5:['Berries & upper herbs','Berries','#D06B7A'],
+  4:['Herb band','Herbs','#4E7A55'],3:['Herb band','Herbs','#4E7A55'],
+  2:['Fast greens & alliums','Greens','#6E9BA5'],1:['Fast greens & alliums','Greens','#6E9BA5']};
+
+const WAVE_DATES = ['2026-06-08','2026-06-22','2026-07-06'];
+const STATUSES = ['Reserved / Open','Seed Starting','Ready to Transplant','Planted','Growing','Flowering','Fruiting','Ready to Harvest','Harvested','Needs Replanting','Problem'];
+
+const TASKS = [
+  {g:'daily',t:'Check water level'},{g:'daily',t:'Look for pump or flow problems'},{g:'daily',t:'Look for wilted plants'},
+  {g:'daily',t:'Scan leaves for pests or disease'},{g:'daily',t:'Check for leaks'},
+  {g:'twice',t:'Measure and record pH'},{g:'twice',t:'Measure and record EC'},{g:'twice',t:'Top off reservoir if needed'},
+  {g:'twice',t:'Inspect plant health'},{g:'twice',t:'Check roots visible near pods'},
+  {g:'weekly',t:'Inspect pump operation'},{g:'weekly',t:'Check water flow at the upper tower'},{g:'weekly',t:'Clean filter / pump intake'},
+  {g:'weekly',t:'Check trellis and supports'},{g:'weekly',t:'Train cucumber vines'},{g:'weekly',t:'Train peas'},
+  {g:'weekly',t:'Support tomato branches'},{g:'weekly',t:'Inspect peppers'},{g:'weekly',t:'Remove yellow and dead leaves'},
+  {g:'weekly',t:'Harvest mature herbs and lettuce'},{g:'weekly',t:'Prune herbs'},{g:'weekly',t:'Check strawberries'},{g:'weekly',t:'Inspect roots for clogging'},
+  {g:'biweekly',t:'Review harvest-ready crops'},{g:'biweekly',t:'Start next lettuce, cilantro and scallion seedlings'},
+  {g:'biweekly',t:'Review open pods and decide replants'},{g:'biweekly',t:'Check spacing, prune crowded growth'},
+  {g:'biweekly',t:'Review nutrient trends'},{g:'biweekly',t:'Inspect pump and filter thoroughly'},
+  {g:'monthly',t:'Calibrate pH meter'},{g:'monthly',t:'Calibrate EC meter if required'},{g:'monthly',t:'Inspect tubing and emitters'},
+  {g:'monthly',t:'Clean accessible reservoir surfaces'},{g:'monthly',t:'Check for mineral / salt buildup'},
+  {g:'monthly',t:'Review older plants for replacement'},{g:'monthly',t:'Review crop productivity'}
+];
+const GROUP_META = {daily:['Daily quick check',1,'#8FA98A'],twice:['2–3 times per week',3,'#6E9BA5'],weekly:['Weekly',7,'#D9A441'],biweekly:['Every 2 weeks',14,'#C4633F'],monthly:['Monthly',30,'#7A5C46']};
+
+const ISSUES = [
+  ['Algae in the pod','#7FA05E',['Rinse this pod and wipe the visible algae off the collar','Cover or shade the pod so light stops reaching the water','Check this pod again in 3 days']],
+  ['Mold on the base or media','#8B9E7A',['Remove the affected plug, media or dead leaf litter','Wipe the pod and collar dry, open up airflow around it','Check this pod again in 3 days']],
+  ['Pests on the plant','#C4633F',['Rinse the leaves and inspect the undersides','Prune the worst-hit leaves and isolate if it spreads','Check this pod again in 3 days']],
+  ['Slimy roots or bad smell','#6E9BA5',['Inspect the roots at this pod and trim anything slimy','Check pump flow and water temperature','Flag reservoir health on the Water tab']],
+  ['Yellowing or stalled growth','#D9A441',['Measure EC and pH and record the readings','Remove yellow leaves','Check this pod again in 5 days']],
+  ['Wilting','#D06B7A',['Confirm water is actually reaching this pod','Inspect the pump and this emitter','Check this pod again tomorrow']]
+];
+const MIX = ['Add most of the required water to the reservoir','Add SUPPORT 4-0-0','Mix thoroughly','Add BASE A','Mix thoroughly','Add BASE B','Mix thoroughly','Add GROW 0-1.5-4','Add EXPAND 0-4-4 when appropriate','Add STRUCTURE when appropriate','Add FLOWER 0-3-4 when fruiting plants need it','Add FLAVUH 4 when appropriate','Add the remaining water','Let the solution circulate','Measure EC','Measure pH','Adjust only after everything is fully mixed'];
+const BASE_RATES = {seedling:[1,3,'Seedling / clone wk 1–2'],veg:[5,9,'Vegetative wk 1–4'],flower14:[9,14,'Flowering wk 1–4'],flower58:[7,10,'Flowering wk 5–8']};
+const EXTRA_PRODUCTS = [['support','SUPPORT 4-0-0'],['grow','GROW 0-1.5-4'],['expand','EXPAND 0-4-4'],['structure','STRUCTURE (silica)'],['flower','FLOWER 0-3-4'],['flavuh','FLAVUH 4']];
+const TRIP_PREP = [
+  ['Top the reservoir right up','A full reservoir is the single thing that decides how long the garden survives alone.'],
+  ['Measure and record pH and EC','Leave on target so nothing drifts far while you are gone.'],
+  ['Dilute slightly if EC is high','Water evaporates and salts concentrate. Aim for the low end of your range before a trip.'],
+  ['Harvest everything close to ready','Anything that would peak while you are away is better picked now than bolted or rotten.'],
+  ['Cut herbs and lettuce back hard','A hard trim slows regrowth and stops crowding while nobody is pruning.'],
+  ['Prune crowded and yellow growth','Less leaf means less water used and less mildew risk in still air.'],
+  ['Secure vines and heavy branches','Tie in cucumbers, peas and tomatoes so nothing collapses unattended.'],
+  ['Clean the pump intake and filter','A clog while you are away is the one failure that kills everything.'],
+  ['Check every emitter at the top of the tower','Confirm water is reaching the highest rows before you leave.'],
+  ['Confirm the light timer and pump timer','Set and test them — do not rely on memory.'],
+  ['Leave a note for whoever checks in','Water level, pump sound, and who to call. Nothing technical.']
+];
+const TRIP_BACK = [
+  ['Look before you touch','Wilting, algae, smell, water level, pump noise. Note what you find.'],
+  ['Check the water level and top off','Record the gallons so KRISP knows the usage rate.'],
+  ['Measure pH and EC','Expect EC to have climbed. Correct with plain water first, nutrients second.'],
+  ['Harvest anything that held','Take it before it bolts now that it is being watched again.'],
+  ['Pull anything that failed','Report the pod as a problem so it goes on the fix list.'],
+  ['Prune and retrain','Catch up the vines, tomatoes and herbs that grew unmanaged.'],
+  ['Restart succession sowing','Fill the gaps the trip created so harvests do not run dry.']
+];
+const HEALTH = ['Persistent EC problems','pH keeps drifting','Off smell','Cloudy or slimy water','Algae','Root disease','Salt / mineral buildup','Clogged pump or intake','Unexplained plant decline'];
+const DEEP_STEPS = ['Harvest anything ready first, then power down the pump','Drain the reservoir into buckets and note the volume','Wipe accessible reservoir walls and the lid; remove biofilm','Pull, rinse and inspect the pump and intake screen','Flush tubing and clear emitters at the top of the tower','Inspect visible roots; trim dead or slimy mass','Refill with pH-adjusted water, then mix nutrients in order','Run 30 minutes, then measure EC and pH and record them'];
+const INVENTORY = [
+  ['Lettuce','#8FA98A',['Salad Bowl Blend',"Farmer's Market Blend / Mesclun",'Brentwood Red Leaf']],
+  ['Cucumber','#7FA05E',['Persian Muncher']],
+  ['Peas','#A9C48C',['Oregon Sugar Pod II snow pea','Sugar Daddy snap pea']],
+  ['Sweet peppers','#D9A441',['Carnival Blend','California Wonder','Orange Sun']],
+  ['Hot peppers','#C4633F',['Chili pepper','Jalapeño','Early Jalapeño']],
+  ['Tomato','#D45D4B',['Cherry Baby Hybrid (tower)','Roma (separate container)']],
+  ['Herbs','#4E7A55',['Italian Genovese basil','Thai basil','Flat leaf parsley','Curled parsley','Slow Bolt cilantro','Thyme','Greek oregano','Chives']],
+  ['Allium','#6E9BA5',['White Lisbon scallion']],
+  ['Starters','#D06B7A',['Spearmint','Strawberries']]
+];
+const CADENCE = [['Lettuce','Every 2–3 weeks'],['Cilantro','Every 2–3 weeks'],['Basil','Every 3–4 weeks as needed'],['Parsley','Every 4–6 weeks as needed'],['Scallions','Every 3–4 weeks'],['Peas','Replace after the crop finishes'],['Strawberries','Long-term; replace individually'],['Peppers & tomatoes','Long-term plants'],['Cucumbers','Long crop until productivity declines']];
+const ZONE_LIST = [['Rows 10–9','Climbing & vining','Persian Muncher cucumber, snap peas, snow peas — trained onto the upper support','#7FA05E'],['Rows 8–7','Fruiting','Cherry tomatoes, sweet peppers, jalapeños, chili peppers','#D45D4B'],['Rows 6–5','Berries & upper herbs','Strawberries, spearmint, thyme','#D06B7A'],['Rows 4–3','Herb band','Basil, cilantro, parsley, chives, oregano, thyme','#4E7A55'],['Rows 2–1','Fast greens','Lettuce, scallions, compact herbs','#6E9BA5']];
+const KEY = 'krisp-garden-v6';
+const DAY = 86400000;
+const SEED_STEPS = [
+  ['Sow into a plug','Soak a rockwool cube or plug, drop in 2 seeds, keep it damp and out of direct light until it sprouts.'],
+  ['Thin to the strongest','Once both sprout, snip the weaker one at the base — never pull it, you would tear the other root.'],
+  ['Feed lightly','Seedlings get the seedling rate only: Base A and Base B at 1–3 mL per gallon, equal amounts, added separately.'],
+  ['Wait for roots','Move a seedling to the tower when white roots poke out of the plug — usually 2–3 weeks for greens and herbs.'],
+  ['Transplant to its pod','Slide the plug into the pod listed in your wave, tuck roots toward the water channel, and check flow reaches it.'],
+  ['Log it here','Tick the pod off in the wave list so KRISP starts the clock on days growing and harvest windows.']
+];
+
+function iso(d){ return new Date(d).toISOString().slice(0,10); }
+function today(){ return iso(new Date()); }
+function fmt(s){ if(!s) return '—'; const d = new Date(s+'T12:00:00'); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function daysSince(s){ if(!s) return null; return Math.floor((new Date(today()+'T12:00:00') - new Date(s+'T12:00:00'))/DAY); }
+function addDays(s,n){ return iso(new Date(s+'T12:00:00').getTime()+n*DAY); }
+function longFmt(s){ const d=new Date(s+'T12:00:00'); return d.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'}); }
+function nextMonday(){ const d=new Date(); const off=(8-d.getDay())%7||7; return iso(new Date(d.getTime()+off*DAY)); }
+const LEAD = {cucumber:14, snowpea:10, snappea:10, cherrytomato:28, sweetpepper:35, hotpepper:35, strawberry:0, lettuce:14, scallion:21, basil:21, thaibasil:21, cilantro:14, parsley:21, thyme:21, oregano:21, chives:21, spearmint:0};
+
+const BASE_LABEL = {cucumber:'Cucumber',snowpea:'Snow Pea',snappea:'Snap Pea',cherrytomato:'Tomato',sweetpepper:'Sweet Pepper',hotpepper:'Hot Pepper',strawberry:'Strawberry',lettuce:'Lettuce',scallion:'Scallion',basil:'Basil',thaibasil:'Thai Basil',cilantro:'Cilantro',parsley:'Parsley',thyme:'Thyme',oregano:'Oregano',chives:'Chives',spearmint:'Spearmint'};
+const SHELVES = ['Lettuce & Greens','Cucumbers & Peas','Peppers','Tomatoes','Basil & Herbs','Onions','Starters'];
+const SEED_DEFS = [
+  ['lettuce','Brentwood','Lettuce — Brentwood','Lettuce & Greens','seed'],
+  ['lettuce','Salad Bowl Blend','Lettuce — Salad Bowl Blend','Lettuce & Greens','seed'],
+  ['lettuce',"Farmer's Market Blend","Lettuce Mesclun — Farmer's Market Blend",'Lettuce & Greens','seed'],
+  ['cucumber','Persian Muncher','Cucumber — Persian Muncher','Cucumbers & Peas','seed'],
+  ['snowpea','Oregon Sugar Pod II','Snow Pea — Oregon Sugar Pod II','Cucumbers & Peas','seed'],
+  ['snappea','Sugar Daddy','Snap Pea — Sugar Daddy','Cucumbers & Peas','seed'],
+  ['sweetpepper','Carnival Blend','Sweet Pepper — Carnival Blend','Peppers','seed'],
+  ['sweetpepper','California Wonder','Sweet Pepper — California Wonder','Peppers','seed'],
+  ['sweetpepper','Orange Sun','Sweet Pepper — Orange Sun','Peppers','seed'],
+  ['hotpepper','Chili Pepper','Chili Pepper','Peppers','seed'],
+  ['hotpepper','Jalapeño','Jalapeño','Peppers','seed'],
+  ['hotpepper','Early Jalapeño','Early Jalapeño','Peppers','seed'],
+  ['cherrytomato','Cherry Baby Hybrid','Cherry Tomato — Cherry Baby Hybrid','Tomatoes','seed'],
+  ['cherrytomato','Roma','Roma Tomato — separate container, not the tower','Tomatoes','seed'],
+  ['basil','Italian Genovese','Basil — Italian Genovese','Basil & Herbs','seed'],
+  ['thaibasil','Sweet Thai','Basil — Sweet Thai','Basil & Herbs','seed'],
+  ['oregano','True Greek','Oregano — True Greek','Basil & Herbs','seed'],
+  ['thyme','Thyme','Thyme','Basil & Herbs','seed'],
+  ['chives','Dolores','Chives — Dolores','Basil & Herbs','seed'],
+  ['parsley','Italian / Flat Leaf','Parsley — Italian / Flat Leaf','Basil & Herbs','seed'],
+  ['parsley','Curled','Parsley — Curled','Basil & Herbs','seed'],
+  ['cilantro','Slow Bolt','Cilantro — Slow Bolt','Basil & Herbs','seed'],
+  ['scallion','White Lisbon','Bunching Onion / Scallion — White Lisbon','Onions','seed'],
+  ['spearmint','Spearmint','Spearmint — starter plant','Starters','starter'],
+  ['strawberry','Strawberry','Strawberry — starter plants','Starters','starter']
+];
+const BASE_SHELF = {lettuce:'Lettuce & Greens',cucumber:'Cucumbers & Peas',snowpea:'Cucumbers & Peas',snappea:'Cucumbers & Peas',sweetpepper:'Peppers',hotpepper:'Peppers',cherrytomato:'Tomatoes',basil:'Basil & Herbs',thaibasil:'Basil & Herbs',oregano:'Basil & Herbs',thyme:'Basil & Herbs',chives:'Basil & Herbs',parsley:'Basil & Herbs',cilantro:'Basil & Herbs',scallion:'Onions',spearmint:'Starters',strawberry:'Starters'};
+const SYSTEMS = [
+  {key:'tower', name:'Nutraponics Tower', short:'Tower', rows:10, cols:8, kind:'tower'},
+  {key:'A', name:'Tabletop A', short:'Table A', rows:3, cols:4, kind:'table'},
+  {key:'B', name:'Tabletop B', short:'Table B', rows:3, cols:4, kind:'table'},
+  {key:'S', name:'Seed Starter Tray', short:'Tray', rows:5, cols:12, kind:'tray'}
+];
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+const ICON_BASE = {cucumber:'cucumber',snowpea:'peas',snappea:'snap_peas',cherrytomato:'cherry_tomatoes',sweetpepper:'red_bell_pepper',hotpepper:'jalapeno',strawberry:'strawberries',lettuce:'green_lettuce',scallion:'scallions',basil:'basil',thaibasil:'basil',cilantro:'cilantro',parsley:'parsley',thyme:'thyme',oregano:'oregano',chives:'chives',spearmint:'mint'};
+const ICON_WORDS = [['chili','chili_pepper'],['jalape','jalapeno'],['roma','tomato'],['red leaf','red_leaf_lettuce'],['salad bowl','leaf_lettuce'],['mesclun','green_lettuce'],['orange sun','orange_bell_pepper'],['california wonder','yellow_bell_pepper'],['carnival','red_bell_pepper'],['baby bok','baby_bok_choy'],['bok choy','bok_choy'],['bunching','bunching_onions'],['dill','dill'],['mint','mint'],['snap pea','snap_peas'],['snow pea','peas'],['strawberr','strawberries'],['scallion','scallions'],['chive','chives'],['thyme','thyme'],['oregano','oregano'],['parsley','parsley'],['cilantro','cilantro'],['basil','basil'],['cucumber','cucumber'],['tomato','cherry_tomatoes'],['lettuce','green_lettuce'],['pea','peas']];
+const ICON_FILES = ['basil','cherry_tomatoes','tomato','chili_pepper','jalapeno','red_bell_pepper','orange_bell_pepper','yellow_bell_pepper','cucumber','peas','snap_peas','strawberries','green_lettuce','leaf_lettuce','red_leaf_lettuce','bok_choy','baby_bok_choy','scallions','bunching_onions','chives','cilantro','parsley','dill','oregano','thyme','mint','generic'];
+const ICON_FILES_FP = ["fp/arugula","fp/banana_pepper","fp/bell_pepper","fp/bok_choy","fp/butter_lettuce","fp/celery","fp/cherry_tomato","fp/chili_pepper","fp/cucumber","fp/dead_failed","fp/disease_issue","fp/eggplant","fp/empty_pod","fp/endive","fp/flower","fp/fruiting","fp/habanero","fp/harvested","fp/jalapeno","fp/kale","fp/lavender","fp/lemon_balm","fp/marjoram","fp/mini_cucumber","fp/mini_sweet_pepper","fp/mizuna","fp/mustard_greens","fp/other_plant","fp/peppermint","fp/pest_bug","fp/poblano","fp/prune","fp/radicchio","fp/romaine","fp/roots","fp/rosemary","fp/sage","fp/scallion","fp/seed","fp/seedling","fp/serrano","fp/shishito","fp/snap_pea","fp/snow_pea","fp/spearmint","fp/spinach","fp/strawberry","fp/swiss_chard","fp/tarragon","fp/tatsoi","fp/tomato","fp/watercress","fp/yellow_squash","fp/zucchini"];
+const BLANK = 'icons/blank.png';
+let ICONX = {src:{}, hidden:{}, custom:[]};
+function syncIcons(d){ const st = (d && d.iconLib) || {};
+  ICONX = {src: Object.assign({}, st.overrides || {}), hidden: st.hidden || {}, custom: st.custom || []};
+  ICONX.custom.forEach(c=>{ ICONX.src[c.key] = c.src; }); }
+function iconSrc(file){ return (ICONX.src && ICONX.src[file]) || 'icons/'+file+'.png'; }
+function iconKeys(){ return ICON_FILES.concat(ICON_FILES_FP).filter(f=>!ICONX.hidden[f]).concat(ICONX.custom.map(c=>c.key)); }
+function dotIcon(color){ return 'icons/generic.png'; }
+function iconFile(base, variety){
+  const v = (variety||'').toLowerCase();
+  for(const [w,f] of ICON_WORDS) if(v.indexOf(w)>=0) return f;
+  if(ICON_BASE[base]) return ICON_BASE[base];
+  return 'generic';
+}
+function iconFor(base, variety, color){ return iconSrc(iconFile(base, variety)); }
+function libItem(base, variety, custom, fullName, shelf, kind){
+  const c = CROPS[base] || CROPS.lettuce;
+  const label = BASE_LABEL[base] || '';
+  const name = fullName || (variety.toLowerCase().indexOf(label.toLowerCase())>=0 ? variety : (variety+' '+label).trim());
+  return {id: base+'_'+slug(variety), base, variety, name, group: shelf || BASE_SHELF[base] || 'Basil & Herbs', kind: kind || 'seed',
+    typeLabel: label, abbr:c.abbr, color:c.color, ring:c.ring, fg:c.fg, icon: iconFor(base, name, c.color),
+    cat:c.cat, dtm:c.dtm.slice(), lead: LEAD[base]!=null?LEAD[base]:21, succ:c.succ, custom:!!custom};
+}
+function defaultLibrary(){ return SEED_DEFS.map(([b,v,n,s,k])=>libItem(b,v,false,n,s,k)); }
+let LIB = {};
+function syncLib(list){ LIB = {}; (list||[]).forEach(i=>{ i.icon = i.iconFile ? iconSrc(i.iconFile) : iconFor(i.base, i.name || i.variety, i.color); LIB[i.id]=i; }); }
+function C(k){ const it = LIB[k]; if(it) return it.icon ? it : Object.assign({icon: iconFor(it.base, it.variety, it.color)}, it);
+  const c = CROPS[k]; if(c) return Object.assign({icon: iconFor(k, c.name, c.color)}, c);
+  return {name:'Unknown', abbr:'?', color:'#8FA98A', ring:'#6C8768', fg:'#FFFDF7', cat:'herb', dtm:[30,45], lead:21, succ:'', icon: dotIcon('#8FA98A')}; }
+function firstOfBase(list, base){ const m = list.filter(i=>i.base===base); return m.length ? m[0].id : null; }
+
+class Component extends DCLogic {
+  state = {tab:'start', view:'elevation', sys:'tower', picker:false, podId:null, harvestFilter:'all', data:null,
+    form:{ph:'',ec:'',temp:'',level:'Full',gal:''}, calc:{gal:'20',stage:'veg',ec:'',ph:''}};
+
+  componentDidMount(){
+    let d = null;
+    try { const raw = localStorage.getItem(KEY); if(raw) d = JSON.parse(raw); } catch(e){}
+    if(!d || !d.pods || d.version !== 6) d = this.seed();
+    syncIcons(d);
+    syncLib(d.library);
+    let added = false;
+    SYSTEMS.forEach(s=>{ if(s.key==='tower') return;
+      for(let row=s.rows; row>=1; row--) for(let pos=1; pos<=s.cols; pos++){
+        const id = s.key+'-R'+row+'-P'+pos;
+        if(!d.pods[id]){ d.pods[id] = {id, sys:s.key, row, pos, plantings:[], note:'', photos:[]}; added = true; }
+      } });
+    if(added) this.persist(d);
+    let signed = false; try{ signed = localStorage.getItem('krisp-session')==='1'; }catch(e){}
+    this.setState({data:d, mode: signed ? 'app' : 'public'});
+  }
+
+  seed(){
+    const pods = {}; const plan = {};
+    const library = defaultLibrary();
+    syncLib(library);
+    const pick = (base, offset) => { const m = library.filter(i=>i.base===base); return m.length ? m[offset % m.length].id : base; };
+    for(let row=5; row>=1; row--) for(let pos=1; pos<=12; pos++){
+      const tid = 'S-R'+row+'-P'+pos; pods[tid] = {id:tid, sys:'S', row, pos, plantings:[], note:'', photos:[]};
+    }
+    for(let s=1; s<=2; s++){ const sys = s===1?'A':'B';
+      for(let row=3; row>=1; row--) for(let pos=1; pos<=4; pos++){
+        const id = sys+'-R'+row+'-P'+pos; pods[id] = {id, sys, row, pos, plantings:[], note:'', photos:[]};
+      }
+    }
+    for(let row=10; row>=1; row--){
+      const rowCrops = ROW_PLAN[row].slice();
+      const start = ((10-row)*3) % 8;
+      const order = [];
+      for(const step of [0,2,4,6,1,3,5,7]) order.push(((start+step) % 8) + 1);
+      const taken = {};
+      rowCrops.forEach((crop,i)=>{ taken[order[i]] = crop; });
+      for(let pos=1; pos<=8; pos++){
+        const id = 'R'+row+'-P'+pos;
+        const crop = taken[pos];
+        pods[id] = {id,sys:'tower',row,pos,plantings:[],note:'',photos:[]};
+        if(crop){
+          const libId = pick(crop, row+pos);
+          plan[id] = {crop: libId, variety: (LIB[libId]||{}).variety || '',
+            wave: (((10-row)*3 + (pos-1)) % 3) + 1, sownOn: null};
+        }
+      }
+    }
+    const d = {pods, plan, library, setup:{active:true, start: nextMonday()}, readings:[], topoffs:[], mix:{}, taskDone:{}, rates:{}, flags:{}, towerPhotos:[], version:6};
+    this.persist(d); return d;
+  }
+
+  waveDate(w){ return iso(new Date(this.state.data.setup.start+'T12:00:00').getTime() + (w-1)*14*DAY); }
+  planEntries(){ const d=this.state.data; return Object.keys(d.plan).map(id=>Object.assign({id}, d.plan[id])); }
+  sowGroup(ids){ this.update(d=>{ ids.forEach(id=>{ if(!d.plan[id].sownOn) d.plan[id].sownOn = today(); }); }); }
+  transplantGroup(ids){ this.update(d=>{ ids.forEach(id=>{ const pod=d.pods[id]; const pl=d.plan[id];
+    if(pod.plantings.length && !pod.plantings[pod.plantings.length-1].removedOn) return;
+    if(!pl.sownOn) pl.sownOn = today();
+    pod.plantings.push({crop:pl.crop, variety:pl.variety, plantedOn:today(), wave:pl.wave, harvests:[], status:'Planted', removedOn:null, sownOn:pl.sownOn,
+      events:[{date:pl.sownOn, label:'Seed started in the nursery'},{date:today(), label:'Moved into this pod'}]});
+  }); }); }
+  undoGroup(ids, kind){ this.update(d=>{ ids.forEach(id=>{
+    if(kind==='sow'){ d.plan[id].sownOn = null; }
+    else { const pod=d.pods[id]; if(pod.plantings.length===1) pod.plantings = []; }
+  }); }); }
+
+  persist(d){ try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch(e){} }
+  update(fn){ this.setState(s=>{ const d = JSON.parse(JSON.stringify(s.data)); fn(d); this.persist(d); return {data:d}; }); }
+
+  current(pod){ if(!pod) return null; const p = pod.plantings[pod.plantings.length-1]; return (p && !p.removedOn) ? p : null; }
+
+  statusOf(pod){
+    const p = this.current(pod);
+    if(!p) return pod.plantings.length ? 'Needs Replanting' : 'Reserved / Open';
+    if(p.status) return p.status;
+    const d = daysSince(p.plantedOn); const c = C(p.crop);
+    if(pod.sys==='S') return d >= (c.lead||14) ? 'Ready to Transplant' : 'Seed Starting';
+    if(d < 0) return 'Seed Starting';
+    const pct = d / c.dtm[0];
+    const fruiting = c.cat==='vine' || c.cat==='fruit' || c.cat==='berry';
+    if(pct < 0.12) return 'Planted';
+    if(pct < 0.55) return 'Growing';
+    if(fruiting){ if(pct < 0.8) return 'Flowering'; if(pct < 1) return 'Fruiting'; return 'Ready to Harvest'; }
+    if(pct < 1) return 'Growing';
+    if(d > c.dtm[1] * 1.5) return 'Needs Replanting';
+    return 'Ready to Harvest';
+  }
+
+  visual(pod){
+    const p = this.current(pod);
+    if(!p){
+      const pl = this.state.data.plan && this.state.data.plan[pod.id];
+      if(pl && !pod.plantings.length){ const c = C(pl.crop);
+        return {color: c.color + (pl.sownOn ? '66' : '2E'), ring: pl.sownOn ? c.ring : '#DED7C8', fg:'#5F6B58', abbr:c.abbr, planned:true, sown:!!pl.sownOn}; }
+      return {color:EMPTY.color, ring:EMPTY.ring, fg:EMPTY.fg, abbr:EMPTY.abbr};
+    }
+    const c = C(p.crop);
+    const st = this.statusOf(pod);
+    return {color:c.color, ring: st==='Ready to Harvest' ? '#E8836B' : (st==='Problem' ? '#C4633F' : c.ring), fg:c.fg, abbr:c.abbr};
+  }
+
+  podList(sys){ const pods = this.state.data.pods;
+    return Object.keys(pods).map(k=>pods[k]).filter(p=>sys ? p.sys===sys : p.sys!=='S')
+      .sort((a,b)=> a.sys===b.sys ? (b.row-a.row || a.pos-b.pos) : (a.sys==='tower'?-1:(b.sys==='tower'?1:(a.sys<b.sys?-1:1)))); }
+
+  setPodPlant(id, libId){ this.update(d=>{ const pod=d.pods[id]; const it=d.library.filter(i=>i.id===libId)[0]; if(!it) return;
+    const cur = pod.plantings[pod.plantings.length-1];
+    if(cur && !cur.removedOn){ cur.crop = it.id; cur.variety = it.variety; }
+    else pod.plantings.push({crop:it.id, variety:it.variety, plantedOn:today(), wave:null, harvests:[], status: pod.sys==='tower' ? 'Planted' : 'Seed Starting', removedOn:null, events:[{date:today(), label: pod.sys==='tower' ? 'Planted in this pod' : 'Sown straight into this pod'}]});
+    if(d.plan[id]) d.plan[id].crop = it.id;
+  }); this.setState({picker:false}); }
+  clearPod(id){ this.update(d=>{ const pod=d.pods[id]; const cur=pod.plantings[pod.plantings.length-1];
+    if(cur && !cur.removedOn){ if(cur.harvests.length) cur.removedOn = today(); else pod.plantings.pop(); } }); this.setState({picker:false}); }
+  moveSeedling(slotId, podId){ this.update(d=>{ const slot=d.pods[slotId]; const sp=slot.plantings[slot.plantings.length-1];
+    if(!sp || sp.removedOn) return;
+    const pod=d.pods[podId]; const cur=pod.plantings[pod.plantings.length-1];
+    if(cur && !cur.removedOn) cur.removedOn = today();
+    sp.removedOn = today(); sp.status = 'Harvested';
+    this.logEvent(sp, 'Moved up to ' + podId);
+    pod.plantings.push({crop:sp.crop, variety:sp.variety, plantedOn:today(), wave:(d.plan[podId]||{}).wave||null, harvests:[],
+      status:'Planted', removedOn:null, sownOn:sp.plantedOn,
+      events:[{date:sp.plantedOn, label:'Seed started in tray slot '+slotId},{date:today(), label:'Moved into this pod'}]});
+    if(d.plan[podId]) d.plan[podId].crop = sp.crop;
+  }); this.setState({podId:null}); }
+  addTray(){ const t = this.state.newTray || {}; const libId = t.crop || (this.state.data.library[0]||{}).id;
+    const n = parseInt(t.count,10) || 1; if(!libId) return;
+    this.update(d=>{ d.trays = d.trays || [];
+      const kind = (t.kind==='starter') ? 'starter' : 'seedling';
+      const ex2 = d.trays.filter(x=>x.crop===libId && x.sownOn===today() && (x.kind||'seedling')===kind)[0];
+      if(ex2) ex2.count += n; else d.trays.push({id:'t'+Date.now(), crop:libId, count:n, sownOn:today(), kind}); });
+    this.setState({newTray:{crop:libId, count:'1', kind:(t.kind||'seedling')}}); }
+  bumpTray(id, delta){ this.update(d=>{ const t=(d.trays||[]).filter(x=>x.id===id)[0]; if(!t) return;
+    t.count += delta; if(t.count<=0) d.trays = d.trays.filter(x=>x.id!==id); }); }
+  removeTray(id){ this.update(d=>{ d.trays = (d.trays||[]).filter(x=>x.id!==id); }); }
+  plantFromTray(podId, trayId){ this.update(d=>{ const t=(d.trays||[]).filter(x=>x.id===trayId)[0]; if(!t) return;
+    const it = d.library.filter(i=>i.id===t.crop)[0]; if(!it) return;
+    const pod = d.pods[podId]; const cur = pod.plantings[pod.plantings.length-1];
+    if(cur && !cur.removedOn) cur.removedOn = today();
+    pod.plantings.push({crop:it.id, variety:it.variety, plantedOn:today(), wave:null, harvests:[], status:'Planted', removedOn:null, sownOn:t.sownOn,
+      events: (t.kind==='starter')
+        ? [{date:t.sownOn, label:'Bought as a starter plant'},{date:today(), label:'Planted in this pod'}]
+        : [{date:t.sownOn, label:'Seed started in the tray'},{date:today(), label:'Moved into this pod from the seedling tray'}]});
+    if(d.plan[podId]) d.plan[podId].crop = it.id;
+    t.count -= 1; if(t.count<=0) d.trays = d.trays.filter(x=>x.id!==trayId); });
+    this.setState({picker:false}); }
+  addSeed(){ const n = (this.state.newSeed && this.state.newSeed.name||'').trim(); if(!n) return;
+    const base = (this.state.newSeed && this.state.newSeed.base) || 'lettuce';
+    const file = this.state.newSeed && this.state.newSeed.iconFile;
+    this.update(d=>{ const it = libItem(base, n, true); if(file){ it.iconFile = file; it.icon = iconSrc(file); }
+      if(!d.library.some(i=>i.id===it.id)) d.library.push(it); syncLib(d.library); });
+    this.setState({newSeed:{name:'', base:(this.state.newSeed&&this.state.newSeed.base)||'lettuce'}}); }
+  setSeedIcon(id, file){ this.update(d=>{ const it=d.library.filter(i=>i.id===id)[0]; if(it){ it.iconFile = file; it.icon = iconSrc(file); } syncLib(d.library); }); this.setState({iconFor:null}); }
+  iconStore(d){ d.iconLib = d.iconLib || {}; const st = d.iconLib;
+    st.overrides = st.overrides || {}; st.hidden = st.hidden || {}; st.custom = st.custom || []; return st; }
+  addIcon(src, name){ this.update(d=>{ const st=this.iconStore(d);
+    st.custom.push({key:'u'+Date.now().toString(36), src, name: name || 'My icon'});
+    syncIcons(d); syncLib(d.library); }); }
+  replaceIcon(key, src){ this.update(d=>{ const st=this.iconStore(d);
+    const c = st.custom.filter(x=>x.key===key)[0];
+    if(c) c.src = src; else st.overrides[key] = src;
+    syncIcons(d); syncLib(d.library); }); }
+  deleteIcon(key){ this.update(d=>{ const st=this.iconStore(d);
+    if(st.custom.some(c=>c.key===key)) st.custom = st.custom.filter(c=>c.key!==key);
+    else { st.hidden[key] = 1; delete st.overrides[key]; }
+    d.library.forEach(i=>{ if(i.iconFile===key) delete i.iconFile; });
+    syncIcons(d); syncLib(d.library); }); }
+  restoreIcon(key){ this.update(d=>{ const st=this.iconStore(d);
+    delete st.hidden[key]; delete st.overrides[key]; syncIcons(d); syncLib(d.library); }); }
+  iconUpload(e, cb){ const f = e.target.files && e.target.files[0]; if(!f) return;
+    const name = (f.name||'icon').replace(/\.[a-z0-9]+$/i,'').replace(/[_-]+/g,' ');
+    const r = new FileReader();
+    r.onload = ev => { const img = new Image(); img.onload = ()=>{ const s = Math.min(1, 128/Math.max(img.width,img.height));
+      const cv = document.createElement('canvas'); cv.width = Math.round(img.width*s); cv.height = Math.round(img.height*s);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height); cb(cv.toDataURL('image/png'), name); }; img.src = ev.target.result; };
+    r.readAsDataURL(f); e.target.value = ''; }
+  setSeedField(id, key, val){ this.update(d=>{ const it=d.library.filter(i=>i.id===id)[0]; if(!it) return;
+    if(key==='dtmMin' || key==='dtmMax'){ const n=parseInt(val,10); if(!isNaN(n)) it.dtm = key==='dtmMin' ? [n, it.dtm[1]] : [it.dtm[0], n]; }
+    else if(key==='lead'){ const n=parseInt(val,10); if(!isNaN(n)) it.lead = n; }
+    else it[key] = val;
+    syncLib(d.library); }); }
+  signIn(){ const pin = (this.state.pin||'').trim();
+    const saved = (this.state.data && this.state.data.auth && this.state.data.auth.pin) || '';
+    if(!saved){ if(!pin) return this.setState({authError:'Pick a code first — anything you will remember.'});
+      this.update(d=>{ d.auth = {pin}; }); try{ localStorage.setItem('krisp-session','1'); }catch(e){}
+      return this.setState({mode:'app', pin:'', authError:''}); }
+    if(pin === saved){ try{ localStorage.setItem('krisp-session','1'); }catch(e){}
+      this.setState({mode:'app', pin:'', authError:''}); }
+    else this.setState({authError:'That code does not match. Try again.'}); }
+  signOut(){ try{ localStorage.removeItem('krisp-session'); }catch(e){} this.setState({mode:'public', pin:'', tab:'today'}); }
+  setTrip(key, val){ this.update(d=>{ d.trip = d.trip || {prep:{}, back:{}}; d.trip[key] = val; }); }
+  clearTrip(){ this.update(d=>{ d.trip = null; }); }
+  toggleTrip(list, i){ this.update(d=>{ d.trip = d.trip || {prep:{}, back:{}}; d.trip[list] = d.trip[list] || {};
+    if(d.trip[list][i]) delete d.trip[list][i]; else d.trip[list][i] = 1; }); }
+  removeSeed(id){ this.update(d=>{ d.library = d.library.filter(i=>i.id!==id); syncLib(d.library); }); }
+
+  // ---- actions
+  openPod(id){ this.setState({podId:id}); }
+  logEvent(p, label){ if(!p) return; p.events = (p.events||[]).concat([{date:today(), label}]); }
+  reportIssue(podId, type){ this.update(d=>{ const def = ISSUES.filter(i=>i[0]===type)[0]; if(!def) return;
+    d.issues = d.issues || [];
+    if(d.issues.some(i=>i.podId===podId && i.type===type && !i.resolved)) return;
+    d.issues.push({id:'i'+Date.now(), podId, type, date:today(), resolved:false, tasks:def[2].map(t=>({label:t, done:false}))});
+    const pod = d.pods[podId]; const p = pod.plantings[pod.plantings.length-1];
+    if(p && !p.removedOn){ p.status = 'Problem'; this.logEvent(p, 'Reported: '+type.toLowerCase()); } }); }
+  toggleIssueTask(id, idx){ this.update(d=>{ const is=(d.issues||[]).filter(i=>i.id===id)[0]; if(is) is.tasks[idx].done = !is.tasks[idx].done; }); }
+  resolveIssue(id){ this.update(d=>{ const is=(d.issues||[]).filter(i=>i.id===id)[0]; if(!is) return; is.resolved = true; is.resolvedOn = today();
+    const pod = d.pods[is.podId]; const p = pod && pod.plantings[pod.plantings.length-1];
+    if(p && !p.removedOn && p.status==='Problem'){ p.status = 'Growing'; this.logEvent(p, 'Resolved: '+is.type.toLowerCase()); } }); }
+  harvestSome(id){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1]; if(p&&!p.removedOn){ p.harvests.push({date:today(),type:'some'}); p.status='Growing'; this.logEvent(p,'Harvested some — plant kept growing'); } }); }
+  harvestRemove(id){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1]; if(p&&!p.removedOn){ p.harvests.push({date:today(),type:'full'}); p.removedOn=today(); p.status='Harvested'; this.logEvent(p,'Final harvest — plant removed'); } }); this.setState({podId:id}); }
+  plantCrop(id, crop){ this.update(d=>{ const c=C(crop); d.pods[id].plantings.push({crop, variety: c.varieties?c.varieties[0]:'', plantedOn:today(), wave:null, harvests:[], status:'Seed Starting', removedOn:null}); }); }
+  reservePod(id){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1]; if(p && !p.removedOn){ p.removedOn=today(); } pod.reserved=true; }); }
+  setPodStatus(id, st){ this.update(d=>{ const pod=d.pods[id]; const p=pod.plantings[pod.plantings.length-1];
+    if(st==='Reserved / Open'){ if(p && !p.removedOn) p.removedOn = today(); return; }
+    if(p && !p.removedOn){ p.status = st; this.logEvent(p, 'Marked ' + st.toLowerCase()); } }); }
+
+  photoFile(e, cb){ const f = e.target.files && e.target.files[0]; if(!f) return; const r = new FileReader();
+    r.onload = ev => { const img = new Image(); img.onload = ()=>{ const s = Math.min(1, 520/Math.max(img.width,img.height));
+      const cv = document.createElement('canvas'); cv.width = img.width*s; cv.height = img.height*s;
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height); cb(cv.toDataURL('image/jpeg',0.7)); }; img.src = ev.target.result; };
+    r.readAsDataURL(f); }
+
+  suggestions(pod){
+    const counts = {}; this.podList().forEach(p=>{ const c=this.current(p); if(c) counts[c.crop]=(counts[c.crop]||0)+1; });
+    const targets = {cucumber:4,snowpea:2,snappea:2,cherrytomato:5,sweetpepper:6,hotpepper:4,strawberry:8,lettuce:12,scallion:4,basil:4,thaibasil:0,cilantro:4,parsley:3,thyme:2,oregano:2,chives:2,spearmint:1};
+    const lib = this.state.data.library;
+    const byBase = {}; lib.forEach(i=>{ byBase[i.base] = byBase[i.base] || i.id; });
+    const baseCounts = {}; Object.keys(counts).forEach(k=>{ const b = C(k).base || k; baseCounts[b] = (baseCounts[b]||0) + counts[k]; });
+    const zone = pod.sys==='tower' ? ROW_PLAN[pod.row].slice() : ['lettuce','cilantro','basil','scallion','thaibasil','parsley'];
+    const allowed = Array.from(new Set(zone.concat(pod.sys==='tower' && pod.row<=4 ? ['lettuce','cilantro','basil','scallion'] : [])))
+      .filter(b=>byBase[b]);
+    const scored = allowed.map(b=>{ const gap = (targets[b]||0) - (baseCounts[b]||0); const id = byBase[b];
+      return {b, id, score: gap*2 + (C(id).dtm[0] <= 45 ? 1 : 0), gap}; }).sort((a,b)=>b.score-a.score).slice(0,3);
+    return scored.map(s=>({key:s.id, reason: s.gap>0 ? (s.gap+' below your target count · '+C(s.id).succ) : ('Balanced — '+C(s.id).succ)}));
+  }
+
+  renderVals(){
+    const d = this.state.data;
+    const mode = this.state.mode || 'public';
+    const base = {isPublic: mode==='public', isLogin: mode==='login', isApp: mode==='app',
+      pin: this.state.pin||'', authError: this.state.authError||'',
+      hasPin: !!(d && d.auth && d.auth.pin),
+      authTitle: (d && d.auth && d.auth.pin) ? 'Welcome back' : 'Set your code',
+      authSub: (d && d.auth && d.auth.pin) ? 'Enter your code to manage the garden.' : 'Pick a code you will remember. It keeps the editing side to you — the public view stays open to everyone.',
+      authCta: (d && d.auth && d.auth.pin) ? 'Sign in' : 'Set code and continue',
+      onPin: e=>{ const v=e.target.value; this.setState({pin:v, authError:''}); },
+      signIn: ()=>this.signIn(), signOut: ()=>this.signOut(),
+      goLogin: ()=>{ let signed=false; try{ signed = localStorage.getItem('krisp-session')==='1'; }catch(e){}
+        this.setState(signed ? {mode:'app'} : {mode:'login', pin:'', authError:''}); },
+      signedIn: (function(){ try{ return localStorage.getItem('krisp-session')==='1'; }catch(e){ return false; } })(),
+      signInLabel: (function(){ try{ return localStorage.getItem('krisp-session')==='1' ? 'Back to my garden' : 'Sign in'; }catch(e){ return 'Sign in'; } })(),
+      goPublic: ()=>this.setState({mode:'public'}),
+      todayLabel: new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'}),
+      isToday:this.state.tab==='today', isTower:this.state.tab==='tower', isPlants:this.state.tab==='plants',
+      isWater:this.state.tab==='water', isTasks:this.state.tab==='tasks', isHarvest:this.state.tab==='harvest',
+      isStart:this.state.tab==='start',
+      navItems: [['start','Start'],['today','Today'],['tower','Tower'],['plants','Plants'],['water','Water'],['tasks','Tasks'],['harvest','Harvest']].map(([k,label])=>({
+        label, go:()=>this.setState({tab:k}), bg: this.state.tab===k?'#35543F':'transparent',
+        fg: this.state.tab===k?'#F6F1E4':'#7A5C46', dot: this.state.tab===k?'#D9A441':'#DED7C8'})),
+      sheet:{open:false}, isElevation:this.state.view==='elevation', isTopDown:this.state.view==='top', isRows:this.state.view==='rows'};
+    if(!d) return Object.assign(base,{stats:{},water:{},todayTasks:[],comingUp:[],miniRows:[],towerRows:[],topDownPods:[],legend:[],
+      towerPhotos:[],waves:[],cadence:[],inventory:[],zones:[],charts:[],calcRows:[],rateInputs:[],mixSteps:[],healthFlags:[],
+      deep:{},deepSteps:[],recentLog:[],taskGroups:[],harvestList:[],form:this.state.form,calc:this.state.calc,calcAdvice:{},
+      setupActive:false, setupPlanted:0, setupTotal:0, setupSown:0, setupPct:'0%', setupStart:'', startLong:'—',
+      trip:{set:false,start:'',end:''}, awayNow:false, camUrl:'', hasCam:false, noCam:true, publicRows:[], publicGrowing:[], publicStat:[], iconManager:[], hiddenIcons:[], hasHiddenIcons:false, firstHarvest:{show:false}, timeline:[], nursery:[], hasNursery:false, seedSteps:[], libraryGroups:[], baseOptions:[], newSeed:{name:'',base:'lettuce'},
+      systemTabs:[], systemCards:[], gridRows:[], isTowerSys:true, totalPods:104, sysTitle:'', sysSub:'',
+      next:{longDate:'—', when:'', title:'—', subtitle:'', badge:'', progress:''}, openIssues:[], hasOpenIssues:false, trayItems:[], hasTrays:false, trayTotal:0, trayOptions:[], newTray:{crop:'',count:'1'}});
+
+    syncIcons(d);
+    syncLib(d.library);
+    const pods = this.podList();
+    const stat = id => this.statusOf(d.pods[id]);
+    const counts = {growing:0, seeding:0, ready:0, reserved:0, attention:0, toPlant:0, nursery:0};
+    pods.forEach(p=>{ const s=this.statusOf(p);
+      const pl = d.plan[p.id];
+      if(!p.plantings.length && pl){ counts.toPlant++; if(pl.sownOn) counts.nursery++; return; }
+      if(s==='Reserved / Open') counts.reserved++;
+      else if(s==='Seed Starting'||s==='Ready to Transplant') counts.seeding++;
+      else if(s==='Ready to Harvest') counts.ready++;
+      else if(s==='Needs Replanting'||s==='Problem') counts.attention++;
+      else counts.growing++; });
+
+    // tasks
+    const groupDue = g => GROUP_META[g][1];
+    const taskObjs = TASKS.map((t,i)=>{ const id='t'+i; const last=d.taskDone[id];
+      const since = last ? Math.floor((Date.now()-new Date(last).getTime())/DAY) : 999;
+      const due = since >= groupDue(t.g);
+      return {id, group:t.g, label:t.t, due, since, done: !due,
+        groupLabel: GROUP_META[t.g][0],
+        mark: due ? '' : '✓', border: due ? '#DED7C8' : '#8FA98A', fill: due ? 'transparent' : '#8FA98A',
+        textColor: due ? '#2E4034' : '#A79E8B',
+        when: last ? ('done '+fmt(iso(new Date(last)))) : 'never',
+        toggle: ()=>this.update(dd=>{ if(dd.taskDone[id] && Math.floor((Date.now()-new Date(dd.taskDone[id]).getTime())/DAY) < groupDue(t.g)) delete dd.taskDone[id]; else dd.taskDone[id]=new Date().toISOString(); }),
+        snooze: ()=>this.update(dd=>{ dd.taskDone[id] = new Date(Date.now()-(groupDue(t.g)-1)*DAY).toISOString(); })};
+    });
+    const tr = d.trip;
+    const awayNow = !!(tr && tr.start && tr.end && daysSince(tr.start) >= 0 && daysSince(tr.end) <= 0);
+    const todayTasks = awayNow ? [] : taskObjs.filter(t=>t.group==='daily' || t.due).slice(0,9);
+
+    // water
+    const rs = d.readings.slice(); const last = rs[rs.length-1] || {};
+    const phOk = last.ph >= 5.8 && last.ph <= 6.2;
+    const ecOk = last.ec >= 0.8 && last.ec <= 1.9;
+    const lastTop = d.topoffs[d.topoffs.length-1];
+    const water = {ph: last.ph!=null?last.ph.toFixed(1):'—', ec: last.ec!=null?last.ec.toFixed(2):'—',
+      temp: last.temp!=null?(last.temp+'°'):'—', level: last.level||'—', ecTarget:'1.2–1.8',
+      phColor: last.ph==null?'#8FA98A':(phOk?'#35543F':'#C4633F'), ecColor: last.ec==null?'#8FA98A':(ecOk?'#35543F':'#C4633F'),
+      lastReading: fmt(last.date), lastTopoff: lastTop ? (lastTop.gal+' gal · '+fmt(lastTop.date)) : '—'};
+
+    const chartFor = (key,title,color,lo,hi)=>{ const vals = rs.slice(-12).map(r=>r[key]).filter(v=>v!=null);
+      const min = Math.min.apply(null, vals.concat([lo])), max = Math.max.apply(null, vals.concat([hi]));
+      const span = (max-min)||1;
+      const pts = vals.map((v,i)=>{ const x = vals.length>1 ? (i/(vals.length-1))*294+3 : 150; const y = 62 - ((v-min)/span)*54; return x.toFixed(1)+','+y.toFixed(1); }).join(' ');
+      const yl = 62-((lo-min)/span)*54, yh = 62-((hi-min)/span)*54;
+      return {title, color, points:pts, band:'0,'+yl.toFixed(1)+' 300,'+yl.toFixed(1)+' 300,'+yh.toFixed(1)+' 0,'+yh.toFixed(1),
+        range: vals.length ? (Math.min.apply(null,vals)+' – '+Math.max.apply(null,vals)) : '—'};
+    };
+
+    // nutrient calc
+    const gal = parseFloat(this.state.calc.gal)||0;
+    const stage = this.state.calc.stage; const br = BASE_RATES[stage];
+    const cec = parseFloat(this.state.calc.ec); const cph = parseFloat(this.state.calc.ph);
+    let conservative = false, advice;
+    if(!isNaN(cec) && cec >= 1.9) { conservative = true; advice = {text:'EC is already at '+cec+'. Hold nutrients and top off with plain pH-adjusted water until EC settles below 1.8. This is a mixed tower — seedlings and greens burn long before the fruiting plants notice.', bg:'#FBEFE9', border:'#F2DDD2', fg:'#C4633F'}; }
+    else if(!isNaN(cec) && cec <= 0.8) advice = {text:'EC is low at '+cec+'. Mix at the low end of the label range, circulate, then re-measure before adding more.', bg:'#F3F6F2', border:'#DCE6D8', fg:'#35543F'};
+    else advice = {text:'Mixed-crop tower: start at the low end of the label range, circulate, then measure EC and adjust. Never chase the maximum manufacturer rate.', bg:'#F3F6F2', border:'#DCE6D8', fg:'#35543F'};
+    if(!isNaN(cph) && (cph<5.8||cph>6.2)) advice = {text:advice.text+' pH is '+cph+' — bring it into 5.8–6.2 after the nutrients are fully mixed.', bg:advice.bg, border:advice.border, fg:advice.fg};
+    const mult = conservative ? 0 : 1;
+    const baseLo = (br[0]*gal*mult), baseHi = (br[1]*gal*mult);
+    const round = n => (Math.round(n*10)/10);
+    const calcRows = [
+      {name:'BASE A', sub:br[2]+' · label '+br[0]+'–'+br[1]+' mL/gal', amount: conservative ? 'hold' : round(baseLo)+'–'+round(baseHi)+' mL', rate:'add first of the pair', amountColor: conservative?'#C4633F':'#35543F'},
+      {name:'BASE B', sub:'Always equal to Base A', amount: conservative ? 'hold' : round(baseLo)+'–'+round(baseHi)+' mL', rate:'add after Base A is mixed in', amountColor: conservative?'#C4633F':'#35543F'}
+    ].concat(EXTRA_PRODUCTS.map(([k,label])=>{ const r = parseFloat(d.rates[k]);
+      return {name:label, sub: isNaN(r) ? 'No label rate saved yet' : r+' mL/gal saved',
+        amount: isNaN(r) ? 'set rate' : (conservative ? 'hold' : round(r*gal)+' mL'),
+        rate: isNaN(r) ? 'enter mL/gal below' : 'from your label', amountColor: isNaN(r) ? '#8FA98A' : (conservative?'#C4633F':'#35543F')}; }));
+
+    const flagsOn = HEALTH.filter(h=>d.flags[h]);
+    const deep = flagsOn.length ? {show:true, bg:'#FBEFE9', border:'#F2DDD2', fg:'#C4633F', text:flagsOn.length+' indicator'+(flagsOn.length>1?'s':'')+' flagged — a deeper reservoir service is worth doing now.'}
+      : {show:false, bg:'#F3F6F2', border:'#DCE6D8', fg:'#35543F', text:'Nothing flagged. Keep topping off, keep monitoring — no need to dismantle the tower.'};
+
+    const recentLog = rs.slice(-6).reverse().map(r=>({text:'pH '+r.ph+' · EC '+r.ec+' · '+r.temp+'°F · '+(r.level||''), date:fmt(r.date)}))
+      .concat(d.topoffs.slice(-3).reverse().map(t=>({text:'Topped off '+t.gal+' gal', date:fmt(t.date)})));
+
+    // harvest list
+    let hl = pods.map(p=>({pod:p, pl:this.current(p)})).filter(x=>x.pl);
+    if(this.state.harvestFilter==='ready') hl = hl.filter(x=>this.statusOf(x.pod)==='Ready to Harvest');
+    hl.sort((a,b)=>{ const da = daysSince(a.pl.plantedOn)/C(a.pl.crop).dtm[0], db = daysSince(b.pl.plantedOn)/C(b.pl.crop).dtm[0]; return db-da; });
+    const podLabel = p => p.sys==='tower' ? ('Tower '+p.id) : (p.sys==='S' ? ('Tray R'+p.row+'-S'+p.pos) : ('Tabletop '+p.sys+' · R'+p.row+'-P'+p.pos));
+    const statusChip = s => s==='Ready to Harvest' ? ['#FBEFE9','#C4633F'] : (s==='Problem'||s==='Needs Replanting' ? ['#F7EDE2','#C4633F'] : ['#F1F5EF','#4E7A55']);
+    const harvestList = hl.slice(0,60).map(x=>{ const c = C(x.pl.crop); const dg = daysSince(x.pl.plantedOn); const s = this.statusOf(x.pod); const chip = statusChip(s);
+      const est = iso(new Date(x.pl.plantedOn+'T12:00:00').getTime()+c.dtm[0]*DAY);
+      return {name: c.name, icon: c.icon, pod: podLabel(x.pod), planted:fmt(x.pl.plantedOn), days:dg,
+        color:c.color, ring:c.ring, status:s, statusBg:chip[0], statusFg:chip[1],
+        pct: Math.min(100, Math.round(dg/c.dtm[0]*100))+'%', window: fmt(est),
+        totalHarvested: x.pl.harvests.length ? (x.pl.harvests.length+' harvests') : 'not harvested yet',
+        some: ()=>this.harvestSome(x.pod.id), remove: ()=>this.harvestRemove(x.pod.id)}; });
+
+    // tower views
+    const mk = p => { const v = this.visual(p); const cur = this.current(p); const pl = d.plan[p.id];
+      const name = cur ? C(cur.crop).name
+        : (v.planned ? (pl.sownOn ? C(pl.crop).name + ' · in nursery' : C(pl.crop).name + ' · wave ' + pl.wave) : 'Reserved / Airflow');
+      return {id:p.id, pos:p.pos, color:v.color, ring:v.ring, fg:v.fg, abbr:v.abbr,
+        icon: cur ? C(cur.crop).icon : (v.planned ? C(pl.crop).icon : BLANK),
+        iconOp: cur ? '1' : (v.planned ? (pl.sownOn ? '0.8' : '0.4') : '0'),
+        plantName: name, open: ()=>this.openPod(p.id)}; };
+    const towerRows = [];
+    for(let row=10; row>=1; row--){ const rp=[]; for(let pos=1;pos<=8;pos++) rp.push(mk(d.pods['R'+row+'-P'+pos]));
+      towerRows.push({row, pods:rp, zone:ZONES[row][0], zoneShort:ZONES[row][1], zoneColor:ZONES[row][2]}); }
+    const sysKey = this.state.sys || 'tower';
+    const sysDef = SYSTEMS.filter(s=>s.key===sysKey)[0];
+    const isTowerSys = sysKey === 'tower';
+    const gridRows = [];
+    if(isTowerSys) towerRows.forEach(r=>gridRows.push(r));
+    else for(let row=sysDef.rows; row>=1; row--){ const rp=[];
+      for(let pos=1; pos<=sysDef.cols; pos++) rp.push(mk(d.pods[sysKey+'-R'+row+'-P'+pos]));
+      gridRows.push({row, pods:rp, zone: sysDef.kind==='tray' ? 'Nursery slots' : 'Seed to harvest in place',
+        zoneShort: sysDef.kind==='tray' ? 'Tray' : 'Tabletop', zoneColor:'#6E9BA5'}); }
+    const systemTabs = SYSTEMS.map(s=>{ const sp = this.podList(s.key);
+      return {key:s.key, label:s.short, count: sp.filter(p=>this.current(p)).length+'/'+sp.length,
+        bg: s.key===sysKey?'#FFFDF7':'transparent', fg: s.key===sysKey?'#35543F':'#7A5C46',
+        go: ()=>this.setState({sys:s.key})}; });
+    const systemCards = SYSTEMS.map(s=>{ const sp = this.podList(s.key); const planted = sp.filter(p=>this.current(p)).length;
+      const sub = s.kind==='tower' ? '10 rows × 8 pods'
+        : (s.kind==='tray' ? '5 rows × 12 slots · seedling nursery' : '3 rows × 4 pods · seed straight into the pod');
+      return {name:s.name, sub,
+        planted: planted+' of '+sp.length+(s.kind==='tray' ? ' slots sown' : ' pods planted'),
+        pct: Math.round(planted/sp.length*100)+'%',
+        accent: s.kind==='tower' ? '#4E7A55' : '#6E9BA5', go: ()=>this.setState({tab:'tower', sys:s.key})}; });
+    const miniRows = towerRows.map(r=>({row:r.row, pods:r.pods}));
+    const topDownPods = [];
+    towerRows.forEach(r=>{ const rad = 142 - (10-r.row)*13.5;
+      r.pods.forEach(p=>{ const a = (p.pos-1)/8*Math.PI*2 - Math.PI/2 + (r.row%2? Math.PI/16:0);
+        topDownPods.push(Object.assign({}, p, {tf:'translate(-50%,-50%) translate('+(Math.cos(a)*rad).toFixed(1)+'px,'+(Math.sin(a)*rad).toFixed(1)+'px)'})); }); });
+
+    const cropCounts = {}; pods.forEach(p=>{ const c=this.current(p); if(c) cropCounts[c.crop]=(cropCounts[c.crop]||0)+1; });
+    const legend = Object.keys(cropCounts).map(k=>({name:C(k).name, icon:C(k).icon, abbr:C(k).abbr, color:C(k).color, ring:C(k).ring, fg:C(k).fg, count:cropCounts[k]}))
+      .concat([{name:'Reserved / Airflow', abbr:'—', color:EMPTY.color, ring:EMPTY.ring, fg:EMPTY.fg, count:counts.reserved}]);
+
+    const entries = this.planEntries();
+    const waveCounts = [0,0,0];
+    entries.forEach(e=>{ waveCounts[e.wave-1]++; });
+    const waveStyle = [['#F1F5EF','#DCE6D8','#4E7A55'],['#FBF3E6','#EFE2CB','#B0801F'],['#FBEFE9','#F2DDD2','#C4633F']];
+    const waves = [0,1,2].map(i=>({n:i+1, date:fmt(this.waveDate(i+1)), count:waveCounts[i], bg:waveStyle[i][0], border:waveStyle[i][1], accent:waveStyle[i][2],
+      note: i===0 ? 'Sow day one — a third of the tower, spread diagonally' : (i===1 ? 'Sow two weeks later, offset a third of a turn' : 'Final sowing, then succession takes over')}));
+
+    // setup timeline: sow days and transplant days
+    const cropGroups = list => { const m={}; list.forEach(e=>{ (m[e.crop]=m[e.crop]||[]).push(e); });
+      return Object.keys(m).map(k=>({crop:k, items:m[k]})); };
+    const evMap = {};
+    const ev = (date,type,w) => { const k=date+'|'+type; if(!evMap[k]) evMap[k]={date,type,wave:w,groups:[]}; return evMap[k]; };
+    for(let w=1; w<=3; w++){
+      const sowDate = this.waveDate(w);
+      const list = entries.filter(e=>e.wave===w);
+      const seeds = list.filter(e=>C(e.crop).lead>0);
+      const starters = list.filter(e=>C(e.crop).lead===0);
+      if(seeds.length){ const a = ev(sowDate,'sow',w); cropGroups(seeds).forEach(g=>a.groups.push(g)); }
+      cropGroups(seeds).forEach(g=>{ ev(addDays(sowDate, C(g.crop).lead),'transplant',w).groups.push(g); });
+      if(starters.length){ const c = ev(sowDate,'transplant',w); cropGroups(starters).forEach(g=>c.groups.push(g)); }
+    }
+    const timeline = Object.keys(evMap).map(k=>evMap[k])
+      .sort((a,b)=> a.date<b.date?-1:(a.date>b.date?1:(a.type==='sow'?-1:1)))
+      .map(e=>{
+        const groups = e.groups.map(g=>{
+          const ids = g.items.map(i=>i.id);
+          const gdone = e.type==='sow' ? ids.every(id=>d.plan[id].sownOn) : ids.every(id=>d.pods[id].plantings.length>0);
+          const c = C(g.crop);
+          const vs = Array.from(new Set(g.items.map(i=>i.variety).filter(Boolean)));
+          return {label: g.items.length+' × '+c.name, icon: c.icon, sub: ids.join(', '),
+            count:g.items.length, color:c.color, mark: gdone?'✓':'', border: gdone?'#8FA98A':'#DED7C8',
+            fill: gdone?'#8FA98A':'transparent', textColor: gdone?'#A79E8B':'#2E4034', done:gdone,
+            toggle: ()=> gdone ? this.undoGroup(ids, e.type) : (e.type==='sow' ? this.sowGroup(ids) : this.transplantGroup(ids))};
+        });
+        const total = groups.reduce((n,g)=>n+g.count,0);
+        const doneCount = groups.filter(g=>g.done).reduce((n,g)=>n+g.count,0);
+        const allDone = total>0 && doneCount===total;
+        const dd = daysSince(e.date);
+        const allIds = e.groups.reduce((a,g)=>a.concat(g.items.map(i=>i.id)),[]);
+        return {date:e.date, longDate: longFmt(e.date), wave:e.wave, type:e.type, total, doneCount, allDone, groups,
+          when: dd===0 ? 'Today' : (dd>0 ? (dd===1 ? 'yesterday' : dd+' days ago') : (dd===-1 ? 'tomorrow' : 'in '+(-dd)+' days')),
+          title: e.type==='sow' ? 'Start '+total+' seedlings' : 'Move '+total+' seedlings into the tower',
+          subtitle: e.type==='sow' ? 'Wave '+e.wave+' · sow into plugs in your nursery tray' : 'Wave '+e.wave+' · transplant into the pods listed',
+          accent: e.type==='sow' ? '#6E9BA5' : '#4E7A55',
+          badge: allDone ? 'Done' : (dd>=0 ? 'Due now' : 'Upcoming'),
+          badgeBg: allDone ? '#F1F5EF' : (dd>=0 ? '#FBEFE9' : '#F4F1E7'),
+          badgeFg: allDone ? '#4E7A55' : (dd>=0 ? '#C4633F' : '#8FA98A'),
+          progress: doneCount+' of '+total+' done',
+          markAll: ()=> e.type==='sow' ? this.sowGroup(allIds) : this.transplantGroup(allIds)};
+      });
+    const nextEvent = timeline.filter(t=>!t.allDone)[0] || null;
+
+    const nurseryMap = {};
+    entries.filter(e=>e.sownOn && !d.pods[e.id].plantings.length).forEach(e=>{ const k=e.crop+'|'+e.sownOn; (nurseryMap[k]=nurseryMap[k]||[]).push(e); });
+    const nursery = Object.keys(nurseryMap).map(k=>{ const g=nurseryMap[k]; const e0=g[0]; const c=C(e0.crop);
+      const ready = addDays(e0.sownOn, C(e0.crop).lead); const left = -daysSince(ready);
+      return {name: g.length+' × '+c.name, icon:c.icon, color:c.color, sown:'sown '+fmt(e0.sownOn), pods: g.map(x=>x.id).join(', '),
+        ready: left>0 ? ('ready in '+left+' days · '+fmt(ready)) : 'ready to transplant now', readyNow: left<=0,
+        btnBg: left<=0 ? '#4E7A55' : '#EFE9DA', btnFg: left<=0 ? '#FFFDF7' : '#8FA98A',
+        plant: ()=>this.transplantGroup(g.map(x=>x.id))};
+    }).sort((a,b)=> (a.readyNow===b.readyNow)?0:(a.readyNow?-1:1));
+
+    const plantedCount = pods.filter(p=>d.plan[p.id] && p.plantings.length).length;
+    const setupActive = !!(d.setup && d.setup.active) && plantedCount < entries.length;
+
+    // sheet
+    let sheet = {open:false, statusOptions:[], facts:[], suggestions:[], photos:[], history:[]};
+    if(this.state.podId){
+      const pod = d.pods[this.state.podId]; const cur = this.current(pod); const v = this.visual(pod); const s = this.statusOf(pod);
+      const c = cur ? C(cur.crop) : null; const dg = cur ? daysSince(cur.plantedOn) : 0;
+      const facts = cur ? [
+        {k:'Variety', v: cur.variety || c.name},
+        {k:'Status', v: s},
+        {k:'Planted', v: fmt(cur.plantedOn) + (cur.wave ? ' · Wave '+cur.wave : ' · succession')},
+        {k:'Days growing', v: dg + ' days'},
+        {k:'Harvest window', v: c.dtm[0]+'–'+c.dtm[1]+' days · '+fmt(iso(new Date(cur.plantedOn+'T12:00:00').getTime()+c.dtm[0]*DAY))},
+        {k:'Times harvested', v: cur.harvests.length ? cur.harvests.length+' · last '+fmt(cur.harvests[cur.harvests.length-1].date) : 'none yet'},
+        {k:'Succession', v: c.succ}
+      ] : [];
+      const pl = d.plan[pod.id];
+      const planned = !cur && !!pl && !pod.plantings.length;
+      const pc = planned ? C(pl.crop) : null;
+      const sowOn = planned ? this.waveDate(pl.wave) : null;
+      sheet = {open:true, color:v.color, ring:v.ring, fg:v.fg, abbr:v.abbr,
+        icon: cur ? c.icon : (planned ? pc.icon : BLANK), iconOp: cur ? '1' : (planned ? '0.55' : '0'),
+        plantName: cur ? c.name : (planned ? pc.name : 'Reserved / Airflow'),
+        location: pod.sys==='tower'
+          ? ('Pod '+pod.id+' · Row '+pod.row+' of 10 · Position '+pod.pos+' of 8 · '+ZONES[pod.row][0])
+          : (pod.sys==='S'
+            ? ('Seed Starter Tray · Row '+pod.row+' of 5 · Slot '+pod.pos+' of 12')
+            : ('Tabletop '+pod.sys+' · Row '+pod.row+' of 3 · Position '+pod.pos+' of 4 · sow straight into the pod')),
+        planned: planned ? {show:true, sown: !!pl.sownOn,
+          headline: pl.sownOn ? 'Seedling in the nursery' : 'Planned for wave '+pl.wave,
+          detail: pl.sownOn
+            ? ('Sown '+fmt(pl.sownOn)+' · move into this pod around '+fmt(addDays(pl.sownOn, C(pl.crop).lead)))
+            : (C(pl.crop).lead===0 ? ('Starter plant — goes straight into the pod on '+longFmt(sowOn))
+              : ('Sow '+longFmt(sowOn)+', transplant around '+fmt(addDays(sowOn, C(pl.crop).lead)))),
+          variety: pl.variety || pc.name,
+          sowLabel: 'Mark seed started today', sow: ()=>this.sowGroup([pod.id]),
+          plantLabel: 'Plant it in this pod now', plant: ()=>this.transplantGroup([pod.id])} : {show:false},
+        hasPlant: !!cur, showReplant: !cur && !planned, replantWhy: 'Suggested from tower balance, this row\u2019s zone, and your succession schedule.',
+        statusOptions: STATUSES.map(st=>({label:st, pick:()=>this.setPodStatus(pod.id, st),
+          border: s===st ? '#35543F' : '#E5DECD', bg: s===st ? '#35543F' : '#FFFDF7', fg: s===st ? '#F6F1E4' : '#7A5C46'})),
+        facts,
+        harvestSome: ()=>this.harvestSome(pod.id), harvestRemove: ()=>this.harvestRemove(pod.id),
+        suggestions: this.suggestions(pod).map(sg=>({name:C(sg.key).name, reason:sg.reason, color:C(sg.key).color, icon:C(sg.key).icon,
+          border:'#E5DECD', bg:'#FCFAF3', plant: ()=>this.setPodPlant(pod.id, sg.key)})),
+        reserve: ()=>this.reservePod(pod.id),
+        note: pod.note||'', onNote: e=>{ const val = e.target.value; this.update(dd=>{ dd.pods[pod.id].note = val; }); },
+        photos: (pod.photos||[]).map(src=>({src})), hasPhotos: (pod.photos||[]).length > 0,
+        addPhoto: e => this.photoFile(e, src => this.update(dd=>{ dd.pods[pod.id].photos = (dd.pods[pod.id].photos||[]).concat([src]); })),
+        hasHistory: pod.plantings.length > (cur?1:0),
+        history: pod.plantings.map((pl,i)=>({n:i+1, name: C(pl.crop).name, span: fmt(pl.plantedOn)+' – '+(pl.removedOn?fmt(pl.removedOn):'now'),
+          result: pl.removedOn ? 'harvested & removed' : 'active'})).reverse()};
+      sheet.isTray = pod.sys==='S';
+      if(sheet.isTray && cur){
+        const lead = c.lead || 14; const age = daysSince(cur.plantedOn); const left = lead - age;
+        sheet.seedling = {show:true, age: age+' day'+(age===1?'':'s')+' old',
+          ready: left > 0 ? ('ready to move up in '+left+' day'+(left===1?'':'s')+' · '+fmt(addDays(cur.plantedOn, lead))) : 'ready to move up now',
+          readyNow: left <= 0};
+        const planMatch = p => d.plan[p.id] && d.plan[p.id].crop === cur.crop;
+        const empties = this.podList().filter(p=>!this.current(p));
+        sheet.moveTargets = empties.sort((a,b)=>(planMatch(b)?1:0)-(planMatch(a)?1:0)).slice(0,8).map(p=>({
+          label: podLabel(p), why: planMatch(p) ? 'planned for this crop' : (p.sys==='tower' ? ZONES[p.row][1] : 'open slot'),
+          move: ()=>this.moveSeedling(pod.id, p.id)}));
+      } else { sheet.seedling = {show:false}; sheet.moveTargets = []; }
+      sheet.trayItems = (d.trays||[]).map(t=>{ const c=C(t.crop); const starter = t.kind==='starter';
+        const ready = addDays(t.sownOn, starter ? 0 : (c.lead||0)); const left = -daysSince(ready);
+        return {name: c.name + (starter ? ' · starter' : ''), icon:c.icon, count:t.count+' available',
+          when: left>0 ? ('ready in '+left+' day'+(left===1?'':'s')) : 'ready now',
+          plant: ()=>this.plantFromTray(pod.id, t.id)}; });
+      sheet.hasTrays = (d.trays||[]).length > 0;
+      sheet.issueOptions = ISSUES.map(([label,color])=>({label, color, report: ()=>this.reportIssue(pod.id, label)}));
+      sheet.podIssues = (d.issues||[]).filter(i=>i.podId===pod.id && !i.resolved).map(i=>({
+        type:i.type, since:'reported '+fmt(i.date),
+        tasks: i.tasks.map((t,ix)=>({label:t.label, mark: t.done?'✓':'', border: t.done?'#8FA98A':'#DED7C8',
+          fill: t.done?'#8FA98A':'transparent', color: t.done?'#A79E8B':'#2E4034', toggle: ()=>this.toggleIssueTask(i.id, ix)})),
+        resolve: ()=>this.resolveIssue(i.id)}));
+      sheet.hasIssues = (d.issues||[]).some(i=>i.podId===pod.id && !i.resolved);
+      sheet.events = cur ? (cur.events||[]).slice().reverse().map(ev=>({date: fmt(ev.date), label: ev.label})) : [];
+      sheet.hasEvents = !!(cur && (cur.events||[]).length);
+      sheet.pickerOpen = !!this.state.picker;
+      sheet.togglePicker = ()=>this.setState(s=>({picker:!s.picker}));
+      sheet.pickerLabel = cur ? 'Change what is in this pod' : 'Choose from my seed library';
+      sheet.clear = ()=>this.clearPod(pod.id);
+      sheet.pickerItems = d.library.map(i=>({id:i.id, name:i.name, group:i.group, icon:i.icon, color:i.color,
+        border: cur && cur.crop===i.id ? '#35543F' : '#EFE9DA', bg: cur && cur.crop===i.id ? '#F1F5EF' : '#FCFAF3',
+        pick: ()=>this.setPodPlant(pod.id, i.id)}));
+    }
+
+    const tabStyle = on => on ? {bg:'#FFFDF7', fg:'#35543F'} : {bg:'transparent', fg:'#7A5C46'};
+
+    return Object.assign(base, {
+      stats:counts, water, todayTasks, awayNow, dueCount: awayNow ? 0 : taskObjs.filter(t=>t.due).length,
+      comingUp: [
+        {when:'Harvest', label: harvestList[0] ? harvestList[0].name.split(' · ')[0]+' at '+harvestList[0].pod : 'Nothing yet', detail: harvestList[0] ? harvestList[0].status+' · first harvest '+harvestList[0].window : ''},
+        {when:'Seed', label:'Start lettuce & cilantro seedlings', detail:'Succession cadence: every 2–3 weeks'},
+        {when:'Transplant', label:'Move ready seedlings into open pods', detail: counts.reserved+' pods reserved, '+counts.attention+' need replanting'},
+        {when:'Upkeep', label: (taskObjs.filter(t=>t.due && t.group!=='daily')[0]||{label:'All caught up'}).label, detail:'Next scheduled maintenance'}
+      ],
+      navItems: [['start','Start'],['today','Today'],['tower','Tower'],['plants','Plants'],['water','Water'],['tasks','Tasks'],['harvest','Harvest']]
+        .filter(([k])=> k!=='start' || (d.setup && d.setup.active))
+        .map(([k,label])=>({label, go:()=>this.setState({tab:k}), bg: this.state.tab===k?'#35543F':'transparent',
+          fg: this.state.tab===k?'#F6F1E4':'#7A5C46', dot: this.state.tab===k?'#D9A441':'#DED7C8'})),
+      systemTabs, systemCards, gridRows, isTowerSys, totalPods: pods.length,
+      sysTitle: sysDef.name,
+      sysSub: isTowerSys ? 'Tap any pod to see or edit what is planted there.'
+        : (sysDef.kind==='tray' ? '5 rows of 12 slots · tap a slot to sow it, then move the seedling up when it is ready.'
+          : '3 rows of 4 · seeds go straight into the pod, no transplant needed.'),
+      isElevation: !isTowerSys || this.state.view==='elevation',
+      isTopDown: isTowerSys && this.state.view==='top',
+      isRows: isTowerSys && this.state.view==='rows',
+      libraryGroups: (function(){ const m={}; d.library.forEach(i=>{ (m[i.group]=m[i.group]||[]).push(i); });
+        const order = SHELVES.filter(s=>m[s]).concat(Object.keys(m).filter(k=>SHELVES.indexOf(k)<0));
+        return order.map(g=>({group:g, items: m[g].map(i=>({id:i.id, name:i.name, icon: i.icon || C(i.id).icon, color:i.color,
+          sub: (i.dtm[0]+'–'+i.dtm[1]+' days') + (i.kind==='starter' ? ' · starter plant' : ' · start '+i.lead+'d before it goes in'),
+          open: this.state.editSeed === i.id,
+          toggle: ()=>this.setState(s=>({editSeed: s.editSeed===i.id ? null : i.id, iconFor:null})),
+          fields: [
+            {key:'brand', label:'Seed company / brand', value: i.brand||'', placeholder:'e.g. Botanical Interests'},
+            {key:'source', label:'Where I bought it', value: i.source||'', placeholder:'shop, site or gift'},
+            {key:'packetYear', label:'Packet year', value: i.packetYear||'', placeholder:'2026'},
+            {key:'lot', label:'Lot / SKU', value: i.lot||'', placeholder:'off the back of the packet'}
+          ].map(f=>Object.assign({}, f, {onChange: e=>this.setSeedField(i.id, f.key, e.target.value)})),
+          numbers: [
+            {key:'dtmMin', label:'Days to harvest — from', value: i.dtm[0]},
+            {key:'dtmMax', label:'to', value: i.dtm[1]},
+            {key:'lead', label:'Start seeds this many days early', value: i.lead}
+          ].map(f=>Object.assign({}, f, {onChange: e=>this.setSeedField(i.id, f.key, e.target.value)})),
+          packetNotes: i.packetNotes||'',
+          onNotes: e=>this.setSeedField(i.id, 'packetNotes', e.target.value),
+          picking: this.state.iconFor === i.id,
+          openIcons: ()=>this.setState(s=>({iconFor: s.iconFor===i.id ? null : i.id})),
+          iconChoices: iconKeys().map(f=>({src: iconSrc(f), pick: ()=>this.setSeedIcon(i.id, f)})),
+          used: (function(){ const n = pods.filter(p=>{ const c=this.current(p); return c && c.crop===i.id; }).length; return n ? ' · '+n+' in use' : ''; }).call(this),
+          remove: ()=>this.removeSeed(i.id)})) })); }).call(this),
+      trayItems: (d.trays||[]).map(t=>{ const c = C(t.crop); const starter = t.kind==='starter';
+        const ready = addDays(t.sownOn, starter ? 0 : (c.lead||0)); const left = -daysSince(ready);
+        return {id:t.id, name:c.name, icon:c.icon, count:t.count,
+          sown: starter ? ('bought starter · added '+fmt(t.sownOn)) : ('started '+fmt(t.sownOn)),
+          ready: left>0 ? ('ready in '+left+' day'+(left===1?'':'s')) : 'ready to plant',
+          readyColor: left>0 ? '#8FA98A' : '#4E7A55',
+          plus: ()=>this.bumpTray(t.id, 1), minus: ()=>this.bumpTray(t.id, -1), remove: ()=>this.removeTray(t.id)}; }),
+      hasTrays: (d.trays||[]).length > 0,
+      trayTotal: (d.trays||[]).reduce((n,t)=>n+t.count, 0),
+      newTray: this.state.newTray || {crop: (d.library[0]||{}).id || '', count:'1', kind:'seedling'},
+      traySeedTab: (!this.state.newTray || (this.state.newTray.kind||'seedling')==='seedling')
+        ? {bg:'#6E9BA5', fg:'#FFFDF7'} : {bg:'transparent', fg:'#7A5C46'},
+      trayStarterTab: (this.state.newTray && this.state.newTray.kind==='starter')
+        ? {bg:'#D06B7A', fg:'#FFFDF7'} : {bg:'transparent', fg:'#7A5C46'},
+      setTraySeed: ()=>this.setState(s=>({newTray:Object.assign({crop:(d.library[0]||{}).id, count:'1'}, s.newTray, {kind:'seedling'})})),
+      setTrayStarter: ()=>this.setState(s=>({newTray:Object.assign({crop:(d.library[0]||{}).id, count:'1'}, s.newTray, {kind:'starter'})})),
+      trayOptions: d.library.map(i=>({value:i.id, label:i.name})),
+      onTrayCrop: e=>{ const v=e.target.value; this.setState(s=>({newTray:Object.assign({count:'1'}, s.newTray, {crop:v})})); },
+      onTrayCount: e=>{ const v=e.target.value; this.setState(s=>({newTray:Object.assign({crop:(d.library[0]||{}).id}, s.newTray, {count:v})})); },
+      addTray: ()=>this.addTray(),
+      newSeed: this.state.newSeed || {name:'', base:'lettuce'},
+      newSeedIcon: (this.state.newSeed && this.state.newSeed.iconFile) ? iconSrc(this.state.newSeed.iconFile) : 'icons/generic.png',
+      newIconPicking: this.state.iconFor === 'new',
+      openNewIcons: ()=>this.setState(s=>({iconFor: s.iconFor==='new' ? null : 'new'})),
+      newIconChoices: iconKeys().map(f=>({src: iconSrc(f),
+        pick: ()=>this.setState(s=>({newSeed:Object.assign({name:'',base:'lettuce'}, s.newSeed, {iconFile:f}), iconFor:null}))})),
+      iconManager: iconKeys().map(f=>{ const custom = (ICONX.custom||[]).filter(c=>c.key===f)[0];
+        const used = d.library.filter(i=>i.iconFile===f).length;
+        return {key:f, src: iconSrc(f), name: custom ? custom.name : f.replace(/^fp\//,'').replace(/_/g,' '),
+          tag: custom ? 'mine' : (((d.iconLib||{}).overrides||{})[f] ? 'replaced' : ''),
+          used: used ? used+' in use' : '',
+          replace: e => this.iconUpload(e, src => this.replaceIcon(f, src)),
+          remove: ()=>this.deleteIcon(f)}; }),
+      hiddenIcons: Object.keys(((d.iconLib||{}).hidden)||{}).map(f=>({key:f, name:f.replace(/^fp\//,'').replace(/_/g,' '),
+        src:'icons/'+f+'.png', restore: ()=>this.restoreIcon(f)})),
+      hasHiddenIcons: Object.keys(((d.iconLib||{}).hidden)||{}).length > 0,
+      addIcon: e => this.iconUpload(e, (src,name) => this.addIcon(src,name)),
+      baseOptions: Object.keys(BASE_LABEL).map(b=>({value:b, label:BASE_LABEL[b]})),
+      onSeedName: e=>{ const v=e.target.value; this.setState(s=>({newSeed:Object.assign({name:'',base:'lettuce'}, s.newSeed, {name:v})})); },
+      onSeedBase: e=>{ const v=e.target.value; this.setState(s=>({newSeed:Object.assign({name:'',base:'lettuce'}, s.newSeed, {base:v})})); },
+      addSeed: ()=>this.addSeed(),
+      firstHarvest: (function(){
+        const cands = [];
+        pods.forEach(p=>{ const cur=this.current(p); if(!cur) return; const c=C(cur.crop);
+          cands.push({date: addDays(cur.plantedOn, c.dtm[0]), name:c.name, icon:c.icon, where:p.id, how:'growing now'}); });
+        (d.trays||[]).forEach(t=>{ const c=C(t.crop); const starter = t.kind==='starter';
+          const inPod = addDays(t.sownOn, starter ? 0 : (c.lead||0));
+          cands.push({date: addDays(inPod, c.dtm[0]), name:c.name, icon:c.icon,
+            where: t.count+' waiting', how: starter ? 'starter, not planted yet' : 'seedling, not planted yet'}); });
+        entries.forEach(e=>{ if(d.pods[e.id].plantings.length) return; const c=C(e.crop);
+          const inPod = addDays(e.sownOn || this.waveDate(e.wave), c.lead||0);
+          cands.push({date: addDays(inPod, c.dtm[0]), name:c.name, icon:c.icon, where:e.id, how:'wave '+e.wave+' plan'}); });
+        if(!cands.length) return {show:false};
+        cands.sort((a,b)=> a.date<b.date?-1:1);
+        const f = cands[0]; const away = -daysSince(f.date);
+        return {show:true,
+          big: away <= 0 ? 'Ready' : String(away),
+          unit: away <= 0 ? 'go pick something' : (away===1 ? 'day away' : 'days away'),
+          icon: f.icon, date: longFmt(f.date), detail: f.name+' · '+f.where+' · '+f.how,
+          note: 'Estimated from days-to-harvest on the packet. It shifts as you sow, transplant and log what actually happens.',
+          soon: cands.slice(0,5).map(x=>{ const a = -daysSince(x.date);
+            return {name:x.name, icon:x.icon, where:x.where,
+              when: a <= 0 ? 'ready now' : ('in '+a+' days · '+fmt(x.date))}; })};
+      }).call(this),
+      camUrl: d.camUrl || '', hasCam: !!d.camUrl, noCam: !d.camUrl,
+      onCamUrl: e=>{ const v=e.target.value; this.update(dd=>{ dd.camUrl = v; }); },
+      publicRows: towerRows,
+      publicGrowing: (function(){ const m={};
+        pods.forEach(p=>{ const c=this.current(p); if(!c) return; const it=C(c.crop);
+          const k=it.name; if(!m[k]) m[k]={name:it.name, icon:it.icon, n:0, soonest:null};
+          m[k].n++; const rd = addDays(c.plantedOn, it.dtm[0]);
+          if(!m[k].soonest || rd < m[k].soonest) m[k].soonest = rd; });
+        return Object.keys(m).map(k=>m[k]).sort((a,b)=>b.n-a.n).map(x=>{
+          const away = -daysSince(x.soonest);
+          return {name:x.name, icon:x.icon, count: x.n+' pod'+(x.n===1?'':'s'),
+            when: away <= 0 ? 'ready now' : ('ready in about '+away+' days')}; });
+      }).call(this),
+      publicStat: [
+        {n: String(counts.growing), label:'growing'},
+        {n: String(counts.ready), label:'ready to pick'},
+        {n: String(counts.nursery + counts.toPlant), label:'on the way'},
+        {n: String(counts.reserved), label:'open for air'}
+      ],
+      setupActive, timeline, nursery, hasNursery: nursery.length>0, seedSteps: SEED_STEPS.map(([t,b])=>({t,b})),
+      setupPlanted: plantedCount, setupTotal: entries.length,
+      setupPct: Math.round(plantedCount/Math.max(1,entries.length)*100)+'%',
+      setupSown: entries.filter(e=>e.sownOn).length,
+      setupStart: d.setup.start, startLong: longFmt(d.setup.start),
+      onStartDate: e=>{ const v=e.target.value; if(v) this.update(dd=>{ dd.setup.start = v; }); },
+      next: nextEvent || {longDate:'—', when:'', title:'Setup complete', subtitle:'The tower is fully planted', badge:'Done', progress:''},
+      goStart: ()=>this.setState({tab:'start'}),
+      finishSetup: ()=>{ this.update(dd=>{ dd.setup.active = false; }); this.setState({tab:'today'}); },
+      isStart: this.state.tab==='start' && !!(d.setup && d.setup.active),
+      isToday: this.state.tab==='today' || (this.state.tab==='start' && !(d.setup && d.setup.active)),
+      miniRows, towerRows, topDownPods, legend, waves,
+      towerPhotos: (d.towerPhotos||[]).map(p=>({src:p.src, date:fmt(p.date)})),
+      hasTowerPhotos: (d.towerPhotos||[]).length > 0,
+      addTowerPhoto: e => this.photoFile(e, src => this.update(dd=>{ dd.towerPhotos = (dd.towerPhotos||[]).concat([{src, date:today()}]); })),
+      cadence: CADENCE.map(([crop,every])=>({crop,every})),
+      inventory: INVENTORY.map(([group,color,items])=>({group,color,items})),
+      zones: ZONE_LIST.map(([rows,title,crops,color])=>({rows,title,crops,color})),
+      charts: [chartFor('ph','pH','#6E9BA5',5.8,6.2), chartFor('ec','EC','#4E7A55',1.2,1.8), chartFor('temp','Water temperature °F','#C4633F',65,75)],
+      readingCount: d.readings.length,
+      form: this.state.form, calc: this.state.calc, calcRows, calcAdvice: advice,
+      onFormPh: e=>{const v=e.target.value; this.setState(s=>({form:Object.assign({},s.form,{ph:v})}));},
+      onFormEc: e=>{const v=e.target.value; this.setState(s=>({form:Object.assign({},s.form,{ec:v})}));},
+      onFormTemp: e=>{const v=e.target.value; this.setState(s=>({form:Object.assign({},s.form,{temp:v})}));},
+      onFormLevel: e=>{const v=e.target.value; this.setState(s=>({form:Object.assign({},s.form,{level:v})}));},
+      onFormGal: e=>{const v=e.target.value; this.setState(s=>({form:Object.assign({},s.form,{gal:v})}));},
+      saveReading: ()=>{ const f=this.state.form; if(!f.ph && !f.ec && !f.temp) return;
+        this.update(dd=>{ dd.readings.push({date:today(), ph:parseFloat(f.ph)||(last.ph||null), ec:parseFloat(f.ec)||(last.ec||null), temp:parseFloat(f.temp)||(last.temp||null), level:f.level});
+          dd.taskDone['t5']=new Date().toISOString(); dd.taskDone['t6']=new Date().toISOString(); });
+        this.setState({form:{ph:'',ec:'',temp:'',level:f.level,gal:''}}); },
+      logTopoff: ()=>{ const g=parseFloat(this.state.form.gal); if(!g) return;
+        this.update(dd=>{ dd.topoffs.push({date:today(), gal:g}); dd.taskDone['t7']=new Date().toISOString(); });
+        this.setState(s=>({form:Object.assign({},s.form,{gal:''})})); },
+      onCalcGal: e=>{const v=e.target.value; this.setState(s=>({calc:Object.assign({},s.calc,{gal:v})}));},
+      onCalcStage: e=>{const v=e.target.value; this.setState(s=>({calc:Object.assign({},s.calc,{stage:v})}));},
+      onCalcEc: e=>{const v=e.target.value; this.setState(s=>({calc:Object.assign({},s.calc,{ec:v})}));},
+      onCalcPh: e=>{const v=e.target.value; this.setState(s=>({calc:Object.assign({},s.calc,{ph:v})}));},
+      rateInputs: EXTRA_PRODUCTS.map(([k,label])=>({label, value: d.rates[k]||'',
+        onChange: e=>{ const v=e.target.value; this.update(dd=>{ dd.rates[k]=v; }); }})),
+      mixSteps: MIX.map((label,i)=>({n:i+1, label, mark: d.mix[i]?'✓':'', border: d.mix[i]?'#8FA98A':'#DED7C8', fill: d.mix[i]?'#8FA98A':'transparent',
+        color: d.mix[i]?'#A79E8B':'#2E4034', toggle: ()=>this.update(dd=>{ if(dd.mix[i]) delete dd.mix[i]; else dd.mix[i]=1; })})),
+      resetMix: ()=>this.update(dd=>{ dd.mix={}; }),
+      healthFlags: HEALTH.map(h=>({label:h, border: d.flags[h]?'#C4633F':'#E5DECD', bg: d.flags[h]?'#FBEFE9':'#FFFDF7', fg: d.flags[h]?'#C4633F':'#7A5C46',
+        toggle: ()=>this.update(dd=>{ if(dd.flags[h]) delete dd.flags[h]; else dd.flags[h]=1; })})),
+      deep, deepSteps: DEEP_STEPS, recentLog,
+      openIssues: (d.issues||[]).filter(i=>!i.resolved).map(i=>{ const def = ISSUES.filter(x=>x[0]===i.type)[0];
+        const done = i.tasks.filter(t=>t.done).length;
+        return {type:i.type, pod: d.pods[i.podId] ? podLabel(d.pods[i.podId]) : i.podId, color: def?def[1]:'#C4633F', since:'reported '+fmt(i.date),
+          progress: done+' of '+i.tasks.length+' steps done', allDone: done===i.tasks.length,
+          tasks: i.tasks.map((t,ix)=>({label:t.label, mark: t.done?'✓':'', border: t.done?'#8FA98A':'#DED7C8',
+            fill: t.done?'#8FA98A':'transparent', color: t.done?'#A79E8B':'#2E4034', toggle: ()=>this.toggleIssueTask(i.id, ix)})),
+          open: ()=>this.openPod(i.podId), resolve: ()=>this.resolveIssue(i.id)}; }),
+      hasOpenIssues: (d.issues||[]).some(i=>!i.resolved),
+      trip: (function(){
+        const t = d.trip || null;
+        if(!t || !t.start || !t.end) return {set:false, start:(t&&t.start)||'', end:(t&&t.end)||'',
+          headline:'Going away?', sub:'Set the dates and KRISP builds a prep list, quiets the daily checks while you are gone, and gives you a come-home routine.'};
+        const days = Math.max(1, Math.round((new Date(t.end+'T12:00:00') - new Date(t.start+'T12:00:00'))/DAY) + 1);
+        const untilStart = -daysSince(t.start), afterEnd = daysSince(t.end);
+        const phase = untilStart > 0 ? 'before' : (afterEnd > 0 ? 'after' : 'away');
+        const prepDone = TRIP_PREP.filter((x,i)=>(t.prep||{})[i]).length;
+        const backDone = TRIP_BACK.filter((x,i)=>(t.back||{})[i]).length;
+        const horizon = (untilStart>0?untilStart:0) + days;
+        const atRisk = pods.map(p=>({pod:p, pl:this.current(p)})).filter(x=>x.pl).map(x=>{
+            const c = C(x.pl.crop); const left = c.dtm[0] - daysSince(x.pl.plantedOn);
+            return {left, name:c.name, icon:c.icon, pod:x.pod.id}; })
+          .filter(x=>x.left <= horizon)
+          .sort((a,b)=>a.left-b.left)
+          .map(x=>({name:x.name, icon:x.icon, pod:x.pod,
+            note: x.left <= 0 ? 'ready now — harvest before you go' : ('ready in about '+x.left+' days — will peak while you are away')}));
+        const gone = phase==='away' ? (daysSince(t.start)+1) : 0;
+        return {set:true, start:t.start, end:t.end, days,
+          range: longFmt(t.start)+' → '+longFmt(t.end),
+          phase, isBefore: phase==='before', isAway: phase==='away', isAfter: phase==='after',
+          headline: phase==='before' ? ('Away in '+untilStart+' day'+(untilStart===1?'':'s'))
+            : (phase==='away' ? ('Away · day '+gone+' of '+days) : 'Welcome back'),
+          sub: phase==='before' ? (days+' day'+(days===1?'':'s')+' unattended · '+prepDone+' of '+TRIP_PREP.length+' prep steps done')
+            : (phase==='away' ? 'Routine checks are paused. Only what genuinely matters is listed.'
+              : backDone+' of '+TRIP_BACK.length+' catch-up steps done'),
+          accent: phase==='away' ? '#6E9BA5' : (phase==='after' ? '#C4633F' : '#B0801F'),
+          bg: phase==='away' ? '#F1F5F6' : (phase==='after' ? '#FBEFE9' : '#FBF3E6'),
+          border: phase==='away' ? '#DCE6E8' : (phase==='after' ? '#F2DDD2' : '#EFE2CB'),
+          prepPct: Math.round(prepDone/TRIP_PREP.length*100)+'%',
+          backPct: Math.round(backDone/TRIP_BACK.length*100)+'%',
+          atRisk, hasRisk: atRisk.length>0,
+          riskLabel: atRisk.length+' planting'+(atRisk.length===1?'':'s')+' will be ready during the trip',
+          awayNote: 'While you are away: nobody needs to dose nutrients. If someone checks in, all they do is look at the water level, top off with plain water, and listen for the pump.',
+          prep: TRIP_PREP.map(([label,why],i)=>{ const done = !!(t.prep||{})[i];
+            return {label, why, mark: done?'✓':'', border: done?'#8FA98A':'#DED7C8', fill: done?'#8FA98A':'transparent',
+              color: done?'#A79E8B':'#2E4034', toggle: ()=>this.toggleTrip('prep', i)}; }),
+          back: TRIP_BACK.map(([label,why],i)=>{ const done = !!(t.back||{})[i];
+            return {label, why, mark: done?'✓':'', border: done?'#8FA98A':'#DED7C8', fill: done?'#8FA98A':'transparent',
+              color: done?'#A79E8B':'#2E4034', toggle: ()=>this.toggleTrip('back', i)}; })};
+      }).call(this),
+      onTripStart: e=>this.setTrip('start', e.target.value),
+      onTripEnd: e=>this.setTrip('end', e.target.value),
+      clearTrip: ()=>this.clearTrip(),
+      goTasks: ()=>this.setState({tab:'tasks'}),
+      taskGroups: Object.keys(GROUP_META).map(g=>{ const ts = taskObjs.filter(t=>t.group===g);
+        return {title:GROUP_META[g][0], accent:GROUP_META[g][2], status: ts.filter(t=>t.due).length ? ts.filter(t=>t.due).length+' due' : 'all done', tasks:ts}; }),
+      harvestList, harvestTotalLabel: hl.length+(hl.length===1 ? ' active planting' : ' active plantings')+' across your garden',
+      hAll: tabStyle(this.state.harvestFilter==='all'), hReady: tabStyle(this.state.harvestFilter==='ready'),
+      setHarvestAll: ()=>this.setState({harvestFilter:'all'}), setHarvestReady: ()=>this.setState({harvestFilter:'ready'}),
+      tabEl: tabStyle(this.state.view==='elevation'), tabTop: tabStyle(this.state.view==='top'), tabRows: tabStyle(this.state.view==='rows'),
+      setViewElevation: ()=>this.setState({view:'elevation'}), setViewTop: ()=>this.setState({view:'top'}), setViewRows: ()=>this.setState({view:'rows'}),
+      goWater: ()=>this.setState({tab:'water'}), goTower: ()=>this.setState({tab:'tower'}),
+      sheet, closeSheet: ()=>this.setState({podId:null}), stop: e=>e.stopPropagation()
+    });
+  }
+}
+
+</script>
+</body>
+</html>
